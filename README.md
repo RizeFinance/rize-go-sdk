@@ -9,11 +9,7 @@
 
 # Official Rize SDKs for GO
 
-## Changelogs
-
-Checkout the changelogs per release [here]()
-
-## Usage
+### Usage
 
 ```go
 import rize "github.com/rizefinance/rize-go-sdk/v1"
@@ -24,8 +20,8 @@ func main() {
 		ProgramUID:  programUID,
 		Environment: environment,
 	}
-  
-  // Start making API calls
+	
+	// Start making API calls
 }
 ```
 
@@ -35,25 +31,30 @@ func main() {
 | ProgramUID  | Program UID for the target environment | nil |
 | Environment | The Rize environment to be used: `'sandbox'`, `'integration'` or `'production'` | 'sandbox' |
 
-## API Docs
+### API Docs
 
 Go to [https://developer.rizefs.com/](https://developer.rizefs.com/)
 
-## Testing Locally
+### Testing Locally
 
 Run the SDK from the command line.
 
 ```sh
-$ cd cmd/rize
-$ go run main.go -k <HMAC_KEY> -p <PROGRAM_UID> -e <ENVIRONMENT>
+# Generate a local configuration file
+$ cp .env-example .env
+```
+
+```sh
+# Test an SDK command
+$ go run cmd/rize/main.go [COMMAND]
 ```
 
 ```sh
 # Open the help menu
-$ go run main.go -h
+$ go run cmd/rize/main.go -h
 ```
 
-## License
-MIT License. Copyright 2021 Rize Money, Inc. All rights reserved.
+### License
+MIT License. Copyright 2021-Present Rize Money, Inc. All rights reserved.
 
 See [LICENSE](LICENSE)
