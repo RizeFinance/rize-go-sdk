@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	rize "github.com/rizefinance/rize-go-sdk/v1"
+	rize "github.com/rizefinance/rize-go-sdk/platform"
 )
 
 func init() {
@@ -45,7 +45,7 @@ func main() {
 		return
 	}
 
-	config := rize.Config{
+	config := rize.RizeConfig{
 		HMACKey:     checkEnvVariable("hmac_key"),
 		ProgramUID:  checkEnvVariable("program_uid"),
 		Environment: checkEnvVariable("environment"),

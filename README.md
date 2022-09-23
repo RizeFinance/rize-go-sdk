@@ -5,11 +5,15 @@
   <br />
 </p>
 
-*Make financial services simple and accessible. Rize enables fintechs, financial institutions and brands to build across multiple account types with one API. If you want to join us [**Check out our open positions**](https://rizefs.com/careers/).*
+*Making financial services simple and accessible. Rize enables fintechs, financial institutions and brands to build across multiple account types with one API.*
 
 # Official Rize SDKs for GO
 
-### Usage
+### Go Version
+
++ Go >= 1.16
+
+### Getting Started
 
 ```go
 import rize "github.com/rizefinance/rize-go-sdk/v1"
@@ -35,23 +39,13 @@ func main() {
 
 Go to [https://developer.rizefs.com/](https://developer.rizefs.com/)
 
-### Testing Locally
+### Examples
 
-Run the SDK from the command line.
+The API examples require availability of certain Rize environment variables. You can set them in the provided dotenv file. 
 
 ```sh
 # Generate a local configuration file
 $ cp .env-example .env
-```
-
-```sh
-# Test an SDK command
-$ go run cmd/rize/main.go [COMMAND]
-```
-
-```sh
-# Open the help menu
-$ go run cmd/rize/main.go -h
 ```
 
 ### License
