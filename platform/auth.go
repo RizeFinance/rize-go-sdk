@@ -2,9 +2,11 @@ package platform
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/rizefinance/rize-go-sdk/internal"
 )
 
 // AuthService handles all Auth related functionality
@@ -33,6 +35,8 @@ func (a *AuthService) getToken() (*authTokenResponse, error) {
 		return nil, err
 	}
 
+	internal.Logger(fmt.Sprintf("auth.getToken:::Token response %+v", response))
+
 	return response, nil
 }
 
@@ -49,6 +53,8 @@ func (a *AuthService) buildRefreshToken() (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	internal.Logger(fmt.Sprintf("auth.buildRefreshToken::Signed token %s", signedToken))
 
 	return signedToken, nil
 }

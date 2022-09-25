@@ -16,7 +16,7 @@
 ### Getting Started
 
 ```go
-import rize "github.com/rizefinance/rize-go-sdk/v1"
+import rize "github.com/rizefinance/rize-go-sdk/platform"
 
 func main() {
 	config := rize.Config{
@@ -34,6 +34,12 @@ func main() {
 | HMACKey     | HMAC key for the target environment | nil |
 | ProgramUID  | Program UID for the target environment | nil |
 | Environment | The Rize environment to be used: `'sandbox'`, `'integration'` or `'production'` | 'sandbox' |
+
+### Enable Debug Logging
+
+```go
+os.Setenv("debug",true)
+```
 
 ### API Docs
 

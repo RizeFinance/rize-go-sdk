@@ -6,8 +6,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk/internal"
 )
 
+// Service type to store the client reference
 type service struct {
 	rizeClient *RizeClient
 }
@@ -34,14 +37,15 @@ type RizeClient struct {
 
 // NewRizeClient initializes the RizeClient and all services
 func NewRizeClient(cfg *RizeConfig) *RizeClient {
+	internal.Logger("client.NewRizeClient::Creating client...")
+
 	r := &RizeClient{}
 	r.cfg = cfg
 	// Store a reference to the RizeClient rather than creating one for each service
 	r.svc.rizeClient = r
 
 	// Initialize API Services
-	// r.Auth = (*AuthService)(&r.svc)
-	r.Auth = &AuthService{}
+	r.Auth = (*AuthService)(&r.svc)
 
 	// Generate Auth Token
 	r.Auth.getToken()
@@ -52,6 +56,8 @@ func NewRizeClient(cfg *RizeConfig) *RizeClient {
 // Make the API request and return the response body
 func (r *RizeClient) doRequest(path string, method string, data io.Reader) ([]byte, error) {
 	url := fmt.Sprintf("https://%s.rizefs.com/api/v1/%s", r.cfg.Environment, path)
+
+	internal.Logger(fmt.Sprintf("client.doRequest::Sending %s request to %s", method, url))
 
 	client := &http.Client{
 		Timeout: time.Second * 10,
@@ -76,4 +82,9 @@ func (r *RizeClient) doRequest(path string, method string, data io.Reader) ([]by
 	}
 
 	return body, nil
+}
+
+// Version outputs the current SDK version
+func Version() string {
+	return internal.SDK_VERSION
 }

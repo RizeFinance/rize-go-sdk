@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -16,45 +15,26 @@ func init() {
 		fmt.Println("Error loading .env file:", err)
 		os.Exit(1)
 	}
+
+	v := rize.Version()
+	fmt.Printf("main.init::Loading Rize SDK version: %s\n", v)
 }
 
-// Creates a command-line wrapper for testing the SDK locally
 func main() {
-	var (
-		showHelp bool
-		command  string
-	)
-
-	flag.BoolVar(&showHelp, "h", false, "Show help menu")
-	flag.Parse()
-
-	if len(os.Args) > 1 {
-		command = os.Args[1]
-	} else {
-		showHelp = true
-	}
-
-	help := "--- Rize GO SDK Command-Line Utility --- \n\n" +
-		"main.go [COMMAND] \n\n" +
-		"COMMAND: SDK command to execute \n\n" +
-		"Example: \n" +
-		"main.go CreateComplianceWorkflow\n"
-
-	if showHelp {
-		fmt.Println(help)
-		return
-	}
-
 	config := rize.RizeConfig{
-		HMACKey:     checkEnvVariable("hmac_key"),
 		ProgramUID:  checkEnvVariable("program_uid"),
+		HMACKey:     checkEnvVariable("hmac_key"),
 		Environment: checkEnvVariable("environment"),
+		Debug:       true,
 	}
 
-	// TODO: Execute sdk command
-	fmt.Printf("%+v\n", config)
-	fmt.Println("Command:", command)
+	// Enable debug logging
+	os.Setenv("debug", fmt.Sprintf("%t", config.Debug))
 
+	// Create new Rize client
+	rc := rize.NewRizeClient(&config)
+
+	fmt.Printf("main::RizeClient  %+v\n", *rc)
 }
 
 // Helper function to check for environment variables
