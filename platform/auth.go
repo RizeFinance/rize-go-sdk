@@ -20,16 +20,18 @@ type authTokenResponse struct {
 
 // Generate an authorization token
 func (a *AuthService) getToken() (*authTokenResponse, error) {
-	token, err := a.buildRefreshToken()
+	refreshToken, err := a.buildRefreshToken()
 	if err != nil {
 		return nil, err
 	}
-	a.rizeClient.Token = token
+	// Store the refresh token
+	a.rizeClient.RefreshToken = refreshToken
 
 	res, err := a.rizeClient.doRequest("auth", "POST", nil)
 	if err != nil {
 		return nil, err
 	}
+	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
@@ -42,6 +44,13 @@ func (a *AuthService) getToken() (*authTokenResponse, error) {
 	}
 
 	internal.Logger(fmt.Sprintf("auth.getToken:::Token response %+v", response))
+
+	// Validate token exists and save to client
+	if response.Token != "" {
+		a.rizeClient.AuthToken = response.Token
+	} else {
+		return nil, fmt.Errorf("Error fetching auth token")
+	}
 
 	return response, nil
 }

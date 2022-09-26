@@ -30,9 +30,9 @@ func main() {
 	// Create new Rize client
 	rc, err := rize.NewRizeClient(&config)
 	if err != nil {
-		log.Fatal("Error building RizeClient", err)
+		log.Fatal("Error building RizeClient\n", err)
 	}
 
 	// Confirm existence of Auth token
-	fmt.Println("Auth Token:", rc.Token)
+	fmt.Println("Auth Token:", rc.AuthToken)
 }

@@ -26,6 +26,9 @@ func main() {
 		Debug:       false,
 	}
 	rc, err := rize.NewRizeClient(&config)
+	if err != nil {
+		log.Fatal("Error building RizeClient\n", err)
+	}
 	
 	// Start making API calls
 }

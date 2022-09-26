@@ -1,6 +1,6 @@
 package platform
 
-// ComplianceWorkflowService handles all Compliance Workflow
+// ComplianceWorkflowService handles all Compliance Workflow operations
 type ComplianceWorkflowService service
 
 // ListWorkflows retrieves a list of Compliance Workflows filtered by the given parameters

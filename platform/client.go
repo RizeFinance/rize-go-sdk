@@ -1,8 +1,10 @@
 package platform
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
@@ -31,11 +33,28 @@ type RizeClient struct {
 	cfg *RizeConfig
 	// Stores a reference to the RizeClient for child services
 	svc service
+	// Refresh token
+	RefreshToken string
 	// Auth token
-	Token string
+	AuthToken string
 	// All available Rize API services
 	Auth               *AuthService
 	ComplianceWorkflow *ComplianceWorkflowService
+}
+
+// Default API error format
+type apiError struct {
+	Errors []struct {
+		Code       int       `json:"code"`
+		Title      string    `json:"title"`
+		Detail     string    `json:"detail"`
+		OccurredAt time.Time `json:"occurred_at"`
+	} `json:"errors"`
+	Status int `json:"status"`
+}
+
+func (e *apiError) Error() string {
+	return fmt.Sprintf("Error status %d and output:\n%+v\n", e.Status, e.Errors)
 }
 
 // NewRizeClient initializes the RizeClient and all services
@@ -75,22 +94,39 @@ func (r *RizeClient) doRequest(path string, method string, data io.Reader) (*htt
 
 	internal.Logger(fmt.Sprintf("client.doRequest::Sending %s request to %s", method, url))
 
-	client := &http.Client{
-		Timeout: time.Second * 10,
-	}
 	req, err := http.NewRequest(method, url, data)
-
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Authorization", r.Token)
+	if path == "auth" {
+		req.Header.Add("Authorization", r.RefreshToken)
+	} else {
+		req.Header.Add("Authorization", r.AuthToken)
+	}
 
+	client := &http.Client{
+		Timeout: time.Second * 10,
+	}
 	res, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
+
+	// Check for error response
+	if res.StatusCode >= 400 {
+		defer res.Body.Close()
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return nil, err
+		}
+		var errorOut = &apiError{}
+		if err = json.Unmarshal(body, &errorOut); err != nil {
+			return nil, err
+		}
+		// Use apiError type to handle specific error codes from the API server
+		return nil, errorOut
+	}
 
 	return res, nil
 }
