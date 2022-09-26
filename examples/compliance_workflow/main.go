@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -14,9 +13,6 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file:", err)
 	}
-
-	v := rize.Version()
-	fmt.Printf("Loading Rize SDK version: %s\n", v)
 }
 
 func main() {
@@ -33,6 +29,6 @@ func main() {
 		log.Fatal("Error building RizeClient", err)
 	}
 
-	// Confirm existence of Auth token
-	fmt.Println("Auth Token:", rc.Token)
+	rc.ComplianceWorkflow.ListWorkflows()
+
 }

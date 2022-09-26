@@ -3,6 +3,7 @@ package platform
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -23,9 +24,14 @@ func (a *AuthService) getToken() (*authTokenResponse, error) {
 	if err != nil {
 		return nil, err
 	}
-	a.rizeClient.token = token
+	a.rizeClient.Token = token
 
-	body, err := a.rizeClient.doRequest("auth", "POST", nil)
+	res, err := a.rizeClient.doRequest("auth", "POST", nil)
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}

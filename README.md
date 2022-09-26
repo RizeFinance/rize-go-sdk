@@ -7,11 +7,11 @@
 
 *Making financial services simple and accessible. Rize enables fintechs, financial institutions and brands to build across multiple account types with one API.*
 
-# Official Rize SDKs for GO
+# Official Rize SDKs for Go
 
 ### Go Version
 
-+ Go >= 1.16
++ Go >= 1.18
 
 ### Getting Started
 
@@ -23,7 +23,9 @@ func main() {
 		HMACKey:     hmac,
 		ProgramUID:  programUID,
 		Environment: environment,
+		Debug:       false,
 	}
+	rc, err := rize.NewRizeClient(&config)
 	
 	// Start making API calls
 }
@@ -34,16 +36,7 @@ func main() {
 | HMACKey     | HMAC key for the target environment | nil |
 | ProgramUID  | Program UID for the target environment | nil |
 | Environment | The Rize environment to be used: `'sandbox'`, `'integration'` or `'production'` | 'sandbox' |
-
-### Enable Debug Logging
-
-```go
-os.Setenv("debug",true)
-```
-
-### API Docs
-
-Go to [https://developer.rizefs.com/](https://developer.rizefs.com/)
+| Debug  | Enable debug logging | false |
 
 ### Examples
 
@@ -53,6 +46,10 @@ The API examples require availability of certain Rize environment variables. You
 # Generate a local configuration file
 $ cp .env-example .env
 ```
+
+### API Docs
+
+Full API documentation is available at [https://developer.rizefs.com/](https://developer.rizefs.com/).
 
 ### License
 MIT License. Copyright 2021-Present Rize Money, Inc. All rights reserved.
