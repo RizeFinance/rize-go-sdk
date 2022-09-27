@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -32,7 +33,7 @@ func (a *AuthService) getToken() (*authTokenResponse, error) {
 		// Store the refresh token (valid for 30 seconds)
 		a.rizeClient.TokenCache.Token = refreshToken
 
-		res, err := a.rizeClient.doRequest("auth", "POST", nil)
+		res, err := a.rizeClient.doRequest(http.MethodPost, "auth", nil, nil)
 		if err != nil {
 			return nil, err
 		}

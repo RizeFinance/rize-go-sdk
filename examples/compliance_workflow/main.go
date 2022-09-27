@@ -29,6 +29,13 @@ func main() {
 		log.Fatal("Error building RizeClient\n", err)
 	}
 
-	rc.ComplianceWorkflow.ListWorkflows()
+	wq := rize.WorkflowQuery{
+		Limit: 10,
+	}
+	w, err := rc.ComplianceWorkflow.ListWorkflows(&wq)
+	if err != nil {
+		log.Fatal("Error fetching compliance workflows\n", err)
+	}
+	log.Printf("%+v", w)
 
 }

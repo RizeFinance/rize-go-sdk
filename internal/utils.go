@@ -6,14 +6,14 @@ import (
 	"os"
 )
 
-// EnableLogging disables the Go log package when enabled is false
+// EnableLogging will customize or disable the standard Go log package
 func EnableLogging(enabled bool) {
-	if !enabled {
-		log.SetFlags(0)
-		log.SetOutput(io.Discard)
-	} else {
+	if enabled {
 		log.SetPrefix("[INFO] ")
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
+	} else {
+		log.SetFlags(0)
+		log.SetOutput(io.Discard)
 	}
 }
 

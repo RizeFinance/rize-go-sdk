@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -92,7 +93,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 }
 
 // Make the API request and return the response body
-func (r *RizeClient) doRequest(path string, method string, data io.Reader) (*http.Response, error) {
+func (r *RizeClient) doRequest(method string, path string, query url.Values, data io.Reader) (*http.Response, error) {
 	url := fmt.Sprintf("https://%s.rizefs.com/%s/%s", r.cfg.Environment, internal.APIBasePath, path)
 
 	log.Println(fmt.Sprintf("Sending %s request to %s", method, url))
@@ -101,6 +102,7 @@ func (r *RizeClient) doRequest(path string, method string, data io.Reader) (*htt
 	if err != nil {
 		return nil, err
 	}
+	req.URL.RawQuery = query.Encode()
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Authorization", r.TokenCache.Token)
 
@@ -113,7 +115,7 @@ func (r *RizeClient) doRequest(path string, method string, data io.Reader) (*htt
 	}
 
 	// Check for error response
-	if res.StatusCode >= 400 {
+	if res.StatusCode >= http.StatusBadRequest {
 		defer res.Body.Close()
 		body, err := ioutil.ReadAll(res.Body)
 		if err != nil {
