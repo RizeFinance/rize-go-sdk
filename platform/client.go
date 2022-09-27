@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -33,13 +33,17 @@ type RizeClient struct {
 	cfg *RizeConfig
 	// Stores a reference to the RizeClient for child services
 	svc service
-	// Refresh token
-	RefreshToken string
-	// Auth token
-	AuthToken string
+	// Cached auth token data
+	*TokenCache
 	// All available Rize API services
 	Auth               *AuthService
 	ComplianceWorkflow *ComplianceWorkflowService
+}
+
+// TokenCache stores Auth token data
+type TokenCache struct {
+	Token     string
+	Timestamp int64
 }
 
 // Default API error format
@@ -60,11 +64,9 @@ func (e *apiError) Error() string {
 // NewRizeClient initializes the RizeClient and all services
 func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	// Enable debug logging
-	if cfg.Debug {
-		os.Setenv("debug", fmt.Sprintf("%t", cfg.Debug))
-	}
+	internal.EnableLogging(cfg.Debug)
 
-	internal.Logger("client.NewRizeClient::Creating client...")
+	log.Println("Creating client...")
 
 	// Validate client config
 	if err := cfg.validateConfig(); err != nil {
@@ -74,6 +76,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	r := &RizeClient{}
 	r.cfg = cfg
 	r.svc.rizeClient = r // Store a reference to the RizeClient rather than creating one for each service
+	r.TokenCache = &TokenCache{}
 
 	// Initialize API Services
 	r.Auth = (*AuthService)(&r.svc)
@@ -90,23 +93,19 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 
 // Make the API request and return the response body
 func (r *RizeClient) doRequest(path string, method string, data io.Reader) (*http.Response, error) {
-	url := fmt.Sprintf("https://%s.rizefs.com/api/v1/%s", r.cfg.Environment, path)
+	url := fmt.Sprintf("https://%s.rizefs.com/%s/%s", r.cfg.Environment, internal.APIBasePath, path)
 
-	internal.Logger(fmt.Sprintf("client.doRequest::Sending %s request to %s", method, url))
+	log.Println(fmt.Sprintf("Sending %s request to %s", method, url))
 
 	req, err := http.NewRequest(method, url, data)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Add("Accept", "application/json")
-	if path == "auth" {
-		req.Header.Add("Authorization", r.RefreshToken)
-	} else {
-		req.Header.Add("Authorization", r.AuthToken)
-	}
+	req.Header.Add("Authorization", r.TokenCache.Token)
 
 	client := &http.Client{
-		Timeout: time.Second * 10,
+		Timeout: internal.APITimeoutSeconds,
 	}
 	res, err := client.Do(req)
 	if err != nil {
@@ -141,8 +140,8 @@ func (cfg *RizeConfig) validateConfig() error {
 		return fmt.Errorf("RizeConfig error: HMACKey is required")
 	}
 
-	if ok := slices.Contains(internal.ENVIRONMENTS, strings.ToLower(cfg.Environment)); !ok {
-		internal.Logger(fmt.Sprintf("Environment %s not recognized. Defaulting to sandbox...", cfg.Environment))
+	if ok := slices.Contains(internal.Environments, strings.ToLower(cfg.Environment)); !ok {
+		log.Println(fmt.Sprintf("Environment %s not recognized. Defaulting to sandbox...", cfg.Environment))
 		cfg.Environment = "sandbox"
 	}
 
@@ -151,5 +150,5 @@ func (cfg *RizeConfig) validateConfig() error {
 
 // Version outputs the current SDK version
 func Version() string {
-	return internal.SDK_VERSION
+	return internal.SDKVersion
 }

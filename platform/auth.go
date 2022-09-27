@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -20,39 +21,49 @@ type authTokenResponse struct {
 
 // Generate an authorization token
 func (a *AuthService) getToken() (*authTokenResponse, error) {
-	refreshToken, err := a.buildRefreshToken()
-	if err != nil {
-		return nil, err
+	// Check for missing or expired token
+	if a.rizeClient.TokenCache.Token == "" || isExpired(a.rizeClient.TokenCache) {
+		log.Println("Token is expired or does not exist. Fetching new token...")
+
+		refreshToken, err := a.buildRefreshToken()
+		if err != nil {
+			return nil, err
+		}
+		// Store the refresh token (valid for 30 seconds)
+		a.rizeClient.TokenCache.Token = refreshToken
+
+		res, err := a.rizeClient.doRequest("auth", "POST", nil)
+		if err != nil {
+			return nil, err
+		}
+		defer res.Body.Close()
+
+		body, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		response := &authTokenResponse{}
+		if err = json.Unmarshal(body, response); err != nil {
+			return nil, err
+		}
+
+		log.Println(fmt.Sprintf("Token response %+v", response))
+
+		// Validate token exists
+		if response.Token == "" {
+			return nil, fmt.Errorf("Error fetching auth token")
+		}
+
+		//  Save token to client. Auth token is valid for 24hrs
+		a.rizeClient.TokenCache.Timestamp = time.Now().Unix()
+		a.rizeClient.TokenCache.Token = response.Token
+		return response, nil
 	}
-	// Store the refresh token
-	a.rizeClient.RefreshToken = refreshToken
 
-	res, err := a.rizeClient.doRequest("auth", "POST", nil)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
+	log.Println("Token is valid. Using existing auth token...")
 
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	response := &authTokenResponse{}
-	if err = json.Unmarshal(body, response); err != nil {
-		return nil, err
-	}
-
-	internal.Logger(fmt.Sprintf("auth.getToken:::Token response %+v", response))
-
-	// Validate token exists and save to client
-	if response.Token != "" {
-		a.rizeClient.AuthToken = response.Token
-	} else {
-		return nil, fmt.Errorf("Error fetching auth token")
-	}
-
-	return response, nil
+	return &authTokenResponse{Token: a.rizeClient.TokenCache.Token}, nil
 }
 
 // Generates a JWT refresh token
@@ -69,7 +80,17 @@ func (a *AuthService) buildRefreshToken() (string, error) {
 		return "", err
 	}
 
-	internal.Logger(fmt.Sprintf("auth.buildRefreshToken::Signed token %s", signedToken))
+	log.Println(fmt.Sprintf("Signed token %s", signedToken))
 
 	return signedToken, nil
+}
+
+// Checks to see if the current Auth token should be refreshed
+func isExpired(tc *TokenCache) bool {
+	currentTime := time.Now().Unix()
+	if tc.Timestamp == 0 || ((currentTime - tc.Timestamp) > internal.APITokenMaxAge) {
+		return true
+	}
+
+	return false
 }

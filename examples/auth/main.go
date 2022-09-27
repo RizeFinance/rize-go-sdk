@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -16,7 +15,7 @@ func init() {
 	}
 
 	v := rize.Version()
-	fmt.Printf("Loading Rize SDK version: %s\n", v)
+	log.Printf("Loading Rize SDK version: %s\n", v)
 }
 
 func main() {
@@ -34,5 +33,5 @@ func main() {
 	}
 
 	// Confirm existence of Auth token
-	fmt.Println("Auth Token:", rc.AuthToken)
+	log.Println("Auth Token:", rc.TokenCache.Token)
 }

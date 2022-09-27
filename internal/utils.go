@@ -1,15 +1,19 @@
 package internal
 
 import (
-	"fmt"
+	"io"
 	"log"
 	"os"
 )
 
-// Logger wraps Println in a DEBUG env check
-func Logger(message string) {
-	if os.Getenv("debug") == "true" {
-		fmt.Println(message)
+// EnableLogging disables the Go log package when enabled is false
+func EnableLogging(enabled bool) {
+	if !enabled {
+		log.SetFlags(0)
+		log.SetOutput(io.Discard)
+	} else {
+		log.SetPrefix("[INFO] ")
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
 	}
 }
 
