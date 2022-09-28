@@ -94,6 +94,13 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 
 // Make the API request and return the response body
 func (r *RizeClient) doRequest(method string, path string, query url.Values, data io.Reader) (*http.Response, error) {
+	// Check for valid auth token
+	if path != "auth" {
+		if _, err := r.Auth.getToken(); err != nil {
+			return nil, err
+		}
+	}
+
 	url := fmt.Sprintf("https://%s.rizefs.com/%s/%s", r.cfg.Environment, internal.APIBasePath, path)
 
 	log.Println(fmt.Sprintf("Sending %s request to %s", method, url))

@@ -29,6 +29,7 @@ func main() {
 		log.Fatal("Error building RizeClient\n", err)
 	}
 
+	// List workflows
 	wq := rize.WorkflowQuery{
 		Limit: 10,
 	}
@@ -37,5 +38,20 @@ func main() {
 		log.Fatal("Error fetching compliance workflows\n", err)
 	}
 	log.Printf("%+v", w)
+
+	// Create workflow
+
+	// View workflow for customer
+	cwq := rize.CustomerWorkflowQuery{
+		ProductCompliancePlanUID: "mheiDmW1K2LSMZQU",
+	}
+	cw, err := rc.ComplianceWorkflow.ViewCustomerWorkflow("SPbiwv93C6M5pSWu", &cwq)
+	if err != nil {
+		log.Fatal("Error fetching customer workflows\n", err)
+	}
+	log.Printf("%+v", cw)
+
+	// Acknowledge document
+	// Acknowledge multiple documents
 
 }
