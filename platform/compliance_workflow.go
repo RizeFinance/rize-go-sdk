@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -35,6 +36,12 @@ type Workflows struct {
 	Data       []interface{} `json:"data"`
 }
 
+// WorkflowParams are the body params used when creating a new compliance workflow
+type WorkflowParams struct {
+	CustomerUID              string `url:"customer_uid"`
+	ProductCompliancePlanUID string `url:"product_compliance_plan_uid"`
+}
+
 // ListWorkflows retrieves a list of Compliance Workflows filtered by the given parameters
 func (c *ComplianceWorkflowService) ListWorkflows(wq *WorkflowQuery) (*Workflows, error) {
 	// Build WorkflowQuery into query string params
@@ -62,7 +69,32 @@ func (c *ComplianceWorkflowService) ListWorkflows(wq *WorkflowQuery) (*Workflows
 	return response, nil
 }
 
-func (c *ComplianceWorkflowService) createWorkflow() {}
+// CreateWorkflow associates a new Compliance Workflow and set of Compliance Documents (for acknowledgment) with a Customer
+func (c *ComplianceWorkflowService) CreateWorkflow(wp *WorkflowParams) (map[string]interface{}, error) {
+	bytesMessage, err := json.Marshal(wp)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := c.rizeClient.doRequest(http.MethodPost, "compliance_workflows", nil, bytes.NewBuffer(bytesMessage))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := make(map[string]interface{})
+	if err = json.Unmarshal(body, &response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
+
+}
 
 // ViewCustomerWorkflow to show the latest compliance workflow for a customer
 func (c *ComplianceWorkflowService) ViewCustomerWorkflow(customerUID string, cwq *CustomerWorkflowQuery) (map[string]interface{}, error) {

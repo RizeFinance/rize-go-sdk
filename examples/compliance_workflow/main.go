@@ -40,6 +40,15 @@ func main() {
 	log.Printf("%+v", w)
 
 	// Create workflow
+	wp := rize.WorkflowParams{
+		CustomerUID:              "LW5NZABQb8hoJfip",
+		ProductCompliancePlanUID: "YNNNrgcAQs9vvd4V",
+	}
+	nw, err := rc.ComplianceWorkflow.CreateWorkflow(&wp)
+	if err != nil {
+		log.Fatal("Error creating new compliance workflow\n", err)
+	}
+	log.Printf("%+v", nw)
 
 	// View workflow for customer
 	cwq := rize.CustomerWorkflowQuery{
