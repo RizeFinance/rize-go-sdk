@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -32,13 +31,13 @@ type RizeConfig struct {
 type RizeClient struct {
 	// All configuration values
 	cfg *RizeConfig
-	// Stores a reference to the RizeClient for child services
+	// Stores a reference to the RizeClient for child services to use internally
 	svc service
 	// Cached auth token data
 	*TokenCache
 	// All available Rize API services
-	Auth               *AuthService
-	ComplianceWorkflow *ComplianceWorkflowService
+	Auth               *authService
+	ComplianceWorkflow *complianceWorkflowService
 }
 
 // TokenCache stores Auth token data
@@ -47,8 +46,8 @@ type TokenCache struct {
 	Timestamp int64
 }
 
-// Default API error format
-type apiError struct {
+// APIError is the default API error format
+type APIError struct {
 	Errors []struct {
 		Code       int       `json:"code"`
 		Title      string    `json:"title"`
@@ -58,7 +57,7 @@ type apiError struct {
 	Status int `json:"status"`
 }
 
-func (e *apiError) Error() string {
+func (e *APIError) Error() string {
 	return fmt.Sprintf("Error status %d and output:\n%+v\n", e.Status, e.Errors)
 }
 
@@ -80,8 +79,8 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	r.TokenCache = &TokenCache{}
 
 	// Initialize API Services
-	r.Auth = (*AuthService)(&r.svc)
-	r.ComplianceWorkflow = (*ComplianceWorkflowService)(&r.svc)
+	r.Auth = (*authService)(&r.svc)
+	r.ComplianceWorkflow = (*complianceWorkflowService)(&r.svc)
 
 	// Generate Auth Token
 	_, err := r.Auth.getToken()
@@ -92,9 +91,9 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	return r, nil
 }
 
-// Make the API request and return the response body
+// Make the API request and return an http.Response. Checks for valid auth token.
 func (r *RizeClient) doRequest(method string, path string, query url.Values, data io.Reader) (*http.Response, error) {
-	// Check for valid auth token
+	// Check for valid auth token and refresh if necessary
 	if path != "auth" {
 		if _, err := r.Auth.getToken(); err != nil {
 			return nil, err
@@ -124,15 +123,15 @@ func (r *RizeClient) doRequest(method string, path string, query url.Values, dat
 	// Check for error response
 	if res.StatusCode >= http.StatusBadRequest {
 		defer res.Body.Close()
-		body, err := ioutil.ReadAll(res.Body)
+		body, err := io.ReadAll(res.Body)
 		if err != nil {
 			return nil, err
 		}
-		var errorOut = &apiError{}
+		var errorOut = &APIError{}
 		if err = json.Unmarshal(body, &errorOut); err != nil {
 			return nil, err
 		}
-		// Use apiError type to handle specific error codes from the API server
+		// Use APIError type to handle specific error codes from the API server
 		return nil, errorOut
 	}
 

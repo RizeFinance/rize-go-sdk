@@ -3,7 +3,7 @@ package platform
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"time"
@@ -12,16 +12,16 @@ import (
 	"github.com/rizefinance/rize-go-sdk/internal"
 )
 
-// AuthService handles all Auth related functionality
-type AuthService service
+// Handles all Auth related functionality
+type authService service
 
-// Response format when fetching an Auth token
-type authTokenResponse struct {
+// AuthTokenResponse is the response format received when fetching an Auth token
+type AuthTokenResponse struct {
 	Token string `json:"token"`
 }
 
 // Generate an authorization token
-func (a *AuthService) getToken() (*authTokenResponse, error) {
+func (a *authService) getToken() (*AuthTokenResponse, error) {
 	// Check for missing or expired token
 	if a.rizeClient.TokenCache.Token == "" || isExpired(a.rizeClient.TokenCache) {
 		log.Println("Token is expired or does not exist. Fetching new token...")
@@ -39,12 +39,12 @@ func (a *AuthService) getToken() (*authTokenResponse, error) {
 		}
 		defer res.Body.Close()
 
-		body, err := ioutil.ReadAll(res.Body)
+		body, err := io.ReadAll(res.Body)
 		if err != nil {
 			return nil, err
 		}
 
-		response := &authTokenResponse{}
+		response := &AuthTokenResponse{}
 		if err = json.Unmarshal(body, response); err != nil {
 			return nil, err
 		}
@@ -64,11 +64,11 @@ func (a *AuthService) getToken() (*authTokenResponse, error) {
 
 	log.Println("Token is valid. Using existing auth token...")
 
-	return &authTokenResponse{Token: a.rizeClient.TokenCache.Token}, nil
+	return &AuthTokenResponse{Token: a.rizeClient.TokenCache.Token}, nil
 }
 
 // Generates a JWT refresh token
-func (a *AuthService) buildRefreshToken() (string, error) {
+func (a *authService) buildRefreshToken() (string, error) {
 	// Encode JWT token with current time and programUID
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
 		"iat": time.Now().Unix(),

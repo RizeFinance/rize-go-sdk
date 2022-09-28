@@ -30,37 +30,70 @@ func main() {
 	}
 
 	// List workflows
-	wq := rize.WorkflowQuery{
-		Limit: 10,
+	wlp := rize.WorkflowListParams{
+		CustomerUID: "",
+		ProductUID:  "",
+		InProgress:  false,
+		Limit:       10,
+		Offset:      0,
 	}
-	w, err := rc.ComplianceWorkflow.ListWorkflows(&wq)
+	l, err := rc.ComplianceWorkflow.List(&wlp)
 	if err != nil {
 		log.Fatal("Error fetching compliance workflows\n", err)
 	}
-	log.Printf("%+v", w)
+	log.Printf("%+v", l)
 
 	// Create workflow
-	wp := rize.WorkflowParams{
-		CustomerUID:              "LW5NZABQb8hoJfip",
-		ProductCompliancePlanUID: "YNNNrgcAQs9vvd4V",
+	wcp := rize.WorkflowCreateParams{
+		CustomerUID:              "h9MzupcjtA3LPW2e",
+		ProductCompliancePlanUID: "25NQX3GGXpAtpUmP",
 	}
-	nw, err := rc.ComplianceWorkflow.CreateWorkflow(&wp)
+	c, err := rc.ComplianceWorkflow.Create(&wcp)
 	if err != nil {
 		log.Fatal("Error creating new compliance workflow\n", err)
 	}
-	log.Printf("%+v", nw)
+	log.Printf("%+v", c)
 
-	// View workflow for customer
-	cwq := rize.CustomerWorkflowQuery{
-		ProductCompliancePlanUID: "mheiDmW1K2LSMZQU",
+	// View latest workflow for a customer
+	lp := rize.WorkflowLatestParams{
+		ProductCompliancePlanUID: "pQtTCSXz57fuefzp",
 	}
-	cw, err := rc.ComplianceWorkflow.ViewCustomerWorkflow("SPbiwv93C6M5pSWu", &cwq)
+	cw, err := rc.ComplianceWorkflow.ViewLatest("h9MzupcjtA3LPW2e", &lp)
 	if err != nil {
-		log.Fatal("Error fetching customer workflows\n", err)
+		log.Fatal("Error fetching latest customer workflow\n", err)
 	}
 	log.Printf("%+v", cw)
 
 	// Acknowledge document
-	// Acknowledge multiple documents
+	wd := rize.WorkflowDocument{
+		Accept:      "yes",
+		CustomerUID: "h9MzupcjtA3LPW2e",
+		DocumentUID: "Yqyjk5b2xgQ9FrxS",
+		IPAddress:   "107.56.230.156",
+		UserName:    "gilbert chesterton",
+	}
+	ad, err := rc.ComplianceWorkflow.AcknowledgeDocument("dolordo", &wd)
+	if err != nil {
+		log.Fatal("Error acknowledging compliance document\n", err)
+	}
+	log.Printf("%+v", ad)
 
+	// Acknowledge multiple documents
+	wdp := rize.WorkflowDocumentsParams{
+		CustomerUID: "h9MzupcjtA3LPW2e",
+		Documents: []rize.WorkflowDocument{{
+			Accept:      "yes",
+			DocumentUID: "Yqyjk5b2xgQ9FrxS",
+			IPAddress:   "107.56.230.156",
+			UserName:    "gilbert chesterton",
+		}, {
+			Accept:      "yes",
+			DocumentUID: "BgT64WeR0IxkgH6D",
+		}},
+	}
+	ads, err := rc.ComplianceWorkflow.AcknowledgeDocuments("dolordo", &wdp)
+	if err != nil {
+		log.Fatal("Error acknowledging compliance documents\n", err)
+	}
+	log.Printf("%+v", ads)
 }

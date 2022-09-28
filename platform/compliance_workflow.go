@@ -4,17 +4,17 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/google/go-querystring/query"
 )
 
-// ComplianceWorkflowService handles all Compliance Workflow operations
-type ComplianceWorkflowService service
+// Handles all Compliance Workflow operations
+type complianceWorkflowService service
 
-// WorkflowQuery builds the parameters used in querying compliance workflows
-type WorkflowQuery struct {
+// WorkflowListParams builds the query parameters used in querying compliance workflows
+type WorkflowListParams struct {
 	CustomerUID string `url:"customer_uid,omitempty"`
 	ProductUID  string `url:"product_uid,omitempty"`
 	InProgress  bool   `url:"in_progress,omitempty"`
@@ -22,13 +22,35 @@ type WorkflowQuery struct {
 	Offset      int    `url:"offset,omitempty"`
 }
 
-// CustomerWorkflowQuery builds parameters used in querying workflows for a customer
-type CustomerWorkflowQuery struct {
+// WorkflowLatestParams builds the query parameters used in querying the latest workflow for a customer
+type WorkflowLatestParams struct {
 	ProductCompliancePlanUID string `url:"product_compliance_plan_uid,omitempty"`
 }
 
-// Workflows is an API response containing a list of compliance workflows
-type Workflows struct {
+// WorkflowCreateParams are the body params used when creating a new compliance workflow
+type WorkflowCreateParams struct {
+	CustomerUID              string `json:"customer_uid"`
+	ProductCompliancePlanUID string `json:"product_compliance_plan_uid"`
+}
+
+// WorkflowDocument are the body params used when acknowledging a compliance document
+type WorkflowDocument struct {
+	Accept      string `json:"accept"`
+	DocumentUID string `json:"document_uid"`
+	IPAddress   string `json:"ip_address,omitempty"`
+	UserName    string `json:"user_name,omitempty"`
+	// Required for AcknowledgeDocument but omitted for AcknowledgeDocuments
+	CustomerUID string `json:"customer_uid,omitempty"`
+}
+
+// WorkflowDocumentsParams are the body params used when acknowledging multiple compliance documents
+type WorkflowDocumentsParams struct {
+	CustomerUID string             `json:"customer_uid"`
+	Documents   []WorkflowDocument `json:"documents"`
+}
+
+// WorkflowResponse is an API response containing a list of compliance workflows
+type WorkflowResponse struct {
 	TotalCount int           `json:"total_count"`
 	Count      int           `json:"count"`
 	Limit      int           `json:"limit"`
@@ -36,16 +58,10 @@ type Workflows struct {
 	Data       []interface{} `json:"data"`
 }
 
-// WorkflowParams are the body params used when creating a new compliance workflow
-type WorkflowParams struct {
-	CustomerUID              string `url:"customer_uid"`
-	ProductCompliancePlanUID string `url:"product_compliance_plan_uid"`
-}
-
 // ListWorkflows retrieves a list of Compliance Workflows filtered by the given parameters
-func (c *ComplianceWorkflowService) ListWorkflows(wq *WorkflowQuery) (*Workflows, error) {
-	// Build WorkflowQuery into query string params
-	v, err := query.Values(wq)
+func (c *complianceWorkflowService) List(wlp *WorkflowListParams) (*WorkflowResponse, error) {
+	// Build WorkflowListParams into query string params
+	v, err := query.Values(wlp)
 	if err != nil {
 		return nil, err
 	}
@@ -56,12 +72,12 @@ func (c *ComplianceWorkflowService) ListWorkflows(wq *WorkflowQuery) (*Workflows
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	response := &Workflows{}
+	response := &WorkflowResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}
@@ -70,8 +86,12 @@ func (c *ComplianceWorkflowService) ListWorkflows(wq *WorkflowQuery) (*Workflows
 }
 
 // CreateWorkflow associates a new Compliance Workflow and set of Compliance Documents (for acknowledgment) with a Customer
-func (c *ComplianceWorkflowService) CreateWorkflow(wp *WorkflowParams) (map[string]interface{}, error) {
-	bytesMessage, err := json.Marshal(wp)
+func (c *complianceWorkflowService) Create(wcp *WorkflowCreateParams) (*http.Response, error) {
+	if wcp.CustomerUID == "" || wcp.ProductCompliancePlanUID == "" {
+		return nil, fmt.Errorf("CustomerUID and ProductCompliancePlanUID values are required")
+	}
+
+	bytesMessage, err := json.Marshal(wcp)
 	if err != nil {
 		return nil, err
 	}
@@ -82,28 +102,19 @@ func (c *ComplianceWorkflowService) CreateWorkflow(wp *WorkflowParams) (map[stri
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	response := make(map[string]interface{})
-	if err = json.Unmarshal(body, &response); err != nil {
-		return nil, err
-	}
-
-	return response, nil
+	return res, nil
 
 }
 
-// ViewCustomerWorkflow to show the latest compliance workflow for a customer
-func (c *ComplianceWorkflowService) ViewCustomerWorkflow(customerUID string, cwq *CustomerWorkflowQuery) (map[string]interface{}, error) {
+// ViewLatest is a helper endpoint for retrieving the most recent Compliance Workflow for a Customer.
+// A Customer UID must be supplied as the path parameter.
+func (c *complianceWorkflowService) ViewLatest(customerUID string, wlp *WorkflowLatestParams) (*http.Response, error) {
 	if customerUID == "" {
 		return nil, fmt.Errorf("customerUID is required")
 	}
 
 	// Build query params
-	v, err := query.Values(cwq)
+	v, err := query.Values(wlp)
 	if err != nil {
 		return nil, err
 	}
@@ -113,18 +124,54 @@ func (c *ComplianceWorkflowService) ViewCustomerWorkflow(customerUID string, cwq
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	return res, nil
+}
+
+// AcknowledgeDocument is used to indicate acceptance or rejection of a Compliance Document within a given Compliance Workflow
+func (c *complianceWorkflowService) AcknowledgeDocument(uid string, wd *WorkflowDocument) (*http.Response, error) {
+	if uid == "" || wd.Accept == "" || wd.DocumentUID == "" || wd.CustomerUID == "" {
+		return nil, fmt.Errorf("UID, Accept, DocumentUID and CustomerUID values are required")
+	}
+
+	bytesMessage, err := json.Marshal(wd)
 	if err != nil {
 		return nil, err
 	}
 
-	response := make(map[string]interface{})
-	if err = json.Unmarshal(body, &response); err != nil {
+	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("compliance_workflows/%s/acknowledge_document", uid), nil, bytes.NewBuffer(bytesMessage))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	return res, nil
+}
+
+// AcknowledgeDocuments is used to indicate acceptance or rejection of multiple Compliance Documents within a given Compliance Workflow
+func (c *complianceWorkflowService) AcknowledgeDocuments(uid string, wdp *WorkflowDocumentsParams) (*http.Response, error) {
+	if uid == "" {
+		return nil, fmt.Errorf("UID is required")
+	}
+
+	for _, d := range wdp.Documents {
+		if d.Accept == "" || d.DocumentUID == "" {
+			return nil, fmt.Errorf("Accept and DocumentUID values are required")
+		}
+		if d.CustomerUID != "" {
+			d.CustomerUID = "" // Clear unsupported property
+		}
+	}
+
+	bytesMessage, err := json.Marshal(wdp)
+	if err != nil {
 		return nil, err
 	}
 
-	return response, nil
-}
+	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("compliance_workflows/%s/batch_acknowledge_documents", uid), nil, bytes.NewBuffer(bytesMessage))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
 
-func (c *ComplianceWorkflowService) acknowledgeDocument()  {}
-func (c *ComplianceWorkflowService) acknowledgeDocuments() {}
+	return res, nil
+}
