@@ -19,6 +19,16 @@ type service struct {
 	rizeClient *RizeClient
 }
 
+// BaseResponse is the default 'List' endpoint response.
+// It is intended to be included in a response type specific to a service, which
+// includes a Data array specific to that service type
+type BaseResponse struct {
+	TotalCount int `json:"total_count"`
+	Count      int `json:"count"`
+	Limit      int `json:"limit"`
+	Offset     int `json:"offset"`
+}
+
 // RizeConfig stores Rize configuration values
 type RizeConfig struct {
 	ProgramUID  string
@@ -38,6 +48,7 @@ type RizeClient struct {
 	// All available Rize API services
 	Auth               *authService
 	ComplianceWorkflow *complianceWorkflowService
+	Customer           *customerService
 }
 
 // TokenCache stores Auth token data
@@ -81,6 +92,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	// Initialize API Services
 	r.Auth = (*authService)(&r.svc)
 	r.ComplianceWorkflow = (*complianceWorkflowService)(&r.svc)
+	r.Customer = (*customerService)(&r.svc)
 
 	// Generate Auth Token
 	_, err := r.Auth.getToken()

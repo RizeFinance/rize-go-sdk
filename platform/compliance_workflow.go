@@ -51,11 +51,8 @@ type WorkflowDocumentsParams struct {
 
 // WorkflowResponse is an API response containing a list of compliance workflows
 type WorkflowResponse struct {
-	TotalCount int           `json:"total_count"`
-	Count      int           `json:"count"`
-	Limit      int           `json:"limit"`
-	Offset     int           `json:"offset"`
-	Data       []interface{} `json:"data"`
+	BaseResponse
+	Data []interface{} `json:"data"`
 }
 
 // ListWorkflows retrieves a list of Compliance Workflows filtered by the given parameters
