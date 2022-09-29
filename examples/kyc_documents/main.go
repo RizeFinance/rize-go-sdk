@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
+	"io/ioutil"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -37,4 +39,40 @@ func main() {
 	}
 	output, _ := json.Marshal(kl)
 	log.Println("List Documents:", string(output))
+
+	// Upload Document
+	bytes, err := ioutil.ReadFile("./file.png")
+	if err != nil {
+		log.Fatal("Error reading file\n", err)
+	}
+	base64Encoding := base64.StdEncoding.EncodeToString(bytes)
+	kup := rize.KYCDocumentUploadParams{
+		EvaluationUID: "sdfHFJnWvJxRJZxq",
+		Filename:      "fred_smith_license.png",
+		FileContent:   base64Encoding,
+		Note:          "Uploaded via SDK",
+		Type:          "license",
+	}
+	ku, err := rc.KYCDocuments.Upload(&kup)
+	if err != nil {
+		log.Fatal("Error uploading document\n", err)
+	}
+	output, _ = json.Marshal(ku)
+	log.Println("Upload Document:", string(output))
+
+	// Get Document
+	kg, err := rc.KYCDocuments.Get("u8EHFJnWvJxRJZxa")
+	if err != nil {
+		log.Fatal("Error getting document\n", err)
+	}
+	output, _ = json.Marshal(kg)
+	log.Println("Get Document:", string(output))
+
+	// View Document
+	kv, err := rc.KYCDocuments.View("u8EHFJnWvJxRJZxa")
+	if err != nil {
+		log.Fatal("Error viewing document\n", err)
+	}
+	output, _ = json.Marshal(kv)
+	log.Println("View Document:", string(output))
 }
