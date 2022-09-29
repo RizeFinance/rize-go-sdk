@@ -81,7 +81,7 @@ func main() {
 	// Acknowledge multiple documents
 	wdp := rize.WorkflowDocumentsParams{
 		CustomerUID: "h9MzupcjtA3LPW2e",
-		Documents: []rize.WorkflowDocument{{
+		Documents: []*rize.WorkflowDocument{{
 			Accept:      "yes",
 			DocumentUID: "Yqyjk5b2xgQ9FrxS",
 			IPAddress:   "107.56.230.156",

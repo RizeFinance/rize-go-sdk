@@ -16,37 +16,37 @@ type customerService service
 
 // Customer data type
 type Customer struct {
-	UID                   string          `json:"uid,omitempty"`
-	ExternalUID           string          `json:"external_uid,omitempty"`
-	ActivatedAt           time.Time       `json:"activated_at,omitempty"`
-	CreatedAt             time.Time       `json:"created_at,omitempty"`
-	CustomerType          string          `json:"customer_type,omitempty"`
-	Email                 string          `json:"email,omitempty"`
-	Details               CustomerDetails `json:"details,omitempty"`
-	KYCStatus             string          `json:"kyc_status,omitempty"`
-	KYCStatusReasons      []string        `json:"kyc_status_reasons,omitempty"`
-	LockReason            string          `json:"lock_reason,omitempty"`
-	LockedAt              time.Time       `json:"locked_at,omitempty"`
-	PoolUIDs              []string        `json:"pool_uids,omitempty"`
-	PrimaryCustomerUID    string          `json:"primary_customer_uid,omitempty"`
-	ProfileResponses      []interface{}   `json:"profile_responses,omitempty"`
-	ProgramUID            string          `json:"program_uid,omitempty"`
-	SecondaryCustomerUIDs []string        `json:"secondary_customer_uids,omitempty"`
-	Status                string          `json:"status,omitempty"`
-	TotalBalance          string          `json:"total_balance,omitempty"`
+	UID                   string           `json:"uid,omitempty"`
+	ExternalUID           string           `json:"external_uid,omitempty"`
+	ActivatedAt           time.Time        `json:"activated_at,omitempty"`
+	CreatedAt             time.Time        `json:"created_at,omitempty"`
+	CustomerType          string           `json:"customer_type,omitempty"`
+	Email                 string           `json:"email,omitempty"`
+	Details               *CustomerDetails `json:"details,omitempty"`
+	KYCStatus             string           `json:"kyc_status,omitempty"`
+	KYCStatusReasons      []string         `json:"kyc_status_reasons,omitempty"`
+	LockReason            string           `json:"lock_reason,omitempty"`
+	LockedAt              time.Time        `json:"locked_at,omitempty"`
+	PoolUIDs              []string         `json:"pool_uids,omitempty"`
+	PrimaryCustomerUID    string           `json:"primary_customer_uid,omitempty"`
+	ProfileResponses      []interface{}    `json:"profile_responses,omitempty"`
+	ProgramUID            string           `json:"program_uid,omitempty"`
+	SecondaryCustomerUIDs []string         `json:"secondary_customer_uids,omitempty"`
+	Status                string           `json:"status,omitempty"`
+	TotalBalance          string           `json:"total_balance,omitempty"`
 }
 
 // CustomerDetails is an object containing the supplied identifying information for the Customer
 type CustomerDetails struct {
-	FirstName    string          `json:"first_name,omitempty"`
-	MiddleName   string          `json:"middle_name,omitempty"`
-	LastName     string          `json:"last_name,omitempty"`
-	Suffix       string          `json:"suffix,omitempty"`
-	Phone        string          `json:"phone,omitempty"`
-	BusinessName string          `json:"business_name,omitempty"`
-	DOB          time.Time       `json:"dob,omitempty"`
-	SSN          string          `json:"ssn,omitempty"`
-	Address      CustomerAddress `json:"address,omitempty"`
+	FirstName    string           `json:"first_name,omitempty"`
+	MiddleName   string           `json:"middle_name,omitempty"`
+	LastName     string           `json:"last_name,omitempty"`
+	Suffix       string           `json:"suffix,omitempty"`
+	Phone        string           `json:"phone,omitempty"`
+	BusinessName string           `json:"business_name,omitempty"`
+	DOB          time.Time        `json:"dob,omitempty"`
+	SSN          string           `json:"ssn,omitempty"`
+	Address      *CustomerAddress `json:"address,omitempty"`
 }
 
 // CustomerAddress information
@@ -99,8 +99,8 @@ type CustomerProfileResponseParams struct {
 // CustomerProfileResponseOrderedListParams are the body params used when updating customer profile responses
 // with the `ordered_list` requirement type
 type CustomerProfileResponseOrderedListParams struct {
-	ProfileRequirementUID string                      `json:"profile_requirement_uid"`
-	ProfileResponse       CustomerProfileResponseList `json:"profile_response"`
+	ProfileRequirementUID string                       `json:"profile_requirement_uid"`
+	ProfileResponse       *CustomerProfileResponseList `json:"profile_response"`
 }
 
 // CustomerProfileResponseList is a nested struct used with CustomerProfileResponseOrderedListParams
@@ -112,16 +112,16 @@ type CustomerProfileResponseList struct {
 
 // SecondaryCustomerParams are the body params used when creating a new secondary customer
 type SecondaryCustomerParams struct {
-	ExternalUID        string          `json:"external_uid,omitempty"`
-	PrimaryCustomerUID string          `json:"primary_customer_uid"`
-	Email              string          `json:"email,omitempty"`
-	Details            CustomerDetails `json:"details"`
+	ExternalUID        string           `json:"external_uid,omitempty"`
+	PrimaryCustomerUID string           `json:"primary_customer_uid"`
+	Email              string           `json:"email,omitempty"`
+	Details            *CustomerDetails `json:"details"`
 }
 
 // CustomerResponse is an API response containing a list of customers
 type CustomerResponse struct {
 	BaseResponse
-	Data []Customer `json:"data"`
+	Data []*Customer `json:"data"`
 }
 
 // List retrieves a list of Customers filtered by the given parameters
@@ -311,7 +311,7 @@ func (c *customerService) Unlock(uid string, lockNote string, unlockReason strin
 }
 
 // UpdateProfileResponses is used to submit a Customer's Profile Responses to Profile Requirements
-func (c *customerService) UpdateProfileResponses(uid string, cprp []CustomerProfileResponseParams) (*http.Response, error) {
+func (c *customerService) UpdateProfileResponses(uid string, cprp []*CustomerProfileResponseParams) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -324,7 +324,7 @@ func (c *customerService) UpdateProfileResponses(uid string, cprp []CustomerProf
 
 	// Wrap profile response params in a `details` json object
 	var details = struct {
-		Details []CustomerProfileResponseParams `json:"details"`
+		Details []*CustomerProfileResponseParams `json:"details"`
 	}{
 		Details: cprp,
 	}
@@ -343,7 +343,7 @@ func (c *customerService) UpdateProfileResponses(uid string, cprp []CustomerProf
 }
 
 // UpdateProfileResponsesOrderedList is used to update Customer's Profile Responses with the `ordered_list` requirement type
-func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cprp []CustomerProfileResponseOrderedListParams) (*http.Response, error) {
+func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cprp []*CustomerProfileResponseOrderedListParams) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -356,7 +356,7 @@ func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cprp []C
 
 	// Wrap profile response params in a `details` json object
 	var details = struct {
-		Details []CustomerProfileResponseOrderedListParams `json:"details"`
+		Details []*CustomerProfileResponseOrderedListParams `json:"details"`
 	}{
 		Details: cprp,
 	}

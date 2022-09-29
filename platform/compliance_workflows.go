@@ -45,8 +45,8 @@ type WorkflowDocument struct {
 
 // WorkflowDocumentsParams are the body params used when acknowledging multiple compliance documents
 type WorkflowDocumentsParams struct {
-	CustomerUID string             `json:"customer_uid"`
-	Documents   []WorkflowDocument `json:"documents"`
+	CustomerUID string              `json:"customer_uid"`
+	Documents   []*WorkflowDocument `json:"documents"`
 }
 
 // WorkflowResponse is an API response containing a list of compliance workflows
@@ -55,7 +55,7 @@ type WorkflowResponse struct {
 	Data []interface{} `json:"data"`
 }
 
-// ListWorkflows retrieves a list of Compliance Workflows filtered by the given parameters
+// Retrieves a list of Compliance Workflows filtered by the given parameters
 func (c *complianceWorkflowService) List(wlp *WorkflowListParams) (*WorkflowResponse, error) {
 	// Build WorkflowListParams into query string params
 	v, err := query.Values(wlp)
@@ -82,7 +82,7 @@ func (c *complianceWorkflowService) List(wlp *WorkflowListParams) (*WorkflowResp
 	return response, nil
 }
 
-// CreateWorkflow associates a new Compliance Workflow and set of Compliance Documents (for acknowledgment) with a Customer
+// Associates a new Compliance Workflow and set of Compliance Documents (for acknowledgment) with a Customer
 func (c *complianceWorkflowService) Create(wcp *WorkflowCreateParams) (*http.Response, error) {
 	if wcp.CustomerUID == "" || wcp.ProductCompliancePlanUID == "" {
 		return nil, fmt.Errorf("CustomerUID and ProductCompliancePlanUID values are required")

@@ -109,7 +109,7 @@ func main() {
 	log.Println("Unlock Customer:", string(output))
 
 	// Update Profile Response
-	cprp := []rize.CustomerProfileResponseParams{
+	cprp := []*rize.CustomerProfileResponseParams{
 		{
 			ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
 			ProfileResponse:       "",
@@ -123,9 +123,9 @@ func main() {
 	log.Println("Update Profile Response:", string(output))
 
 	// Update Profile Response (ordered_list)
-	cprpol := []rize.CustomerProfileResponseOrderedListParams{{
+	cprpol := []*rize.CustomerProfileResponseOrderedListParams{{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
-		ProfileResponse: rize.CustomerProfileResponseList{
+		ProfileResponse: &rize.CustomerProfileResponseList{
 			Num0: "string",
 		},
 	}}
@@ -139,10 +139,10 @@ func main() {
 	// Secondary Customers
 	scp := rize.SecondaryCustomerParams{
 		PrimaryCustomerUID: "kbF5TGrmwGizQuzZ",
-		Details: rize.CustomerDetails{
+		Details: &rize.CustomerDetails{
 			FirstName: "Olive",
 			LastName:  "Oyl",
-			Address: rize.CustomerAddress{
+			Address: &rize.CustomerAddress{
 				PostalCode: "12345",
 			},
 		},
