@@ -105,6 +105,14 @@ type CustomerProfileResponseOrderedListParams struct {
 	} `json:"details"`
 }
 
+// SecondaryCustomerParams are the body params used when creating a new secondary customer
+type SecondaryCustomerParams struct {
+	ExternalUID        string          `json:"external_uid,omitempty"`
+	PrimaryCustomerUID string          `json:"primary_customer_uid"`
+	Email              string          `json:"email,omitempty"`
+	Details            CustomerDetails `json:"details"`
+}
+
 // CustomerResponse is an API response containing a list of customers
 type CustomerResponse struct {
 	BaseResponse
@@ -349,4 +357,22 @@ func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cprp *Cu
 	return res, nil
 }
 
-func (c *customerService) CreateSecondaryCustomer(uid string) (*http.Response, error) {}
+// CreateSecondaryCustomer is used to create a new Secondary Customer
+func (c *customerService) CreateSecondaryCustomer(scp *SecondaryCustomerParams) (*http.Response, error) {
+	if scp.PrimaryCustomerUID == "" {
+		return nil, fmt.Errorf("PrimaryCustomerUID is required")
+	}
+
+	bytesMessage, err := json.Marshal(&scp)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := c.rizeClient.doRequest(http.MethodPost, "customers/create_secondary", nil, bytes.NewBuffer(bytesMessage))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	return res, nil
+}
