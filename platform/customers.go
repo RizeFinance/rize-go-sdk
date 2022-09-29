@@ -181,3 +181,100 @@ func (c *customerService) Update(uid string, cd *CustomerDetails) (*http.Respons
 
 	return res, nil
 }
+
+// Delete will archive a customer
+func (c *customerService) Delete(uid string, archiveNote string) (*http.Response, error) {
+	if uid == "" {
+		return nil, fmt.Errorf("UID is required")
+	}
+
+	var params = struct {
+		ArchiveNote string `json:"archive_note,omitempty"`
+	}{}
+	params.ArchiveNote = archiveNote
+
+	bytesMessage, err := json.Marshal(&params)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := c.rizeClient.doRequest(http.MethodDelete, fmt.Sprintf("customers/%s", uid), nil, bytes.NewBuffer(bytesMessage))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	return res, nil
+}
+
+// ConfirmPIIData is used to explicitly confirm a Customer's PII data is up-to-date in order to add additional products
+func (c *customerService) ConfirmPIIData(uid string) (*http.Response, error) {
+	if uid == "" {
+		return nil, fmt.Errorf("UID is required")
+	}
+
+	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/identity_confirmation", uid), nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	return res, nil
+}
+
+// Lock will freeze all activities relating to the Customer
+func (c *customerService) Lock(uid string, lockNote string, lockReason string) (*http.Response, error) {
+	if uid == "" || lockReason == "" {
+		return nil, fmt.Errorf("UID and lockReason are required")
+	}
+
+	var params = struct {
+		LockNote   string `json:"lock_note,omitempty"`
+		LockReason string `json:"lock_reason"`
+	}{}
+	params.LockNote = lockNote
+	params.LockReason = lockReason
+
+	bytesMessage, err := json.Marshal(&params)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/lock", uid), nil, bytes.NewBuffer(bytesMessage))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	return res, nil
+}
+
+// Unlock will remove the Customer lock, returning their state to normal
+func (c *customerService) Unlock(uid string, lockNote string, unlockReason string) (*http.Response, error) {
+	if uid == "" {
+		return nil, fmt.Errorf("UID is required")
+	}
+
+	var params = struct {
+		LockNote     string `json:"lock_note,omitempty"`
+		UnlockReason string `json:"unlock_reason,omitempty"`
+	}{}
+	params.LockNote = lockNote
+	params.UnlockReason = unlockReason
+
+	bytesMessage, err := json.Marshal(&params)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/unlock", uid), nil, bytes.NewBuffer(bytesMessage))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	return res, nil
+}
+
+func (c *customerService) UpdateProfileResponses(uid string) (*http.Response, error)  {}
+func (c *customerService) CreateSecondaryCustomer(uid string) (*http.Response, error) {}
