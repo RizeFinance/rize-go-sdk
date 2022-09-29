@@ -34,11 +34,123 @@ func main() {
 	clp := rize.CustomerListParams{
 		Limit: 10,
 	}
-	l, err := rc.Customers.List(&clp)
+	cl, err := rc.Customers.List(&clp)
 	if err != nil {
 		log.Fatal("Error fetching customers\n", err)
 	}
-	output, _ := json.Marshal(l)
-	log.Println("Customers:", string(output))
+	output, _ := json.Marshal(cl)
+	log.Println("List Customers:", string(output))
 
+	// Create new customer
+	ccp := rize.CustomerCreateParams{
+		CustomerType: "primary",
+		Email:        "thomas@example.com",
+	}
+	cc, err := rc.Customers.Create(&ccp)
+	if err != nil {
+		log.Fatal("Error creating new customer\n", err)
+	}
+	output, _ = json.Marshal(cc)
+	log.Println("New Customer:", string(output))
+
+	// Get customer
+	cg, err := rc.Customers.Get("EhrQZJNjCd79LLYq")
+	if err != nil {
+		log.Fatal("Error fetching customer\n", err)
+	}
+	output, _ = json.Marshal(cg)
+	log.Println("Get Customer:", string(output))
+
+	// Update customer
+	cup := rize.CustomerUpdateParams{
+		Email: "olive.oyl@rizemoney.com",
+		Details: rize.CustomerDetails{
+			FirstName: "Olive",
+			LastName:  "Oyl",
+		},
+	}
+	cu, err := rc.Customers.Update("EhrQZJNjCd79LLYq", &cup)
+	if err != nil {
+		log.Fatal("Error updating customer\n", err)
+	}
+	output, _ = json.Marshal(cu)
+	log.Println("Update Customer:", string(output))
+
+	// Delete customer
+	cdl, err := rc.Customers.Delete("EhrQZJNjCd79LLYq", "Archiving customer note")
+	if err != nil {
+		log.Fatal("Error archiving customer\n", err)
+	}
+	output, _ = json.Marshal(cdl)
+	log.Println("Delete Customer:", string(output))
+
+	// Confirm Identity
+	ci, err := rc.Customers.ConfirmPIIData("EhrQZJNjCd79LLYq")
+	if err != nil {
+		log.Fatal("Error confirming identity\n", err)
+	}
+	output, _ = json.Marshal(ci)
+	log.Println("Confirm customer identity:", string(output))
+
+	// Lock customer
+	clk, err := rc.Customers.Lock("EhrQZJNjCd79LLYq", "note", "reason")
+	if err != nil {
+		log.Fatal("Error locking customer\n", err)
+	}
+	output, _ = json.Marshal(clk)
+	log.Println("Lock Customer:", string(output))
+
+	// Unlock Customer
+	culk, err := rc.Customers.Unlock("EhrQZJNjCd79LLYq", "note", "reason")
+	if err != nil {
+		log.Fatal("Error unlocking customer\n", err)
+	}
+	output, _ = json.Marshal(culk)
+	log.Println("Unlock Customer:", string(output))
+
+	// Update Profile Response
+	cprp := []rize.CustomerProfileResponseParams{
+		{
+			ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
+			ProfileResponse:       "",
+		},
+	}
+	cupr, err := rc.Customers.UpdateProfileResponses("EhrQZJNjCd79LLYq", cprp)
+	if err != nil {
+		log.Fatal("Error updating profile response\n", err)
+	}
+	output, _ = json.Marshal(cupr)
+	log.Println("Update Profile Response:", string(output))
+
+	// Update Profile Response (ordered_list)
+	cprpol := []rize.CustomerProfileResponseOrderedListParams{{
+		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
+		ProfileResponse: rize.CustomerProfileResponseList{
+			Num0: "string",
+		},
+	}}
+	cuprol, err := rc.Customers.UpdateProfileResponsesOrderedList("EhrQZJNjCd79LLYq", cprpol)
+	if err != nil {
+		log.Fatal("Error updating profile response (ordered_list)\n", err)
+	}
+	output, _ = json.Marshal(cuprol)
+	log.Println("Update Profile Response (ordered_list):", string(output))
+
+	// Secondary Customers
+	scp := rize.SecondaryCustomerParams{
+		PrimaryCustomerUID: "kbF5TGrmwGizQuzZ",
+		Details: rize.CustomerDetails{
+			FirstName: "Olive",
+			LastName:  "Oyl",
+			Address: rize.CustomerAddress{
+				PostalCode: "12345",
+			},
+		},
+	}
+	sc, err := rc.Customers.CreateSecondaryCustomer(&scp)
+	if err != nil {
+		log.Fatal("Error creating secondary customer\n", err)
+	}
+	output, _ = json.Marshal(sc)
+	log.Println("Secondary Customer:", string(output))
 }
