@@ -63,7 +63,7 @@ func main() {
 	// Get Document
 	kg, err := rc.KYCDocuments.Get("u8EHFJnWvJxRJZxa")
 	if err != nil {
-		log.Fatal("Error getting document\n", err)
+		log.Fatal("Error fetching document\n", err)
 	}
 	output, _ = json.Marshal(kg)
 	log.Println("Get Document:", string(output))

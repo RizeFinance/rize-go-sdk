@@ -30,25 +30,19 @@ func main() {
 		log.Fatal("Error building RizeClient\n", err)
 	}
 
-	// List Pools
-	plp := rize.PoolListParams{
-		CustomerUID: "uKxmLxUEiSj5h4M3",
-		ExternalUID: "client-generated-id",
-		Limit:       100,
-		Offset:      0,
-	}
-	pl, err := rc.Pools.List(&plp)
+	// List Products
+	pl, err := rc.Products.List("pQtTCSXz57fuefzp")
 	if err != nil {
-		log.Fatal("Error fetching pools\n", err)
+		log.Fatal("Error fetching products\n", err)
 	}
 	output, _ := json.Marshal(pl)
-	log.Println("List Pools:", string(output))
+	log.Println("List Products:", string(output))
 
-	// Get Pool
-	pg, err := rc.Pools.Get("EhrQZJNjCd79LLYq")
+	// Get Product
+	pg, err := rc.Products.Get("f9VncZny4ejhcPF4")
 	if err != nil {
-		log.Fatal("Error fetching pool\n", err)
+		log.Fatal("Error fetching product\n", err)
 	}
 	output, _ = json.Marshal(pg)
-	log.Println("Get Pool:", string(output))
+	log.Println("Get Product:", string(output))
 }
