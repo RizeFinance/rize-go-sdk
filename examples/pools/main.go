@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -28,4 +29,26 @@ func main() {
 	if err != nil {
 		log.Fatal("Error building RizeClient\n", err)
 	}
+
+	// List Pools
+	plp := rize.PoolListParams{
+		CustomerUID: "uKxmLxUEiSj5h4M3",
+		ExternalUID: "client-generated-id",
+		Limit:       100,
+		Offset:      0,
+	}
+	pl, err := rc.Pools.List(&plp)
+	if err != nil {
+		log.Fatal("Error fetching pools\n", err)
+	}
+	output, _ := json.Marshal(pl)
+	log.Println("List Pools:", string(output))
+
+	// Get Pool
+	pg, err := rc.Pools.Get("EhrQZJNjCd79LLYq")
+	if err != nil {
+		log.Fatal("Error getting pool\n", err)
+	}
+	output, _ = json.Marshal(pg)
+	log.Println("Get Pool:", string(output))
 }
