@@ -11,4 +11,4 @@ const (
 )
 
 // Environments are Rize infrastructure tiers
-var Environments = []string{"sandbox", "staging", "integration", "production"}
+var Environments = []string{"sandbox", "integration", "production"}

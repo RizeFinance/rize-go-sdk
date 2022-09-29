@@ -84,6 +84,27 @@ type CustomerCreateParams struct {
 	Email        string `json:"email"`
 }
 
+// CustomerProfileResponseParams are the body params used when updating customer profile responses
+type CustomerProfileResponseParams struct {
+	Details []struct {
+		ProfileRequirementUID string `json:"profile_requirement_uid"`
+		ProfileResponse       string `json:"profile_response"`
+	} `json:"details"`
+}
+
+// CustomerProfileResponseOrderedListParams are the body params used when updating customer profile responses
+// with the `ordered_list` requirement type
+type CustomerProfileResponseOrderedListParams struct {
+	Details []struct {
+		ProfileRequirementUID string `json:"profile_requirement_uid"`
+		ProfileResponse       struct {
+			Num0 string `json:"0"`
+			Num1 string `json:"1"`
+			Num2 string `json:"2"`
+		} `json:"profile_response"`
+	} `json:"details"`
+}
+
 // CustomerResponse is an API response containing a list of customers
 type CustomerResponse struct {
 	BaseResponse
@@ -276,5 +297,56 @@ func (c *customerService) Unlock(uid string, lockNote string, unlockReason strin
 	return res, nil
 }
 
-func (c *customerService) UpdateProfileResponses(uid string) (*http.Response, error)  {}
+// UpdateProfileResponses is used to submit a Customer's Profile Responses to Profile Requirements
+func (c *customerService) UpdateProfileResponses(uid string, cprp *CustomerProfileResponseParams) (*http.Response, error) {
+	if uid == "" {
+		return nil, fmt.Errorf("UID is required")
+	}
+
+	for _, v := range cprp.Details {
+		if v.ProfileRequirementUID == "" || v.ProfileResponse == "" {
+			return nil, fmt.Errorf("ProfileRequirementUID and ProfileResponse are required")
+		}
+	}
+
+	bytesMessage, err := json.Marshal(&cprp)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	return res, nil
+}
+
+// UpdateProfileResponsesOrderedList is used to update Customer's Profile Responses with the `ordered_list` requirement type
+func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cprp *CustomerProfileResponseOrderedListParams) (*http.Response, error) {
+	if uid == "" {
+		return nil, fmt.Errorf("UID is required")
+	}
+
+	for _, v := range cprp.Details {
+		if v.ProfileRequirementUID == "" || v.ProfileResponse.Num0 == "" {
+			return nil, fmt.Errorf("ProfileRequirementUID and ProfileResponse are required")
+		}
+	}
+
+	bytesMessage, err := json.Marshal(&cprp)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	return res, nil
+}
+
 func (c *customerService) CreateSecondaryCustomer(uid string) (*http.Response, error) {}
