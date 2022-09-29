@@ -34,7 +34,7 @@ func main() {
 	clp := rize.CustomerListParams{
 		Limit: 10,
 	}
-	l, err := rc.Customer.List(&clp)
+	l, err := rc.Customers.List(&clp)
 	if err != nil {
 		log.Fatal("Error fetching customers\n", err)
 	}

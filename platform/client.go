@@ -46,9 +46,9 @@ type RizeClient struct {
 	// Cached auth token data
 	*TokenCache
 	// All available Rize API services
-	Auth               *authService
-	ComplianceWorkflow *complianceWorkflowService
-	Customer           *customerService
+	Auth                *authService
+	ComplianceWorkflows *complianceWorkflowService
+	Customers           *customerService
 }
 
 // TokenCache stores Auth token data
@@ -91,8 +91,8 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 
 	// Initialize API Services
 	r.Auth = (*authService)(&r.svc)
-	r.ComplianceWorkflow = (*complianceWorkflowService)(&r.svc)
-	r.Customer = (*customerService)(&r.svc)
+	r.ComplianceWorkflows = (*complianceWorkflowService)(&r.svc)
+	r.Customers = (*customerService)(&r.svc)
 
 	// Generate Auth Token
 	_, err := r.Auth.getToken()
