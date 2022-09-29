@@ -100,7 +100,6 @@ func (c *complianceWorkflowService) Create(wcp *WorkflowCreateParams) (*http.Res
 	defer res.Body.Close()
 
 	return res, nil
-
 }
 
 // ViewLatest is a helper endpoint for retrieving the most recent Compliance Workflow for a Customer.

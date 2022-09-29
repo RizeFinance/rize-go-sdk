@@ -57,8 +57,8 @@ type TokenCache struct {
 	Timestamp int64
 }
 
-// APIError is the default API error format
-type APIError struct {
+// RizeError is the default API error format
+type RizeError struct {
 	Errors []struct {
 		Code       int       `json:"code"`
 		Title      string    `json:"title"`
@@ -68,7 +68,7 @@ type APIError struct {
 	Status int `json:"status"`
 }
 
-func (e *APIError) Error() string {
+func (e *RizeError) Error() string {
 	return fmt.Sprintf("Error status %d and output:\n%+v\n", e.Status, e.Errors)
 }
 
@@ -139,11 +139,11 @@ func (r *RizeClient) doRequest(method string, path string, query url.Values, dat
 		if err != nil {
 			return nil, err
 		}
-		var errorOut = &APIError{}
+		var errorOut = &RizeError{}
 		if err = json.Unmarshal(body, &errorOut); err != nil {
 			return nil, err
 		}
-		// Use APIError type to handle specific error codes from the API server
+		// Use RizeError type to handle specific error codes from the API server
 		return nil, errorOut
 	}
 
