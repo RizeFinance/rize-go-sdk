@@ -15,29 +15,29 @@ type evaluationService service
 
 // Evaluation data type
 type Evaluation struct {
-	UID       string              `json:"uid"`
-	Outcome   string              `json:"outcome"`
-	CreatedAt time.Time           `json:"created_at"`
-	Flags     *EvaluationFlag     `json:"flags"`
-	PIIMatch  *EvaluationPIIMatch `json:"pii_match"`
+	UID       string              `json:"uid,omitempty"`
+	Outcome   string              `json:"outcome,omitempty"`
+	CreatedAt time.Time           `json:"created_at,omitempty"`
+	Flags     *EvaluationFlag     `json:"flags,omitempty"`
+	PIIMatch  *EvaluationPIIMatch `json:"pii_match,omitempty"`
 }
 
 // EvaluationFlag provides a mapping of categories to outcomes for those categories
 type EvaluationFlag struct {
-	DocumentQualityCheck bool `json:"Document Quality Check"`
-	FraudCheck           bool `json:"Fraud Check"`
-	FinancialCheck       bool `json:"Financial Check"`
-	WatchListCheck       bool `json:"Watch List Check"`
+	DocumentQualityCheck bool `json:"Document Quality Check,omitempty"`
+	FraudCheck           bool `json:"Fraud Check,omitempty"`
+	FinancialCheck       bool `json:"Financial Check,omitempty"`
+	WatchListCheck       bool `json:"Watch List Check,omitempty"`
 }
 
 // EvaluationPIIMatch provides a mapping of KYC categories to results returned from various services
 type EvaluationPIIMatch struct {
-	DOBMatch     bool `json:"DOB Match"`
-	SSNMatch     bool `json:"SSN Match"`
-	NameMatch    bool `json:"Name Match"`
-	EmailMatch   bool `json:"Email Match"`
-	PhoneMatch   bool `json:"Phone Match"`
-	AddressMatch bool `json:"Address Match"`
+	DOBMatch     bool `json:"DOB Match,omitempty"`
+	SSNMatch     bool `json:"SSN Match,omitempty"`
+	NameMatch    bool `json:"Name Match,omitempty"`
+	EmailMatch   bool `json:"Email Match,omitempty"`
+	PhoneMatch   bool `json:"Phone Match,omitempty"`
+	AddressMatch bool `json:"Address Match,omitempty"`
 }
 
 // EvaluationListParams builds the query parameters used in querying Evaluations
