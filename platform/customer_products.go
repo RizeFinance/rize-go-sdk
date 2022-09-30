@@ -26,9 +26,9 @@ type CustomerProduct struct {
 
 // CustomerProductListParams builds the query parameters used in querying Customer Products
 type CustomerProductListParams struct {
-	ProgramUID  string `json:"program_uid,omitempty"`
-	ProductUID  string `json:"product_uid,omitempty"`
-	CustomerUID string `json:"customer_uid,omitempty"`
+	ProgramUID  string `url:"program_uid,omitempty"`
+	ProductUID  string `url:"product_uid,omitempty"`
+	CustomerUID string `url:"customer_uid,omitempty"`
 }
 
 // CustomerProductCreateParams are the body params used when creating a new Customer Product
