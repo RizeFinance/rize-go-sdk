@@ -58,7 +58,7 @@ type CustomerAddress struct {
 	PostalCode string `json:"postal_code,omitempty"`
 }
 
-// CustomerListParams builds the query parameters used in querying customers
+// CustomerListParams builds the query parameters used in querying Customers
 type CustomerListParams struct {
 	Status           string `url:"status,omitempty"`
 	IncludeInitiated bool   `url:"include_initiated,omitempty"`
@@ -77,26 +77,26 @@ type CustomerListParams struct {
 	Sort             string `url:"sort,omitempty"`
 }
 
-// CustomerCreateParams are the body params used when creating a new customer
+// CustomerCreateParams are the body params used when creating a new Customer
 type CustomerCreateParams struct {
 	ExternalUID  string `json:"external_uid,omitempty"`
 	CustomerType string `json:"customer_type,omitempty"`
 	Email        string `json:"email"`
 }
 
-// CustomerUpdateParams are the body params used when updating a customer
+// CustomerUpdateParams are the body params used when updating a Customer
 type CustomerUpdateParams struct {
 	Email   string          `json:"email,omitempty"`
 	Details CustomerDetails `json:"details,omitempty"`
 }
 
-// CustomerProfileResponseParams are the body params used when updating customer profile responses
+// CustomerProfileResponseParams are the body params used when updating Customer Profile responses
 type CustomerProfileResponseParams struct {
 	ProfileRequirementUID string `json:"profile_requirement_uid"`
 	ProfileResponse       string `json:"profile_response"`
 }
 
-// CustomerProfileResponseOrderedListParams are the body params used when updating customer profile responses
+// CustomerProfileResponseOrderedListParams are the body params used when updating Customer Profile responses
 // with the `ordered_list` requirement type
 type CustomerProfileResponseOrderedListParams struct {
 	ProfileRequirementUID string                       `json:"profile_requirement_uid"`
@@ -110,7 +110,7 @@ type CustomerProfileResponseList struct {
 	Num2 string `json:"2"`
 }
 
-// SecondaryCustomerParams are the body params used when creating a new secondary customer
+// SecondaryCustomerParams are the body params used when creating a new Secondary Customer
 type SecondaryCustomerParams struct {
 	ExternalUID        string           `json:"external_uid,omitempty"`
 	PrimaryCustomerUID string           `json:"primary_customer_uid"`
@@ -118,7 +118,7 @@ type SecondaryCustomerParams struct {
 	Details            *CustomerDetails `json:"details"`
 }
 
-// CustomerResponse is an API response containing a list of customers
+// CustomerResponse is an API response containing a list of Customers
 type CustomerResponse struct {
 	BaseResponse
 	Data []*Customer `json:"data"`
@@ -216,7 +216,7 @@ func (c *customerService) Update(uid string, cu *CustomerUpdateParams) (*http.Re
 	return res, nil
 }
 
-// Delete will archive a customer
+// Delete will archive a Customer
 func (c *customerService) Delete(uid string, archiveNote string) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
@@ -311,12 +311,12 @@ func (c *customerService) Unlock(uid string, lockNote string, unlockReason strin
 }
 
 // UpdateProfileResponses is used to submit a Customer's Profile Responses to Profile Requirements
-func (c *customerService) UpdateProfileResponses(uid string, cprp []*CustomerProfileResponseParams) (*http.Response, error) {
+func (c *customerService) UpdateProfileResponses(uid string, cpp []*CustomerProfileResponseParams) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	for _, v := range cprp {
+	for _, v := range cpp {
 		if v.ProfileRequirementUID == "" || v.ProfileResponse == "" {
 			return nil, fmt.Errorf("ProfileRequirementUID and ProfileResponse are required")
 		}
@@ -326,7 +326,7 @@ func (c *customerService) UpdateProfileResponses(uid string, cprp []*CustomerPro
 	var details = struct {
 		Details []*CustomerProfileResponseParams `json:"details"`
 	}{
-		Details: cprp,
+		Details: cpp,
 	}
 	bytesMessage, err := json.Marshal(&details)
 	if err != nil {
@@ -343,12 +343,12 @@ func (c *customerService) UpdateProfileResponses(uid string, cprp []*CustomerPro
 }
 
 // UpdateProfileResponsesOrderedList is used to update Customer's Profile Responses with the `ordered_list` requirement type
-func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cprp []*CustomerProfileResponseOrderedListParams) (*http.Response, error) {
+func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cpp []*CustomerProfileResponseOrderedListParams) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	for _, v := range cprp {
+	for _, v := range cpp {
 		if v.ProfileRequirementUID == "" || v.ProfileResponse.Num0 == "" {
 			return nil, fmt.Errorf("ProfileRequirementUID and ProfileResponse are required")
 		}
@@ -358,7 +358,7 @@ func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cprp []*
 	var details = struct {
 		Details []*CustomerProfileResponseOrderedListParams `json:"details"`
 	}{
-		Details: cprp,
+		Details: cpp,
 	}
 	bytesMessage, err := json.Marshal(&details)
 	if err != nil {

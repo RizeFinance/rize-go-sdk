@@ -13,21 +13,21 @@ type productService service
 
 // Product data type
 type Product struct {
-	UID                      string   `json:"uid"`
-	Name                     string   `json:"name"`
-	Description              string   `json:"description"`
-	ProductCompliancePlanUID string   `json:"product_compliance_plan_uid"`
-	CompliancePlanName       string   `json:"compliance_plan_name"`
-	PrerequisiteProductUids  []string `json:"prerequisite_product_uids"`
-	ProgramUID               string   `json:"program_uid"`
+	UID                      string   `json:"uid,omitempty"`
+	Name                     string   `json:"name,omitempty"`
+	Description              string   `json:"description,omitempty"`
+	ProductCompliancePlanUID string   `json:"product_compliance_plan_uid,omitempty"`
+	CompliancePlanName       string   `json:"compliance_plan_name,omitempty"`
+	PrerequisiteProductUids  []string `json:"prerequisite_product_uids,omitempty"`
+	ProgramUID               string   `json:"program_uid,omitempty"`
 	ProfileRequirements      []struct {
-		ProfileRequirementUID string   `json:"profile_requirement_uid"`
-		ProfileRequirement    string   `json:"profile_requirement"`
-		Category              string   `json:"category"`
-		Required              bool     `json:"required"`
-		RequirementType       string   `json:"requirement_type"`
-		ResponseValues        []string `json:"response_values"`
-	} `json:"profile_requirements"`
+		ProfileRequirementUID string   `json:"profile_requirement_uid,omitempty"`
+		ProfileRequirement    string   `json:"profile_requirement,omitempty"`
+		Category              string   `json:"category,omitempty"`
+		Required              bool     `json:"required,omitempty"`
+		RequirementType       string   `json:"requirement_type,omitempty"`
+		ResponseValues        []string `json:"response_values,omitempty"`
+	} `json:"profile_requirements,omitempty"`
 }
 
 // ProductResponse is an API response containing a list of Products
@@ -60,7 +60,7 @@ func (p *productService) List(programUID string) (*ProductResponse, error) {
 	return response, nil
 }
 
-// Get returns a single product
+// Get returns a single Product
 func (p *productService) Get(uid string) (*Product, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")

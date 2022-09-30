@@ -13,7 +13,7 @@ import (
 // Handles all Compliance Workflow operations
 type complianceWorkflowService service
 
-// WorkflowListParams builds the query parameters used in querying compliance workflows
+// WorkflowListParams builds the query parameters used in querying Compliance Workflows
 type WorkflowListParams struct {
 	CustomerUID string `url:"customer_uid,omitempty"`
 	ProductUID  string `url:"product_uid,omitempty"`
@@ -22,19 +22,19 @@ type WorkflowListParams struct {
 	Offset      int    `url:"offset,omitempty"`
 }
 
-// WorkflowLatestParams builds the query parameters used in querying the latest workflow for a customer
+// WorkflowLatestParams builds the query parameters used in querying the latest Compliance Workflow for a customer
 type WorkflowLatestParams struct {
 	ProductCompliancePlanUID string `url:"product_compliance_plan_uid,omitempty"`
 }
 
-// WorkflowCreateParams are the body params used when creating a new compliance workflow
+// WorkflowCreateParams are the body params used when creating a new Compliance Workflow
 type WorkflowCreateParams struct {
 	CustomerUID              string `json:"customer_uid"`
 	ProductCompliancePlanUID string `json:"product_compliance_plan_uid"`
 }
 
-// WorkflowDocument are the body params used when acknowledging a compliance document
-type WorkflowDocument struct {
+// WorkflowDocumentParams are the body params used when acknowledging a compliance document
+type WorkflowDocumentParams struct {
 	Accept      string `json:"accept"`
 	DocumentUID string `json:"document_uid"`
 	IPAddress   string `json:"ip_address,omitempty"`
@@ -45,11 +45,11 @@ type WorkflowDocument struct {
 
 // WorkflowDocumentsParams are the body params used when acknowledging multiple compliance documents
 type WorkflowDocumentsParams struct {
-	CustomerUID string              `json:"customer_uid"`
-	Documents   []*WorkflowDocument `json:"documents"`
+	CustomerUID string                    `json:"customer_uid"`
+	Documents   []*WorkflowDocumentParams `json:"documents"`
 }
 
-// WorkflowResponse is an API response containing a list of compliance workflows
+// WorkflowResponse is an API response containing a list of Compliance Workflows
 type WorkflowResponse struct {
 	BaseResponse
 	Data []interface{} `json:"data"`
@@ -124,7 +124,7 @@ func (c *complianceWorkflowService) ViewLatest(customerUID string, wlp *Workflow
 }
 
 // AcknowledgeDocument is used to indicate acceptance or rejection of a Compliance Document within a given Compliance Workflow
-func (c *complianceWorkflowService) AcknowledgeDocument(uid string, wd *WorkflowDocument) (*http.Response, error) {
+func (c *complianceWorkflowService) AcknowledgeDocument(uid string, wd *WorkflowDocumentParams) (*http.Response, error) {
 	if uid == "" || wd.Accept == "" || wd.DocumentUID == "" || wd.CustomerUID == "" {
 		return nil, fmt.Errorf("UID, Accept, DocumentUID and CustomerUID values are required")
 	}

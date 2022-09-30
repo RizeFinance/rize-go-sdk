@@ -23,7 +23,7 @@ type KYCDocument struct {
 	CreatedAt time.Time `json:"created_at"`
 }
 
-// KYCDocumentUploadParams are the body params used when uploading a new KYC document
+// KYCDocumentUploadParams are the body params used when uploading a new KYC Document
 type KYCDocumentUploadParams struct {
 	EvaluationUID string `json:"evaluation_uid"`
 	Filename      string `json:"filename"`
@@ -32,13 +32,13 @@ type KYCDocumentUploadParams struct {
 	Type          string `json:"type"`
 }
 
-// KYCDocumentResponse is an API response containing a list of KYC documents
+// KYCDocumentResponse is an API response containing a list of KYC Documents
 type KYCDocumentResponse struct {
 	BaseResponse
 	Data []*KYCDocument `json:"data"`
 }
 
-// List retrieves a list of KYC documents for a given evaluation
+// List retrieves a list of KYC Documents for a given evaluation
 func (k *kycDocumentService) List(evaluationUID string) (*KYCDocumentResponse, error) {
 	if evaluationUID == "" {
 		return nil, fmt.Errorf("evaluationUID is required")
@@ -115,7 +115,7 @@ func (k *kycDocumentService) Get(uid string) (*KYCDocument, error) {
 	return response, nil
 }
 
-// View is used to retrieve a document (image, PDF, etc) previously uploaded
+// View is used to retrieve a KYC Document (image, PDF, etc) previously uploaded
 func (k *kycDocumentService) View(uid string) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")

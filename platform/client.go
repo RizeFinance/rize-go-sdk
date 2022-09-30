@@ -52,6 +52,7 @@ type RizeClient struct {
 	KYCDocuments        *kycDocumentService
 	Pools               *poolService
 	Products            *productService
+	CustomerProducts    *customerProductService
 }
 
 // TokenCache stores Auth token data
@@ -99,6 +100,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	r.KYCDocuments = (*kycDocumentService)(&r.svc)
 	r.Pools = (*poolService)(&r.svc)
 	r.Products = (*productService)(&r.svc)
+	r.CustomerProducts = (*customerProductService)(&r.svc)
 
 	// Generate Auth Token
 	_, err := r.Auth.getToken()

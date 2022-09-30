@@ -14,13 +14,13 @@ type poolService service
 
 // Pool data type
 type Pool struct {
-	UID              string   `json:"uid"`
-	Name             string   `json:"name"`
-	OwnerCustomerUID string   `json:"owner_customer_uid"`
-	CustomerUIDs     []string `json:"customer_uids"`
+	UID              string   `json:"uid,omitempty"`
+	Name             string   `json:"name,omitempty"`
+	OwnerCustomerUID string   `json:"owner_customer_uid,omitempty"`
+	CustomerUIDs     []string `json:"customer_uids,omitempty"`
 }
 
-// PoolListParams builds the query parameters used in querying pools
+// PoolListParams builds the query parameters used in querying Pools
 type PoolListParams struct {
 	CustomerUID string `url:"customer_uid,omitempty"`
 	ExternalUID string `url:"external_uid,omitempty"`
@@ -61,7 +61,7 @@ func (p *poolService) List(plp *PoolListParams) (*PoolResponse, error) {
 	return response, nil
 }
 
-// Get returns a single pool
+// Get returns a single Pool
 func (p *poolService) Get(uid string) (*Pool, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
