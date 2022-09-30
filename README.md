@@ -5,17 +5,17 @@
   <br />
 </p>
 
-# Rize Money Go SDK
+# Rize Go SDK
 
-## Overview
-
-[Rize](https://rizemoney.com/) makes financial services simple and accessible by enabling fintechs, financial institutions and brands to build across multiple account types with one API. The Rize GO SDK enables access to all platform services in our sandbox, integration and production environment. When you're ready to build, open a sandbox environment [here](https://rizefs.com/get-access/). If you have questions, feedback, or a use case you want to discuss with us, contact us at [hello@rizemoney.com](mailto:hello@rizemoney.com).
+Rize makes financial services simple and accessible by enabling fintechs, financial institutions and brands to build across multiple account types with one API. The Rize GO SDK enables access to all platform services in our sandbox, integration and production environment. When you're ready to build, [open a sandbox environment](https://rizefs.com/get-access/). If you have questions, feedback, or a use case you want to discuss with us, contact us at [hello@rizemoney.com](mailto:hello@rizemoney.com).
 
 For more information, check out our [Platform API Documentation](https://developer.rizefs.com/).
 
 ### Supported Go Versions
 
-The Rize Go SDK is compatible with the two most recent, major Go releases. We currently support **Go v1.18 and higher**.
+The Rize Go SDK is compatible with the two most recent, major Go releases. 
+
+We currently support **Go v1.18 and higher**.
 
 ## Getting Started
 
@@ -33,7 +33,7 @@ go get github.com/rizefinance/rize-go-sdk@v1.0.0
 
 ### Configuration
 
-The SDK requires program configuration credentials in order to interact with the API. You can find these in the Rize [admin portal](https://admin-sandbox.rizefs.com/).
+The SDK requires program configuration credentials in order to interact with the API. You can find these in the [**Rize Admin Portal**](https://admin-sandbox.rizefs.com/).
 
 | Parameter   | Description                                                  | Default   |
 | ----------- | ------------------------------------------------------------ | --------- |
