@@ -259,8 +259,8 @@ func (sa *syntheticAccountService) ListAccountTypes(plp *SyntheticAccountTypeLis
 	return response, nil
 }
 
-// GetAccountTypes returns a single Synthetic Account Type resource along with supporting details
-func (sa *syntheticAccountService) GetAccountTypes(uid string) (*SyntheticAccountType, error) {
+// GetAccountType returns a single Synthetic Account Type resource along with supporting details
+func (sa *syntheticAccountService) GetAccountType(uid string) (*SyntheticAccountType, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
