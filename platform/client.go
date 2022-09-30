@@ -53,6 +53,7 @@ type RizeClient struct {
 	Pools               *poolService
 	Products            *productService
 	CustomerProducts    *customerProductService
+	CustodialAccounts   *custodialAccountService
 }
 
 // TokenCache stores Auth token data
@@ -101,6 +102,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	r.Pools = (*poolService)(&r.svc)
 	r.Products = (*productService)(&r.svc)
 	r.CustomerProducts = (*customerProductService)(&r.svc)
+	r.CustodialAccounts = (*custodialAccountService)(&r.svc)
 
 	// Generate Auth Token
 	_, err := r.Auth.getToken()
