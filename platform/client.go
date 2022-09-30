@@ -51,6 +51,7 @@ type RizeClient struct {
 	CustodialAccounts   *custodialAccountService
 	CustomerProducts    *customerProductService
 	Customers           *customerService
+	DebitCards          *debitCardService
 	Documents           *documentService
 	Evaluations         *evaluationService
 	KYCDocuments        *kycDocumentService
@@ -105,6 +106,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	r.CustodialAccounts = (*custodialAccountService)(&r.svc)
 	r.CustomerProducts = (*customerProductService)(&r.svc)
 	r.Customers = (*customerService)(&r.svc)
+	r.DebitCards = (*debitCardService)(&r.svc)
 	r.Documents = (*documentService)(&r.svc)
 	r.Evaluations = (*evaluationService)(&r.svc)
 	r.KYCDocuments = (*kycDocumentService)(&r.svc)

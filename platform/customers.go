@@ -27,6 +27,7 @@ type Customer struct {
 	KYCStatusReasons      []string                   `json:"kyc_status_reasons,omitempty"`
 	LockReason            string                     `json:"lock_reason,omitempty"`
 	LockedAt              time.Time                  `json:"locked_at,omitempty"`
+	PIIConfirmedAt        time.Time                  `json:"pii_confirmed_at,omitempty"`
 	PoolUIDs              []string                   `json:"pool_uids,omitempty"`
 	PrimaryCustomerUID    string                     `json:"primary_customer_uid,omitempty"`
 	ProfileResponses      *[]CustomerProfileResponse `json:"profile_responses,omitempty"`
@@ -46,6 +47,7 @@ type CustomerDetails struct {
 	BusinessName string           `json:"business_name,omitempty"`
 	DOB          time.Time        `json:"dob,omitempty"`
 	SSN          string           `json:"ssn,omitempty"`
+	SSNLastFour  string           `json:"ssn_last_four,omitempty"`
 	Address      *CustomerAddress `json:"address,omitempty"`
 }
 
@@ -158,7 +160,7 @@ func (c *customerService) List(clp *CustomerListParams) (*CustomerResponse, erro
 }
 
 // Create is used to initialize a new Customer with an email and external_uid
-func (c *customerService) Create(ccp *CustomerCreateParams) (*http.Response, error) {
+func (c *customerService) Create(ccp *CustomerCreateParams) (*Customer, error) {
 	if ccp.Email == "" {
 		return nil, fmt.Errorf("Email is required")
 	}
@@ -174,7 +176,17 @@ func (c *customerService) Create(ccp *CustomerCreateParams) (*http.Response, err
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Customer{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // Get retrieves overall status about a Customer as well as their total Asset Balances across all accounts
@@ -203,7 +215,7 @@ func (c *customerService) Get(uid string) (*Customer, error) {
 }
 
 // Update will submit or update a Customer's personally identifiable information (PII) after they are created
-func (c *customerService) Update(uid string, cu *CustomerUpdateParams) (*http.Response, error) {
+func (c *customerService) Update(uid string, cu *CustomerUpdateParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -219,7 +231,17 @@ func (c *customerService) Update(uid string, cu *CustomerUpdateParams) (*http.Re
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Customer{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // Delete will archive a Customer
@@ -248,7 +270,7 @@ func (c *customerService) Delete(uid string, archiveNote string) (*http.Response
 }
 
 // ConfirmPIIData is used to explicitly confirm a Customer's PII data is up-to-date in order to add additional products
-func (c *customerService) ConfirmPIIData(uid string) (*http.Response, error) {
+func (c *customerService) ConfirmPIIData(uid string) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -259,11 +281,21 @@ func (c *customerService) ConfirmPIIData(uid string) (*http.Response, error) {
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Customer{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // Lock will freeze all activities relating to the Customer
-func (c *customerService) Lock(uid string, lockNote string, lockReason string) (*http.Response, error) {
+func (c *customerService) Lock(uid string, lockNote string, lockReason string) (*Customer, error) {
 	if uid == "" || lockReason == "" {
 		return nil, fmt.Errorf("UID and lockReason are required")
 	}
@@ -286,11 +318,21 @@ func (c *customerService) Lock(uid string, lockNote string, lockReason string) (
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Customer{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // Unlock will remove the Customer lock, returning their state to normal
-func (c *customerService) Unlock(uid string, lockNote string, unlockReason string) (*http.Response, error) {
+func (c *customerService) Unlock(uid string, lockNote string, unlockReason string) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -313,11 +355,21 @@ func (c *customerService) Unlock(uid string, lockNote string, unlockReason strin
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Customer{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // UpdateProfileResponses is used to submit a Customer's Profile Responses to Profile Requirements
-func (c *customerService) UpdateProfileResponses(uid string, cpp []*CustomerProfileResponseParams) (*http.Response, error) {
+func (c *customerService) UpdateProfileResponses(uid string, cpp []*CustomerProfileResponseParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -345,11 +397,21 @@ func (c *customerService) UpdateProfileResponses(uid string, cpp []*CustomerProf
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Customer{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // UpdateProfileResponsesOrderedList is used to update Customer's Profile Responses with the `ordered_list` requirement type
-func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cpp []*CustomerProfileResponseOrderedListParams) (*http.Response, error) {
+func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cpp []*CustomerProfileResponseOrderedListParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -377,11 +439,21 @@ func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cpp []*C
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Customer{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // CreateSecondaryCustomer is used to create a new Secondary Customer
-func (c *customerService) CreateSecondaryCustomer(scp *SecondaryCustomerParams) (*http.Response, error) {
+func (c *customerService) CreateSecondaryCustomer(scp *SecondaryCustomerParams) (*Customer, error) {
 	if scp.PrimaryCustomerUID == "" {
 		return nil, fmt.Errorf("PrimaryCustomerUID is required")
 	}
@@ -397,5 +469,15 @@ func (c *customerService) CreateSecondaryCustomer(scp *SecondaryCustomerParams) 
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Customer{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }

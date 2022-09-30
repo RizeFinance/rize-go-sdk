@@ -145,7 +145,7 @@ func (c *complianceWorkflowService) List(wlp *WorkflowListParams) (*WorkflowResp
 }
 
 // Associates a new Compliance Workflow and set of Compliance Documents (for acknowledgment) with a Customer
-func (c *complianceWorkflowService) Create(wcp *WorkflowCreateParams) (*http.Response, error) {
+func (c *complianceWorkflowService) Create(wcp *WorkflowCreateParams) (*Workflow, error) {
 	if wcp.CustomerUID == "" || wcp.ProductCompliancePlanUID == "" {
 		return nil, fmt.Errorf("CustomerUID and ProductCompliancePlanUID values are required")
 	}
@@ -161,12 +161,22 @@ func (c *complianceWorkflowService) Create(wcp *WorkflowCreateParams) (*http.Res
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Workflow{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // ViewLatest is a helper endpoint for retrieving the most recent Compliance Workflow for a Customer.
 // A Customer UID must be supplied as the path parameter.
-func (c *complianceWorkflowService) ViewLatest(customerUID string, wlp *WorkflowLatestParams) (*http.Response, error) {
+func (c *complianceWorkflowService) ViewLatest(customerUID string, wlp *WorkflowLatestParams) (*Workflow, error) {
 	if customerUID == "" {
 		return nil, fmt.Errorf("customerUID is required")
 	}
@@ -182,11 +192,21 @@ func (c *complianceWorkflowService) ViewLatest(customerUID string, wlp *Workflow
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Workflow{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // AcknowledgeDocument is used to indicate acceptance or rejection of a Compliance Document within a given Compliance Workflow
-func (c *complianceWorkflowService) AcknowledgeDocument(uid string, wd *WorkflowDocumentParams) (*http.Response, error) {
+func (c *complianceWorkflowService) AcknowledgeDocument(uid string, wd *WorkflowDocumentParams) (*Workflow, error) {
 	if uid == "" || wd.Accept == "" || wd.DocumentUID == "" || wd.CustomerUID == "" {
 		return nil, fmt.Errorf("UID, Accept, DocumentUID and CustomerUID values are required")
 	}
@@ -202,11 +222,21 @@ func (c *complianceWorkflowService) AcknowledgeDocument(uid string, wd *Workflow
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Workflow{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // AcknowledgeDocuments is used to indicate acceptance or rejection of multiple Compliance Documents within a given Compliance Workflow
-func (c *complianceWorkflowService) AcknowledgeDocuments(uid string, wdp *WorkflowDocumentsParams) (*http.Response, error) {
+func (c *complianceWorkflowService) AcknowledgeDocuments(uid string, wdp *WorkflowDocumentsParams) (*Workflow, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -231,5 +261,15 @@ func (c *complianceWorkflowService) AcknowledgeDocuments(uid string, wdp *Workfl
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &Workflow{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }

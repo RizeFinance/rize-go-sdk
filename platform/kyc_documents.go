@@ -15,12 +15,12 @@ type kycDocumentService service
 
 // KYCDocument data type
 type KYCDocument struct {
-	UID       string    `json:"uid"`
-	Type      string    `json:"type"`
-	Filename  string    `json:"filename"`
-	Note      string    `json:"note"`
-	Extension string    `json:"extension"`
-	CreatedAt time.Time `json:"created_at"`
+	UID       string    `json:"uid,omitempty"`
+	Type      string    `json:"type,omitempty"`
+	Filename  string    `json:"filename,omitempty"`
+	Note      string    `json:"note,omitempty"`
+	Extension string    `json:"extension,omitempty"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
 }
 
 // KYCDocumentUploadParams are the body params used when uploading a new KYC Document
@@ -30,6 +30,16 @@ type KYCDocumentUploadParams struct {
 	FileContent   string `json:"file_content"`
 	Note          string `json:"note"`
 	Type          string `json:"type"`
+}
+
+// KYCDocumentUploadResponse is the response received when uploading a new KYC Document
+type KYCDocumentUploadResponse struct {
+	UID       string    `json:"uid,omitempty"`
+	Type      string    `json:"type,omitempty"`
+	Filename  string    `json:"filename,omitempty"`
+	Note      string    `json:"note,omitempty"`
+	Extension string    `json:"extension,omitempty"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
 }
 
 // KYCDocumentResponse is an API response containing a list of KYC Documents
@@ -67,7 +77,7 @@ func (k *kycDocumentService) List(evaluationUID string) (*KYCDocumentResponse, e
 }
 
 // Upload a KYC Document for review
-func (k *kycDocumentService) Upload(p *KYCDocumentUploadParams) (*http.Response, error) {
+func (k *kycDocumentService) Upload(p *KYCDocumentUploadParams) (*KYCDocumentUploadResponse, error) {
 	if p.EvaluationUID == "" ||
 		p.Filename == "" ||
 		p.FileContent == "" ||
@@ -87,7 +97,17 @@ func (k *kycDocumentService) Upload(p *KYCDocumentUploadParams) (*http.Response,
 	}
 	defer res.Body.Close()
 
-	return res, nil
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &KYCDocumentUploadResponse{}
+	if err = json.Unmarshal(body, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
 }
 
 // Get is used to retrieve metadata for a KYC Document previously uploaded
