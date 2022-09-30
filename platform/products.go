@@ -18,7 +18,7 @@ type Product struct {
 	Description              string                `json:"description,omitempty"`
 	ProductCompliancePlanUID string                `json:"product_compliance_plan_uid,omitempty"`
 	CompliancePlanName       string                `json:"compliance_plan_name,omitempty"`
-	PrerequisiteProductUids  []string              `json:"prerequisite_product_uids,omitempty"`
+	PrerequisiteProductUIDs  []string              `json:"prerequisite_product_uids,omitempty"`
 	ProgramUID               string                `json:"program_uid,omitempty"`
 	ProfileRequirements      []*ProfileRequirement `json:"profile_requirements,omitempty"`
 }

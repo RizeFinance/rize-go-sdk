@@ -25,9 +25,9 @@ type CustodialAccount struct {
 	PrimaryAccount         bool                            `json:"primary_account,omitempty"`
 	Status                 string                          `json:"status,omitempty"`
 	AccountErrors          []*CustodialAccountError        `json:"account_errors,omitempty"`
-	NetUsdBalance          string                          `json:"net_usd_balance,omitempty"`
-	NetUsdPendingBalance   string                          `json:"net_usd_pending_balance,omitempty"`
-	NetUsdAvailableBalance string                          `json:"net_usd_available_balance,omitempty"`
+	NetUSDBalance          string                          `json:"net_usd_balance,omitempty"`
+	NetUSDPendingBalance   string                          `json:"net_usd_pending_balance,omitempty"`
+	NetUSDAvailableBalance string                          `json:"net_usd_available_balance,omitempty"`
 	AssetBalances          []*CustodialAccountAssetBalance `json:"asset_balances,omitempty"`
 	AccountNumber          string                          `json:"account_number,omitempty"`
 	AccountNumberMasked    string                          `json:"account_number_masked,omitempty"`
@@ -47,7 +47,7 @@ type CustodialAccountError struct {
 type CustodialAccountAssetBalance struct {
 	AssetQuantity   string `json:"asset_quantity,omitempty"`
 	AssetType       string `json:"asset_type,omitempty"`
-	CurrentUsdValue string `json:"current_usd_value,omitempty"`
+	CurrentUSDValue string `json:"current_usd_value,omitempty"`
 	Debit           bool   `json:"debit,omitempty"`
 }
 

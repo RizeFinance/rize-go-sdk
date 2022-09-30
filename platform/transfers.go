@@ -23,8 +23,8 @@ type Transfer struct {
 	InitiatingCustomerUID          string    `json:"initiating_customer_uid,omitempty"`
 	Status                         string    `json:"status,omitempty"`
 	CreatedAt                      time.Time `json:"created_at,omitempty"`
-	UsdTransferAmount              string    `json:"usd_transfer_amount,omitempty"`
-	UsdRequestedAmount             string    `json:"usd_requested_amount,omitempty"`
+	USDTransferAmount              string    `json:"usd_transfer_amount,omitempty"`
+	USDRequestedAmount             string    `json:"usd_requested_amount,omitempty"`
 }
 
 // TransferListParams builds the query parameters used in querying Transfers
@@ -43,7 +43,7 @@ type TransferCreateParams struct {
 	SourceSyntheticAccountUID      string `json:"source_synthetic_account_uid"`
 	DestinationSyntheticAccountUID string `json:"destination_synthetic_account_uid"`
 	InitiatingCustomerUID          string `json:"initiating_customer_uid"`
-	UsdTransferAmount              string `json:"usd_transfer_amount"`
+	USDTransferAmount              string `json:"usd_transfer_amount"`
 }
 
 // TransferResponse is an API response containing a list of Transfers
@@ -84,8 +84,8 @@ func (t *transferService) Create(tc *TransferCreateParams) (*Transfer, error) {
 	if tc.SourceSyntheticAccountUID == "" ||
 		tc.DestinationSyntheticAccountUID == "" ||
 		tc.InitiatingCustomerUID == "" ||
-		tc.UsdTransferAmount == "" {
-		return nil, fmt.Errorf("SourceSyntheticAccountUID, DestinationSyntheticAccountUID, InitiatingCustomerUID and UsdTransferAmount are required")
+		tc.USDTransferAmount == "" {
+		return nil, fmt.Errorf("SourceSyntheticAccountUID, DestinationSyntheticAccountUID, InitiatingCustomerUID and USDTransferAmount are required")
 	}
 
 	bytesMessage, err := json.Marshal(tc)

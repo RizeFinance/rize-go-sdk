@@ -25,9 +25,9 @@ type SyntheticAccount struct {
 	SyntheticAccountCategory    string                          `json:"synthetic_account_category,omitempty"`
 	Status                      string                          `json:"status,omitempty"`
 	Liability                   bool                            `json:"liability,omitempty"`
-	NetUsdBalance               string                          `json:"net_usd_balance,omitempty"`
-	NetUsdPendingBalance        string                          `json:"net_usd_pending_balance,omitempty"`
-	NetUsdAvailableBalance      string                          `json:"net_usd_available_balance,omitempty"`
+	NetUSDBalance               string                          `json:"net_usd_balance,omitempty"`
+	NetUSDPendingBalance        string                          `json:"net_usd_pending_balance,omitempty"`
+	NetUSDAvailableBalance      string                          `json:"net_usd_available_balance,omitempty"`
 	AssetBalances               []*SyntheticAccountAssetBalance `json:"asset_balances,omitempty"`
 	MasterAccount               bool                            `json:"master_account,omitempty"`
 	AccountNumber               string                          `json:"account_number,omitempty"`
@@ -42,7 +42,7 @@ type SyntheticAccount struct {
 type SyntheticAccountAssetBalance struct {
 	AssetQuantity        string `json:"asset_quantity,omitempty"`
 	AssetType            string `json:"asset_type,omitempty"`
-	CurrentUsdValue      string `json:"current_usd_value,omitempty"`
+	CurrentUSDValue      string `json:"current_usd_value,omitempty"`
 	CustodialAccountUID  string `json:"custodial_account_uid,omitempty"`
 	CustodialAccountName string `json:"custodial_account_name,omitempty"`
 	Debit                bool   `json:"debit,omitempty"`

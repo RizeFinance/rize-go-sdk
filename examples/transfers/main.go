@@ -52,7 +52,7 @@ func main() {
 		SourceSyntheticAccountUID:      "4XkJnsfHsuqrxmeX",
 		DestinationSyntheticAccountUID: "exMDShw6yM3NHLYV",
 		InitiatingCustomerUID:          "iDtmSA52zRhgN4iy",
-		UsdTransferAmount:              "12.34",
+		USDTransferAmount:              "12.34",
 	}
 	tc, err := rc.Transfers.Create(&cp)
 	if err != nil {
