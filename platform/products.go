@@ -13,21 +13,24 @@ type productService service
 
 // Product data type
 type Product struct {
-	UID                      string   `json:"uid,omitempty"`
-	Name                     string   `json:"name,omitempty"`
-	Description              string   `json:"description,omitempty"`
-	ProductCompliancePlanUID string   `json:"product_compliance_plan_uid,omitempty"`
-	CompliancePlanName       string   `json:"compliance_plan_name,omitempty"`
-	PrerequisiteProductUids  []string `json:"prerequisite_product_uids,omitempty"`
-	ProgramUID               string   `json:"program_uid,omitempty"`
-	ProfileRequirements      []struct {
-		ProfileRequirementUID string   `json:"profile_requirement_uid,omitempty"`
-		ProfileRequirement    string   `json:"profile_requirement,omitempty"`
-		Category              string   `json:"category,omitempty"`
-		Required              bool     `json:"required,omitempty"`
-		RequirementType       string   `json:"requirement_type,omitempty"`
-		ResponseValues        []string `json:"response_values,omitempty"`
-	} `json:"profile_requirements,omitempty"`
+	UID                      string                `json:"uid,omitempty"`
+	Name                     string                `json:"name,omitempty"`
+	Description              string                `json:"description,omitempty"`
+	ProductCompliancePlanUID string                `json:"product_compliance_plan_uid,omitempty"`
+	CompliancePlanName       string                `json:"compliance_plan_name,omitempty"`
+	PrerequisiteProductUids  []string              `json:"prerequisite_product_uids,omitempty"`
+	ProgramUID               string                `json:"program_uid,omitempty"`
+	ProfileRequirements      []*ProfileRequirement `json:"profile_requirements,omitempty"`
+}
+
+// ProfileRequirement is a list of Profile Requirements a Customer must provide Profile Responses to
+type ProfileRequirement struct {
+	ProfileRequirementUID string   `json:"profile_requirement_uid,omitempty"`
+	ProfileRequirement    string   `json:"profile_requirement,omitempty"`
+	Category              string   `json:"category,omitempty"`
+	Required              bool     `json:"required,omitempty"`
+	RequirementType       string   `json:"requirement_type,omitempty"`
+	ResponseValues        []string `json:"response_values,omitempty"`
 }
 
 // ProductResponse is an API response containing a list of Products

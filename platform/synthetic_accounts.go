@@ -16,33 +16,36 @@ type syntheticAccountService service
 
 // SyntheticAccount data type
 type SyntheticAccount struct {
-	UID                      string `json:"uid,omitempty"`
-	ExternalUID              string `json:"external_uid,omitempty"`
-	Name                     string `json:"name,omitempty"`
-	PoolUID                  string `json:"pool_uid,omitempty"`
-	CustomerUID              string `json:"customer_uid,omitempty"`
-	SyntheticAccountTypeUID  string `json:"synthetic_account_type_uid,omitempty"`
-	SyntheticAccountCategory string `json:"synthetic_account_category,omitempty"`
-	Status                   string `json:"status,omitempty"`
-	Liability                bool   `json:"liability,omitempty"`
-	NetUsdBalance            string `json:"net_usd_balance,omitempty"`
-	NetUsdPendingBalance     string `json:"net_usd_pending_balance,omitempty"`
-	NetUsdAvailableBalance   string `json:"net_usd_available_balance,omitempty"`
-	AssetBalances            []struct {
-		AssetQuantity        string `json:"asset_quantity,omitempty"`
-		AssetType            string `json:"asset_type,omitempty"`
-		CurrentUsdValue      string `json:"current_usd_value,omitempty"`
-		CustodialAccountUID  string `json:"custodial_account_uid,omitempty"`
-		CustodialAccountName string `json:"custodial_account_name,omitempty"`
-		Debit                bool   `json:"debit,omitempty"`
-	} `json:"asset_balances,omitempty"`
-	MasterAccount               bool        `json:"master_account,omitempty"`
-	AccountNumber               string      `json:"account_number,omitempty"`
-	AccountNumberLastFour       string      `json:"account_number_last_four,omitempty"`
-	RoutingNumber               string      `json:"routing_number,omitempty"`
-	OpenedAt                    time.Time   `json:"opened_at,omitempty"`
-	ClosedAt                    interface{} `json:"closed_at,omitempty"`
-	ClosedToSyntheticAccountUID interface{} `json:"closed_to_synthetic_account_uid,omitempty"`
+	UID                         string                          `json:"uid,omitempty"`
+	ExternalUID                 string                          `json:"external_uid,omitempty"`
+	Name                        string                          `json:"name,omitempty"`
+	PoolUID                     string                          `json:"pool_uid,omitempty"`
+	CustomerUID                 string                          `json:"customer_uid,omitempty"`
+	SyntheticAccountTypeUID     string                          `json:"synthetic_account_type_uid,omitempty"`
+	SyntheticAccountCategory    string                          `json:"synthetic_account_category,omitempty"`
+	Status                      string                          `json:"status,omitempty"`
+	Liability                   bool                            `json:"liability,omitempty"`
+	NetUsdBalance               string                          `json:"net_usd_balance,omitempty"`
+	NetUsdPendingBalance        string                          `json:"net_usd_pending_balance,omitempty"`
+	NetUsdAvailableBalance      string                          `json:"net_usd_available_balance,omitempty"`
+	AssetBalances               []*SyntheticAccountAssetBalance `json:"asset_balances,omitempty"`
+	MasterAccount               bool                            `json:"master_account,omitempty"`
+	AccountNumber               string                          `json:"account_number,omitempty"`
+	AccountNumberLastFour       string                          `json:"account_number_last_four,omitempty"`
+	RoutingNumber               string                          `json:"routing_number,omitempty"`
+	OpenedAt                    time.Time                       `json:"opened_at,omitempty"`
+	ClosedAt                    string                          `json:"closed_at,omitempty"`
+	ClosedToSyntheticAccountUID string                          `json:"closed_to_synthetic_account_uid,omitempty"`
+}
+
+// SyntheticAccountAssetBalance provides a  list of balances for the various asset types
+type SyntheticAccountAssetBalance struct {
+	AssetQuantity        string `json:"asset_quantity,omitempty"`
+	AssetType            string `json:"asset_type,omitempty"`
+	CurrentUsdValue      string `json:"current_usd_value,omitempty"`
+	CustodialAccountUID  string `json:"custodial_account_uid,omitempty"`
+	CustodialAccountName string `json:"custodial_account_name,omitempty"`
+	Debit                bool   `json:"debit,omitempty"`
 }
 
 // SyntheticAccountType data type

@@ -101,39 +101,39 @@ func main() {
 	log.Println("Lock Customer:", string(output))
 
 	// Unlock Customer
-	culk, err := rc.Customers.Unlock("EhrQZJNjCd79LLYq", "note", "reason")
+	cul, err := rc.Customers.Unlock("EhrQZJNjCd79LLYq", "note", "reason")
 	if err != nil {
 		log.Fatal("Error unlocking customer\n", err)
 	}
-	output, _ = json.Marshal(culk)
+	output, _ = json.Marshal(cul)
 	log.Println("Unlock Customer:", string(output))
 
 	// Update Profile Response
-	cprp := []*rize.CustomerProfileResponseParams{
+	cpp := []*rize.CustomerProfileResponseParams{
 		{
 			ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
 			ProfileResponse:       "",
 		},
 	}
-	cupr, err := rc.Customers.UpdateProfileResponses("EhrQZJNjCd79LLYq", cprp)
+	cpr, err := rc.Customers.UpdateProfileResponses("EhrQZJNjCd79LLYq", cpp)
 	if err != nil {
 		log.Fatal("Error updating profile response\n", err)
 	}
-	output, _ = json.Marshal(cupr)
+	output, _ = json.Marshal(cpr)
 	log.Println("Update Profile Response:", string(output))
 
 	// Update Profile Response (ordered_list)
-	cprpol := []*rize.CustomerProfileResponseOrderedListParams{{
+	cro := []*rize.CustomerProfileResponseOrderedListParams{{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
-		ProfileResponse: &rize.CustomerProfileResponseList{
+		ProfileResponse: &rize.CustomerProfileResponseItem{
 			Num0: "string",
 		},
 	}}
-	cuprol, err := rc.Customers.UpdateProfileResponsesOrderedList("EhrQZJNjCd79LLYq", cprpol)
+	col, err := rc.Customers.UpdateProfileResponsesOrderedList("EhrQZJNjCd79LLYq", cro)
 	if err != nil {
 		log.Fatal("Error updating profile response (ordered_list)\n", err)
 	}
-	output, _ = json.Marshal(cuprol)
+	output, _ = json.Marshal(col)
 	log.Println("Update Profile Response (ordered_list):", string(output))
 
 	// Secondary Customers

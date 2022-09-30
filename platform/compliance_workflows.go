@@ -6,12 +6,74 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/google/go-querystring/query"
 )
 
 // Handles all Compliance Workflow operations
 type complianceWorkflowService service
+
+// Workflow data type
+type Workflow struct {
+	UID                         string                      `json:"uid,omitempty"`
+	Summary                     *WorkflowSummary            `json:"summary,omitempty"`
+	Customer                    *WorkflowCustomer           `json:"customer,omitempty"`
+	ProductUID                  string                      `json:"product_uid,omitempty"`
+	ProductCompliancePlanUID    string                      `json:"product_compliance_plan_uid,omitempty"`
+	AcceptedDocuments           []*WorkflowAcceptedDocument `json:"accepted_documents,omitempty"`
+	CurrentStepDocumentsPending []*WorkflowPendingDocument  `json:"current_step_documents_pending,omitempty"`
+	AllDocuments                []*WorkflowDocument         `json:"all_documents,omitempty"`
+}
+
+// WorkflowSummary contains a status summary of the Compliance Workflow
+type WorkflowSummary struct {
+	AcceptedQuantity int       `json:"accepted_quantity,omitempty"`
+	BegunAt          time.Time `json:"begun_at,omitempty"`
+	CompletedStep    int       `json:"completed_step,omitempty"`
+	CurrentStep      int       `json:"current_step,omitempty"`
+	Status           string    `json:"status,omitempty"`
+}
+
+// WorkflowCustomer contains Customer information related to this Compliance Workflow
+type WorkflowCustomer struct {
+	Email       string `json:"email,omitempty"`
+	ExternalUID string `json:"external_uid,omitempty"`
+	UID         string `json:"uid,omitempty"`
+}
+
+// WorkflowAcceptedDocument contains information about accepted Compliance Workflow documents
+type WorkflowAcceptedDocument struct {
+	ElectronicSignatureRequired string    `json:"electronic_signature_required,omitempty"`
+	ExternalStorageName         string    `json:"external_storage_name,omitempty"`
+	ComplianceDocumentURL       string    `json:"compliance_document_url,omitempty"`
+	Name                        string    `json:"name,omitempty"`
+	Step                        int       `json:"step,omitempty"`
+	Version                     int       `json:"version,omitempty"`
+	UID                         string    `json:"uid,omitempty"`
+	AcceptedAt                  time.Time `json:"accepted_at,omitempty"`
+}
+
+// WorkflowPendingDocument contains information about pending Compliance Workflow documents
+type WorkflowPendingDocument struct {
+	ElectronicSignatureRequired string `json:"electronic_signature_required,omitempty"`
+	ExternalStorageName         string `json:"external_storage_name,omitempty"`
+	ComplianceDocumentURL       string `json:"compliance_document_url,omitempty"`
+	Name                        string `json:"name,omitempty"`
+	Step                        int    `json:"step,omitempty"`
+	Version                     int    `json:"version,omitempty"`
+	UID                         string `json:"uid,omitempty"`
+}
+
+// WorkflowDocument contains information about all Compliance Workflow documents
+type WorkflowDocument struct {
+	ElectronicSignatureRequired string `json:"electronic_signature_required,omitempty"`
+	ExternalStorageName         string `json:"external_storage_name,omitempty"`
+	ComplianceDocumentURL       string `json:"compliance_document_url,omitempty"`
+	Name                        string `json:"name,omitempty"`
+	Step                        int    `json:"step,omitempty"`
+	Version                     int    `json:"version,omitempty"`
+}
 
 // WorkflowListParams builds the query parameters used in querying Compliance Workflows
 type WorkflowListParams struct {
@@ -52,7 +114,7 @@ type WorkflowDocumentsParams struct {
 // WorkflowResponse is an API response containing a list of Compliance Workflows
 type WorkflowResponse struct {
 	BaseResponse
-	Data []interface{} `json:"data"`
+	Data []*Workflow `json:"data"`
 }
 
 // Retrieves a list of Compliance Workflows filtered by the given parameters

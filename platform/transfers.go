@@ -39,7 +39,7 @@ type TransferListParams struct {
 
 // TransferCreateParams are the body params used when creating a new Transfer
 type TransferCreateParams struct {
-	ExternalUID                    string `json:"external_uid"`
+	ExternalUID                    string `json:"external_uid,omitempty"`
 	SourceSyntheticAccountUID      string `json:"source_synthetic_account_uid"`
 	DestinationSyntheticAccountUID string `json:"destination_synthetic_account_uid"`
 	InitiatingCustomerUID          string `json:"initiating_customer_uid"`

@@ -15,34 +15,40 @@ type custodialAccountService service
 
 // CustodialAccount data type
 type CustodialAccount struct {
-	UID            string `json:"uid,omitempty"`
-	ExternalUID    string `json:"external_uid,omitempty"`
-	CustomerUID    string `json:"customer_uid,omitempty"`
-	PoolUID        string `json:"pool_uid,omitempty"`
-	Type           string `json:"type,omitempty"`
-	Liability      bool   `json:"liability,omitempty"`
-	Name           string `json:"name,omitempty"`
-	PrimaryAccount bool   `json:"primary_account,omitempty"`
-	Status         string `json:"status,omitempty"`
-	AccountErrors  []struct {
-		ErrorCode        string `json:"error_code,omitempty"`
-		ErrorName        string `json:"error_name,omitempty"`
-		ErrorDescription string `json:"error_description,omitempty"`
-	} `json:"account_errors,omitempty"`
-	NetUsdBalance          string `json:"net_usd_balance,omitempty"`
-	NetUsdPendingBalance   string `json:"net_usd_pending_balance,omitempty"`
-	NetUsdAvailableBalance string `json:"net_usd_available_balance,omitempty"`
-	AssetBalances          []struct {
-		AssetQuantity   string `json:"asset_quantity,omitempty"`
-		AssetType       string `json:"asset_type,omitempty"`
-		CurrentUsdValue string `json:"current_usd_value,omitempty"`
-		Debit           bool   `json:"debit,omitempty"`
-	} `json:"asset_balances,omitempty"`
-	AccountNumber       string    `json:"account_number,omitempty"`
-	AccountNumberMasked string    `json:"account_number_masked,omitempty"`
-	RoutingNumber       string    `json:"routing_number,omitempty"`
-	OpenedAt            time.Time `json:"opened_at,omitempty"`
-	ClosedAt            time.Time `json:"closed_at,omitempty"`
+	UID                    string                          `json:"uid,omitempty"`
+	ExternalUID            string                          `json:"external_uid,omitempty"`
+	CustomerUID            string                          `json:"customer_uid,omitempty"`
+	PoolUID                string                          `json:"pool_uid,omitempty"`
+	Type                   string                          `json:"type,omitempty"`
+	Liability              bool                            `json:"liability,omitempty"`
+	Name                   string                          `json:"name,omitempty"`
+	PrimaryAccount         bool                            `json:"primary_account,omitempty"`
+	Status                 string                          `json:"status,omitempty"`
+	AccountErrors          []*CustodialAccountError        `json:"account_errors,omitempty"`
+	NetUsdBalance          string                          `json:"net_usd_balance,omitempty"`
+	NetUsdPendingBalance   string                          `json:"net_usd_pending_balance,omitempty"`
+	NetUsdAvailableBalance string                          `json:"net_usd_available_balance,omitempty"`
+	AssetBalances          []*CustodialAccountAssetBalance `json:"asset_balances,omitempty"`
+	AccountNumber          string                          `json:"account_number,omitempty"`
+	AccountNumberMasked    string                          `json:"account_number_masked,omitempty"`
+	RoutingNumber          string                          `json:"routing_number,omitempty"`
+	OpenedAt               time.Time                       `json:"opened_at,omitempty"`
+	ClosedAt               time.Time                       `json:"closed_at,omitempty"`
+}
+
+// CustodialAccountError provides errors info related to this account
+type CustodialAccountError struct {
+	ErrorCode        string `json:"error_code,omitempty"`
+	ErrorName        string `json:"error_name,omitempty"`
+	ErrorDescription string `json:"error_description,omitempty"`
+}
+
+// CustodialAccountAssetBalance provides balance info for the various asset types held in this Custodial Account
+type CustodialAccountAssetBalance struct {
+	AssetQuantity   string `json:"asset_quantity,omitempty"`
+	AssetType       string `json:"asset_type,omitempty"`
+	CurrentUsdValue string `json:"current_usd_value,omitempty"`
+	Debit           bool   `json:"debit,omitempty"`
 }
 
 // CustodialAccountListParams builds the query parameters used in querying Custodial Accounts

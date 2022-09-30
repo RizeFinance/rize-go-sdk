@@ -55,6 +55,7 @@ type RizeClient struct {
 	Pools               *poolService
 	Products            *productService
 	SyntheticAccounts   *syntheticAccountService
+	Transactions        *transactionService
 	Transfers           *transferService
 }
 
@@ -106,6 +107,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	r.Pools = (*poolService)(&r.svc)
 	r.Products = (*productService)(&r.svc)
 	r.SyntheticAccounts = (*syntheticAccountService)(&r.svc)
+	r.Transactions = (*transactionService)(&r.svc)
 	r.Transfers = (*transferService)(&r.svc)
 
 	// Generate Auth Token
