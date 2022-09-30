@@ -47,15 +47,16 @@ type RizeClient struct {
 	*TokenCache
 	// All available Rize API services
 	Auth                *authService
-	CardArtwork         *cardArtworkService
+	CardArtworks        *cardArtworkService
 	ComplianceWorkflows *complianceWorkflowService
 	CustodialAccounts   *custodialAccountService
-	CustodialPartner    *custodialPartnerService
+	CustodialPartners   *custodialPartnerService
 	CustomerProducts    *customerProductService
 	Customers           *customerService
 	DebitCards          *debitCardService
 	Documents           *documentService
 	Evaluations         *evaluationService
+	PinwheelJobs        *pinwheelJobService
 	KYCDocuments        *kycDocumentService
 	Pools               *poolService
 	Products            *productService
@@ -105,16 +106,17 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 
 	// Initialize API Services
 	r.Auth = (*authService)(&r.svc)
-	r.CardArtwork = (*cardArtworkService)(&r.svc)
+	r.CardArtworks = (*cardArtworkService)(&r.svc)
 	r.ComplianceWorkflows = (*complianceWorkflowService)(&r.svc)
 	r.CustodialAccounts = (*custodialAccountService)(&r.svc)
-	r.CustodialPartner = (*custodialPartnerService)(&r.svc)
+	r.CustodialPartners = (*custodialPartnerService)(&r.svc)
 	r.CustomerProducts = (*customerProductService)(&r.svc)
 	r.Customers = (*customerService)(&r.svc)
 	r.DebitCards = (*debitCardService)(&r.svc)
 	r.Documents = (*documentService)(&r.svc)
 	r.Evaluations = (*evaluationService)(&r.svc)
 	r.KYCDocuments = (*kycDocumentService)(&r.svc)
+	r.PinwheelJobs = (*pinwheelJobService)(&r.svc)
 	r.Pools = (*poolService)(&r.svc)
 	r.Products = (*productService)(&r.svc)
 	r.Sandbox = (*sandboxService)(&r.svc)

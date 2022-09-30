@@ -36,7 +36,7 @@ func main() {
 		Limit:      100,
 		Offset:     0,
 	}
-	cl, err := rc.CardArtwork.List(&clp)
+	cl, err := rc.CardArtworks.List(&clp)
 	if err != nil {
 		log.Fatal("Error fetching Card Artwork\n", err)
 	}
@@ -44,7 +44,7 @@ func main() {
 	log.Println("List Card Artwork:", string(output))
 
 	// Get Card Artwork
-	cg, err := rc.CardArtwork.Get("EhrQZJNjCd79LLYq")
+	cg, err := rc.CardArtworks.Get("EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching CardArtwork\n", err)
 	}

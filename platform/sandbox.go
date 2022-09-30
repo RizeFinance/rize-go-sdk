@@ -17,7 +17,7 @@ type SandboxCreateParams struct {
 	CustomerUID      string  `json:"customer_uid"`
 	DebitCardUID     string  `json:"debit_card_uid"`
 	DenialReason     string  `json:"denial_reason,omitempty"`
-	UsDollarAmount   float64 `json:"us_dollar_amount"`
+	USDollarAmount   float64 `json:"us_dollar_amount"`
 	Mcc              string  `json:"mcc,omitempty"`
 	MerchantLocation string  `json:"merchant_location,omitempty"`
 	MerchantName     string  `json:"merchant_name,omitempty"`
@@ -32,7 +32,10 @@ type SandboxResponse struct {
 
 // Create a Transaction by simulating the attributes that would be expected from reading an actual transaction received from a third party system
 func (s *sandboxService) Create(scp *SandboxCreateParams) (*SandboxResponse, error) {
-	if scp.TransactionType == "" {
+	if scp.TransactionType == "" ||
+		scp.CustomerUID == "" ||
+		scp.DebitCardUID == "" ||
+		scp.USDollarAmount == 0 {
 		return nil, fmt.Errorf("Email is required")
 	}
 

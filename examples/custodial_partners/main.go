@@ -31,7 +31,7 @@ func main() {
 	}
 
 	// List Custodial Partner
-	cl, err := rc.CustodialPartner.List()
+	cl, err := rc.CustodialPartners.List()
 	if err != nil {
 		log.Fatal("Error fetching Custodial Partners\n", err)
 	}
@@ -39,7 +39,7 @@ func main() {
 	log.Println("List Custodial Partners:", string(output))
 
 	// Get Custodial Partner
-	cg, err := rc.CustodialPartner.Get("EhrQZJNjCd79LLYq")
+	cg, err := rc.CustodialPartners.Get("EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching CustodialPartner\n", err)
 	}

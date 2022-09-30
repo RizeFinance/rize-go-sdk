@@ -36,7 +36,7 @@ func main() {
 		CustomerUID:      "uKxmLxUEiSj5h4M3",
 		DebitCardUID:     "h9MzupcjtA3LPW2e",
 		DenialReason:     "insufficient_funds",
-		UsDollarAmount:   21.89,
+		USDollarAmount:   21.89,
 		Mcc:              "5200",
 		MerchantLocation: "NEW YORK, NY",
 		MerchantName:     "Widgets Incorporated",
