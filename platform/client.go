@@ -46,6 +46,7 @@ type RizeClient struct {
 	// Cached auth token data
 	*TokenCache
 	// All available Rize API services
+	Adjustments         *adjustmentService
 	Auth                *authService
 	CardArtworks        *cardArtworkService
 	ComplianceWorkflows *complianceWorkflowService
@@ -105,6 +106,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	r.TokenCache = &TokenCache{}
 
 	// Initialize API Services
+	r.Adjustments = (*adjustmentService)(&r.svc)
 	r.Auth = (*authService)(&r.svc)
 	r.CardArtworks = (*cardArtworkService)(&r.svc)
 	r.ComplianceWorkflows = (*complianceWorkflowService)(&r.svc)

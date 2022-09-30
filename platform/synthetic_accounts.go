@@ -38,7 +38,7 @@ type SyntheticAccount struct {
 	ClosedToSyntheticAccountUID string                          `json:"closed_to_synthetic_account_uid,omitempty"`
 }
 
-// SyntheticAccountAssetBalance provides a  list of balances for the various asset types
+// SyntheticAccountAssetBalance provides a list of balances for the various asset types
 type SyntheticAccountAssetBalance struct {
 	AssetQuantity        string `json:"asset_quantity,omitempty"`
 	AssetType            string `json:"asset_type,omitempty"`
