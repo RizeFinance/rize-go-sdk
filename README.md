@@ -5,15 +5,52 @@
   <br />
 </p>
 
-*Making financial services simple and accessible. Rize enables fintechs, financial institutions and brands to build across multiple account types with one API.*
+# Rize Money Go SDK
 
-# Official Rize SDKs for Go
+## Overview
 
-### Go Version
+[Rize](https://rizemoney.com/) makes financial services simple and accessible by enabling fintechs, financial institutions and brands to build across multiple account types with one API. The Rize GO SDK enables access to all platform services in our sandbox, integration and production environment. When you're ready to build, open a sandbox environment [here](https://rizefs.com/get-access/). If you have questions, feedback, or a use case you want to discuss with us, contact us at [hello@rizemoney.com](mailto:hello@rizemoney.com).
 
-+ Go >= 1.18
+For more information, check out our [Platform API Documentation](https://developer.rizefs.com/).
 
-### Getting Started
+### Supported Go Versions
+
+The Rize Go SDK is compatible with the two most recent, major Go releases. We currently support **Go v1.18 and higher**.
+
+## Getting Started
+
+### Installation
+
+To install the latest Rize Go SDK, add the module as dependency using go mod:
+```
+go get github.com/rizefinance/rize-go-sdk@latest
+```
+
+To install a specific release version:
+```
+go get github.com/rizefinance/rize-go-sdk@v1.0.0
+```
+
+### Configuration
+
+The SDK requires program configuration credentials in order to interact with the API. You can find these in the Rize [admin portal](https://admin-sandbox.rizefs.com/).
+
+| Parameter   | Description                                                  | Default   |
+| ----------- | ------------------------------------------------------------ | --------- |
+| HMACKey     | HMAC key for the target environment | "" |
+| ProgramUID  | Program UID for the target environment | "" |
+| Environment | The Rize environment to be used:<br> `"sandbox"`, `"integration"` or `"production"` | "sandbox" |
+| Debug  | Enable debug logging | false |
+
+### Import SDK
+
+Import the SDK module into your code:
+
+```go
+import rize "github.com/rizefinance/rize-go-sdk/platform"
+```
+
+### Start Making API Calls
 
 ```go
 import rize "github.com/rizefinance/rize-go-sdk/platform"
@@ -30,31 +67,36 @@ func main() {
 		log.Fatal("Error building RizeClient\n", err)
 	}
 	
-	// Start making API calls
+	// Create a new Compliance Worflow
+	wcp := rize.WorkflowCreateParams{
+		CustomerUID:              "h9MzupcjtA3LPW2e",
+		ProductCompliancePlanUID: "25NQX3GGXpAtpUmP",
+	}
+	c, err := rc.ComplianceWorkflows.Create(&wcp)
+	if err != nil {
+		log.Fatal("Error creating new Compliance Workflow\n", err)
+	}
 }
 ```
 
-| Parameter   | Description                                                  | Default   |
-| ----------- | ------------------------------------------------------------ | --------- |
-| HMACKey     | HMAC key for the target environment | nil |
-| ProgramUID  | Program UID for the target environment | nil |
-| Environment | The Rize environment to be used: `'sandbox'`, `'integration'` or `'production'` | 'sandbox' |
-| Debug  | Enable debug logging | false |
+## Examples
 
-### Examples
-
-The API examples require availability of certain Rize environment variables. You can set them in the provided dotenv file. 
+The [examples](examples/) directory provides basic implementation examples for each API endpoint. They require configuration credentials to be set as environment variables. Use the provided dotenv file to set those credentials for local testing. 
 
 ```sh
 # Generate a local configuration file
 $ cp .env-example .env
 ```
 
-### API Docs
+## Documentation
 
-Full API documentation is available at [https://developer.rizefs.com/](https://developer.rizefs.com/).
+* [Platform API Documentation](https://developer.rizefs.com/)
+* [Rize Postman](https://www.postman.com/rizemoney/)
+* [Rize GitHub](https://github.com/RizeFinance)
+* [Rize JS SDK](https://github.com/RizeFinance/rize-js)
+* [Rize Website](https://www.rizemoney.com/)
 
-### License
+## License
 MIT License. Copyright 2021-Present Rize Money, Inc. All rights reserved.
 
 See [LICENSE](LICENSE)
