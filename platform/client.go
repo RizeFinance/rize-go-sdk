@@ -48,13 +48,14 @@ type RizeClient struct {
 	// All available Rize API services
 	Auth                *authService
 	ComplianceWorkflows *complianceWorkflowService
+	CustodialAccounts   *custodialAccountService
+	CustomerProducts    *customerProductService
 	Customers           *customerService
 	KYCDocuments        *kycDocumentService
 	Pools               *poolService
 	Products            *productService
-	CustomerProducts    *customerProductService
-	CustodialAccounts   *custodialAccountService
 	SyntheticAccounts   *syntheticAccountService
+	Transfers           *transferService
 }
 
 // TokenCache stores Auth token data
@@ -98,13 +99,14 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	// Initialize API Services
 	r.Auth = (*authService)(&r.svc)
 	r.ComplianceWorkflows = (*complianceWorkflowService)(&r.svc)
+	r.CustodialAccounts = (*custodialAccountService)(&r.svc)
+	r.CustomerProducts = (*customerProductService)(&r.svc)
 	r.Customers = (*customerService)(&r.svc)
 	r.KYCDocuments = (*kycDocumentService)(&r.svc)
 	r.Pools = (*poolService)(&r.svc)
 	r.Products = (*productService)(&r.svc)
-	r.CustomerProducts = (*customerProductService)(&r.svc)
-	r.CustodialAccounts = (*custodialAccountService)(&r.svc)
 	r.SyntheticAccounts = (*syntheticAccountService)(&r.svc)
+	r.Transfers = (*transferService)(&r.svc)
 
 	// Generate Auth Token
 	_, err := r.Auth.getToken()
