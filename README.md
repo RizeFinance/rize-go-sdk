@@ -81,6 +81,40 @@ func main() {
 }
 ```
 
+### Configure http.Client
+
+You have the option to supply your own http.Client. By default, the SDK uses `DefaultClient` with a 30s timeout.
+
+To set a proxy for all requests, configure the Transport for the HTTPClient:
+
+```go
+config := rize.Config{
+	HMACKey:     hmac,
+	ProgramUID:  programUID,
+	Environment: environment,
+	HTTPClient: &http.Client{
+		Transport: &http.Transport{
+			Proxy: http.ProxyURL(proxyUrl),
+		},
+	},
+	Debug:       false,
+}
+```
+
+Similarly, to configure the timeout, set it on the HTTPClient:
+
+```go
+config := rize.Config{
+	HMACKey:     hmac,
+	ProgramUID:  programUID,
+	Environment: environment,
+	HTTPClient: &http.Client{
+		Timeout: time.Minute,
+	},
+	Debug:       false,
+}
+```
+
 ## Examples
 
 The [examples](examples/) directory provides basic implementation examples for each API endpoint. They require configuration credentials to be set as environment variables. 

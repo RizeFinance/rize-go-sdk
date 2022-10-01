@@ -31,10 +31,16 @@ type BaseResponse struct {
 
 // RizeConfig stores Rize configuration values
 type RizeConfig struct {
-	ProgramUID  string
-	HMACKey     string
+	// Program within the target environment
+	ProgramUID string
+	// HMAC key for the target environment
+	HMACKey string
+	// Rize infrastructure target environment. Defaults to `sandbox``
 	Environment string
-	Debug       bool
+	// Provide your own HTTPClient configuration (optional)
+	HTTPClient *http.Client
+	// Enable debug logging
+	Debug bool
 }
 
 // RizeClient is the top-level client containing all APIs
@@ -43,7 +49,9 @@ type RizeClient struct {
 	cfg *RizeConfig
 	// Stores a reference to the RizeClient for child services to use internally
 	svc service
-	// Cached auth token data
+	// Allows additional configuration options like proxy, timeouts, etc
+	httpClient *http.Client
+	// Cached Auth token data
 	*TokenCache
 	// All available Rize API services
 	Adjustments         *adjustmentService
@@ -103,6 +111,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	r := &RizeClient{}
 	r.cfg = cfg
 	r.svc.rizeClient = r // Store a reference to the RizeClient rather than creating one for each service
+	r.httpClient = cfg.HTTPClient
 	r.TokenCache = &TokenCache{}
 
 	// Initialize API Services
@@ -156,10 +165,7 @@ func (r *RizeClient) doRequest(method string, path string, query url.Values, dat
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Authorization", r.TokenCache.Token)
 
-	client := &http.Client{
-		Timeout: internal.APITimeoutSeconds,
-	}
-	res, err := client.Do(req)
+	res, err := r.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -195,6 +201,12 @@ func (cfg *RizeConfig) validateConfig() error {
 	if ok := slices.Contains(internal.Environments, strings.ToLower(cfg.Environment)); !ok {
 		log.Println(fmt.Sprintf("Environment %s not recognized. Defaulting to sandbox...", cfg.Environment))
 		cfg.Environment = "sandbox"
+	}
+
+	if cfg.HTTPClient == nil {
+		cfg.HTTPClient = &http.Client{
+			Timeout: internal.APITimeoutSeconds,
+		}
 	}
 
 	return nil
