@@ -1,12 +1,14 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"net/url"
+	"runtime"
 	"strings"
 	"time"
 
@@ -49,6 +51,8 @@ type RizeClient struct {
 	cfg *RizeConfig
 	// Allows additional configuration options like proxy, timeouts, etc
 	httpClient *http.Client
+	// Set custom `user-agent` header string
+	userAgent string
 	// Cached Auth token data
 	*TokenCache
 	// All available Rize API services
@@ -109,6 +113,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	r := &RizeClient{}
 	r.cfg = cfg
 	r.httpClient = cfg.HTTPClient
+	r.userAgent = fmt.Sprintf("%s/%s (Go: %s)", "rize-go-sdk", internal.SDKVersion, runtime.Version())
 	r.TokenCache = &TokenCache{}
 
 	// Initialize API Services
@@ -133,7 +138,7 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 	r.Transfers = &transferService{client: r}
 
 	// Generate Auth Token
-	_, err := r.Auth.getToken()
+	_, err := r.Auth.GetToken(context.Background())
 	if err != nil {
 		return nil, err
 	}
@@ -142,10 +147,10 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 }
 
 // Make the API request and return an http.Response. Checks for valid auth token.
-func (r *RizeClient) doRequest(method string, path string, query url.Values, data io.Reader) (*http.Response, error) {
+func (r *RizeClient) doRequest(ctx context.Context, method string, path string, query url.Values, data io.Reader) (*http.Response, error) {
 	// Check for valid auth token and refresh if necessary
 	if path != "auth" {
-		if _, err := r.Auth.getToken(); err != nil {
+		if _, err := r.Auth.GetToken(ctx); err != nil {
 			return nil, err
 		}
 	}
@@ -154,12 +159,14 @@ func (r *RizeClient) doRequest(method string, path string, query url.Values, dat
 
 	log.Println(fmt.Sprintf("Sending %s request to %s", method, url))
 
-	req, err := http.NewRequest(method, url, data)
+	req, err := http.NewRequestWithContext(ctx, method, url, data)
 	if err != nil {
 		return nil, err
 	}
-	req.URL.RawQuery = query.Encode()
+
 	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("User-Agent", r.userAgent)
 	req.Header.Add("Authorization", r.TokenCache.Token)
 
 	res, err := r.httpClient.Do(req)
@@ -168,7 +175,7 @@ func (r *RizeClient) doRequest(method string, path string, query url.Values, dat
 	}
 
 	// Check for error response
-	if res.StatusCode >= http.StatusBadRequest {
+	if res.StatusCode < http.StatusOK || res.StatusCode >= http.StatusBadRequest {
 		defer res.Body.Close()
 		body, err := io.ReadAll(res.Body)
 		if err != nil {

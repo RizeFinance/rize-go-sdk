@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -36,7 +37,7 @@ func main() {
 		ProductUID:  "zbJbEa72eKMgbbBv",
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 	}
-	pl, err := rc.CustomerProducts.List(&cpp)
+	pl, err := rc.CustomerProducts.List(context.Background(), &cpp)
 	if err != nil {
 		log.Fatal("Error fetching Customer Products\n", err)
 	}
@@ -48,7 +49,7 @@ func main() {
 		CustomerUID: "S62MaHx6WwsqG9vQ",
 		ProductUID:  "pQtTCSXz57fuefzp",
 	}
-	cc, err := rc.CustomerProducts.Create(&ccp)
+	cc, err := rc.CustomerProducts.Create(context.Background(), &ccp)
 	if err != nil {
 		log.Fatal("Error creating Customer Product\n", err)
 	}
@@ -56,7 +57,7 @@ func main() {
 	log.Println("Create Customer Product:", string(output))
 
 	// Get Customer Product
-	cp, err := rc.CustomerProducts.Get("Tegvs2E4TQgVYYMj")
+	cp, err := rc.CustomerProducts.Get(context.Background(), "Tegvs2E4TQgVYYMj")
 	if err != nil {
 		log.Fatal("Error fetching Customer Product\n", err)
 	}

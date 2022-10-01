@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -37,7 +38,7 @@ func main() {
 		Limit:       10,
 		Offset:      0,
 	}
-	l, err := rc.ComplianceWorkflows.List(&wlp)
+	l, err := rc.ComplianceWorkflows.List(context.Background(), &wlp)
 	if err != nil {
 		log.Fatal("Error fetching compliance workflows\n", err)
 	}
@@ -48,7 +49,7 @@ func main() {
 		CustomerUID:              "h9MzupcjtA3LPW2e",
 		ProductCompliancePlanUID: "25NQX3GGXpAtpUmP",
 	}
-	c, err := rc.ComplianceWorkflows.Create(&wcp)
+	c, err := rc.ComplianceWorkflows.Create(context.Background(), &wcp)
 	if err != nil {
 		log.Fatal("Error creating new compliance workflow\n", err)
 	}
@@ -58,7 +59,7 @@ func main() {
 	lp := rize.WorkflowLatestParams{
 		ProductCompliancePlanUID: "pQtTCSXz57fuefzp",
 	}
-	cw, err := rc.ComplianceWorkflows.ViewLatest("h9MzupcjtA3LPW2e", &lp)
+	cw, err := rc.ComplianceWorkflows.ViewLatest(context.Background(), "h9MzupcjtA3LPW2e", &lp)
 	if err != nil {
 		log.Fatal("Error fetching latest customer workflow\n", err)
 	}
@@ -72,7 +73,7 @@ func main() {
 		IPAddress:   "107.56.230.156",
 		UserName:    "gilbert chesterton",
 	}
-	ad, err := rc.ComplianceWorkflows.AcknowledgeDocument("dolordo", &wd)
+	ad, err := rc.ComplianceWorkflows.AcknowledgeDocument(context.Background(), "dolordo", &wd)
 	if err != nil {
 		log.Fatal("Error acknowledging compliance document\n", err)
 	}
@@ -91,7 +92,7 @@ func main() {
 			DocumentUID: "BgT64WeR0IxkgH6D",
 		}},
 	}
-	ads, err := rc.ComplianceWorkflows.AcknowledgeDocuments("dolordo", &wdp)
+	ads, err := rc.ComplianceWorkflows.AcknowledgeDocuments(context.Background(), "dolordo", &wdp)
 	if err != nil {
 		log.Fatal("Error acknowledging compliance documents\n", err)
 	}

@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -51,14 +52,14 @@ type PinwheelJobResponse struct {
 }
 
 // List retrieves a list of Pinwheel Jobs filtered by the given parameters
-func (p *pinwheelJobService) List(plp *PinwheelJobListParams) (*PinwheelJobResponse, error) {
+func (p *pinwheelJobService) List(ctx context.Context, plp *PinwheelJobListParams) (*PinwheelJobResponse, error) {
 	// Build PinwheelJobListParams into query string params
 	v, err := query.Values(plp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := p.client.doRequest(http.MethodGet, "pinwheel_jobs", v, nil)
+	res, err := p.client.doRequest(ctx, http.MethodGet, "pinwheel_jobs", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +79,7 @@ func (p *pinwheelJobService) List(plp *PinwheelJobListParams) (*PinwheelJobRespo
 }
 
 // Create is used to initialize a new Pinwheel Job and return a pinwheel_link_token to be used with the Pinwheel Link SDK
-func (p *pinwheelJobService) Create(pcp *PinwheelJobCreateParams) (*PinwheelJob, error) {
+func (p *pinwheelJobService) Create(ctx context.Context, pcp *PinwheelJobCreateParams) (*PinwheelJob, error) {
 	if len(pcp.JobNames) == 0 || pcp.SyntheticAccountUID == "" {
 		return nil, fmt.Errorf("JobNames and SyntheticAccountUID are required")
 	}
@@ -88,7 +89,7 @@ func (p *pinwheelJobService) Create(pcp *PinwheelJobCreateParams) (*PinwheelJob,
 		return nil, err
 	}
 
-	res, err := p.client.doRequest(http.MethodPost, "pinwheel_jobs", nil, bytes.NewBuffer(bytesMessage))
+	res, err := p.client.doRequest(ctx, http.MethodPost, "pinwheel_jobs", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -108,12 +109,12 @@ func (p *pinwheelJobService) Create(pcp *PinwheelJobCreateParams) (*PinwheelJob,
 }
 
 // Get returns a single PinwheelJob
-func (p *pinwheelJobService) Get(uid string) (*PinwheelJob, error) {
+func (p *pinwheelJobService) Get(ctx context.Context, uid string) (*PinwheelJob, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := p.client.doRequest(http.MethodGet, fmt.Sprintf("pinwheel_jobs/%s", uid), nil, nil)
+	res, err := p.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("pinwheel_jobs/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

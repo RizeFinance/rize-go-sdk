@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -46,14 +47,14 @@ type DocumentResponse struct {
 }
 
 // List retrieves a list of Documents filtered by the given parameters
-func (d *documentService) List(dlp *DocumentListParams) (*DocumentResponse, error) {
+func (d *documentService) List(ctx context.Context, dlp *DocumentListParams) (*DocumentResponse, error) {
 	// Build DocumentListParams into query string params
 	v, err := query.Values(dlp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := d.client.doRequest(http.MethodGet, "documents", v, nil)
+	res, err := d.client.doRequest(ctx, http.MethodGet, "documents", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -73,12 +74,12 @@ func (d *documentService) List(dlp *DocumentListParams) (*DocumentResponse, erro
 }
 
 // Get returns a single Document
-func (d *documentService) Get(uid string) (*Document, error) {
+func (d *documentService) Get(ctx context.Context, uid string) (*Document, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := d.client.doRequest(http.MethodGet, fmt.Sprintf("documents/%s", uid), nil, nil)
+	res, err := d.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("documents/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -98,13 +99,13 @@ func (d *documentService) Get(uid string) (*Document, error) {
 }
 
 // View is used to retrieve a Document and return it in either PDF or HTML format
-func (d *documentService) View(uid string) (*http.Response, error) {
+func (d *documentService) View(ctx context.Context, uid string) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
 	// TODO: Does this require a different Accept header type (application/pdf)?
-	res, err := d.client.doRequest(http.MethodGet, fmt.Sprintf("documents/%s/view", uid), nil, nil)
+	res, err := d.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("documents/%s/view", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -68,14 +69,14 @@ type CustodialAccountResponse struct {
 }
 
 // List retrieves a list of Custodial Accounts filtered by the given parameters
-func (c *custodialAccountService) List(plp *CustodialAccountListParams) (*CustodialAccountResponse, error) {
+func (c *custodialAccountService) List(ctx context.Context, plp *CustodialAccountListParams) (*CustodialAccountResponse, error) {
 	// Build CustodialAccountListParams into query string params
 	v, err := query.Values(plp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodGet, "custodial_accounts", v, nil)
+	res, err := c.client.doRequest(ctx, http.MethodGet, "custodial_accounts", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -95,12 +96,12 @@ func (c *custodialAccountService) List(plp *CustodialAccountListParams) (*Custod
 }
 
 // Get returns a single Custodial Account
-func (c *custodialAccountService) Get(uid string) (*CustodialAccount, error) {
+func (c *custodialAccountService) Get(ctx context.Context, uid string) (*CustodialAccount, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := c.client.doRequest(http.MethodGet, fmt.Sprintf("custodial_accounts/%s", uid), nil, nil)
+	res, err := c.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("custodial_accounts/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

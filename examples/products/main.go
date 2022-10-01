@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -31,7 +32,7 @@ func main() {
 	}
 
 	// List Products
-	pl, err := rc.Products.List("pQtTCSXz57fuefzp")
+	pl, err := rc.Products.List(context.Background(), "pQtTCSXz57fuefzp")
 	if err != nil {
 		log.Fatal("Error fetching products\n", err)
 	}
@@ -39,7 +40,7 @@ func main() {
 	log.Println("List Products:", string(output))
 
 	// Get Product
-	pg, err := rc.Products.Get("f9VncZny4ejhcPF4")
+	pg, err := rc.Products.Get(context.Background(), "f9VncZny4ejhcPF4")
 	if err != nil {
 		log.Fatal("Error fetching product\n", err)
 	}

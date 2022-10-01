@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -34,7 +35,7 @@ func main() {
 	clp := rize.CustomerListParams{
 		Limit: 10,
 	}
-	cl, err := rc.Customers.List(&clp)
+	cl, err := rc.Customers.List(context.Background(), &clp)
 	if err != nil {
 		log.Fatal("Error fetching customers\n", err)
 	}
@@ -46,7 +47,7 @@ func main() {
 		CustomerType: "primary",
 		Email:        "thomas@example.com",
 	}
-	cc, err := rc.Customers.Create(&ccp)
+	cc, err := rc.Customers.Create(context.Background(), &ccp)
 	if err != nil {
 		log.Fatal("Error creating new customer\n", err)
 	}
@@ -54,7 +55,7 @@ func main() {
 	log.Println("New Customer:", string(output))
 
 	// Get customer
-	cg, err := rc.Customers.Get("EhrQZJNjCd79LLYq")
+	cg, err := rc.Customers.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching customer\n", err)
 	}
@@ -69,7 +70,7 @@ func main() {
 			LastName:  "Oyl",
 		},
 	}
-	cu, err := rc.Customers.Update("EhrQZJNjCd79LLYq", &cup)
+	cu, err := rc.Customers.Update(context.Background(), "EhrQZJNjCd79LLYq", &cup)
 	if err != nil {
 		log.Fatal("Error updating customer\n", err)
 	}
@@ -77,7 +78,7 @@ func main() {
 	log.Println("Update Customer:", string(output))
 
 	// Delete customer
-	cdl, err := rc.Customers.Delete("EhrQZJNjCd79LLYq", "Archiving customer note")
+	cdl, err := rc.Customers.Delete(context.Background(), "EhrQZJNjCd79LLYq", "Archiving customer note")
 	if err != nil {
 		log.Fatal("Error archiving customer\n", err)
 	}
@@ -85,7 +86,7 @@ func main() {
 	log.Println("Delete Customer:", string(output))
 
 	// Confirm Identity
-	ci, err := rc.Customers.ConfirmPIIData("EhrQZJNjCd79LLYq")
+	ci, err := rc.Customers.ConfirmPIIData(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error confirming identity\n", err)
 	}
@@ -93,7 +94,7 @@ func main() {
 	log.Println("Confirm customer identity:", string(output))
 
 	// Lock customer
-	clk, err := rc.Customers.Lock("EhrQZJNjCd79LLYq", "note", "reason")
+	clk, err := rc.Customers.Lock(context.Background(), "EhrQZJNjCd79LLYq", "note", "reason")
 	if err != nil {
 		log.Fatal("Error locking customer\n", err)
 	}
@@ -101,7 +102,7 @@ func main() {
 	log.Println("Lock Customer:", string(output))
 
 	// Unlock Customer
-	cul, err := rc.Customers.Unlock("EhrQZJNjCd79LLYq", "note", "reason")
+	cul, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", "note", "reason")
 	if err != nil {
 		log.Fatal("Error unlocking customer\n", err)
 	}
@@ -115,7 +116,7 @@ func main() {
 			ProfileResponse:       "",
 		},
 	}
-	cpr, err := rc.Customers.UpdateProfileResponses("EhrQZJNjCd79LLYq", cpp)
+	cpr, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", cpp)
 	if err != nil {
 		log.Fatal("Error updating profile response\n", err)
 	}
@@ -129,7 +130,7 @@ func main() {
 			Num0: "string",
 		},
 	}}
-	col, err := rc.Customers.UpdateProfileResponsesOrderedList("EhrQZJNjCd79LLYq", cro)
+	col, err := rc.Customers.UpdateProfileResponsesOrderedList(context.Background(), "EhrQZJNjCd79LLYq", cro)
 	if err != nil {
 		log.Fatal("Error updating profile response (ordered_list)\n", err)
 	}
@@ -147,7 +148,7 @@ func main() {
 			},
 		},
 	}
-	sc, err := rc.Customers.CreateSecondaryCustomer(&scp)
+	sc, err := rc.Customers.CreateSecondaryCustomer(context.Background(), &scp)
 	if err != nil {
 		log.Fatal("Error creating secondary customer\n", err)
 	}

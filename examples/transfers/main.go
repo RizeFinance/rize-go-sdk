@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -39,7 +40,7 @@ func main() {
 		Limit:               100,
 		Offset:              0,
 	}
-	tl, err := rc.Transfers.List(&lp)
+	tl, err := rc.Transfers.List(context.Background(), &lp)
 	if err != nil {
 		log.Fatal("Error fetching Transfers\n", err)
 	}
@@ -54,7 +55,7 @@ func main() {
 		InitiatingCustomerUID:          "iDtmSA52zRhgN4iy",
 		USDTransferAmount:              "12.34",
 	}
-	tc, err := rc.Transfers.Create(&cp)
+	tc, err := rc.Transfers.Create(context.Background(), &cp)
 	if err != nil {
 		log.Fatal("Error creating Transfer\n", err)
 	}
@@ -62,7 +63,7 @@ func main() {
 	log.Println("Create Transfer:", string(output))
 
 	// Get Transfer
-	tg, err := rc.Transfers.Get("EhrQZJNjCd79LLYq")
+	tg, err := rc.Transfers.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Transfer\n", err)
 	}

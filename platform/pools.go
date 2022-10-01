@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -35,14 +36,14 @@ type PoolResponse struct {
 }
 
 // List retrieves a list of Pools filtered by the given parameters
-func (p *poolService) List(plp *PoolListParams) (*PoolResponse, error) {
+func (p *poolService) List(ctx context.Context, plp *PoolListParams) (*PoolResponse, error) {
 	// Build PoolListParams into query string params
 	v, err := query.Values(plp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := p.client.doRequest(http.MethodGet, "pools", v, nil)
+	res, err := p.client.doRequest(ctx, http.MethodGet, "pools", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -62,12 +63,12 @@ func (p *poolService) List(plp *PoolListParams) (*PoolResponse, error) {
 }
 
 // Get returns a single Pool
-func (p *poolService) Get(uid string) (*Pool, error) {
+func (p *poolService) Get(ctx context.Context, uid string) (*Pool, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := p.client.doRequest(http.MethodGet, fmt.Sprintf("pools/%s", uid), nil, nil)
+	res, err := p.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("pools/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

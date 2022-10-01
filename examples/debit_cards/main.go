@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -40,7 +41,7 @@ func main() {
 		Locked:      false,
 		Status:      "queued",
 	}
-	dl, err := rc.DebitCards.List(&dlp)
+	dl, err := rc.DebitCards.List(context.Background(), &dlp)
 	if err != nil {
 		log.Fatal("Error fetching Debit Cards\n", err)
 	}
@@ -61,7 +62,7 @@ func main() {
 			PostalCode: "12345",
 		},
 	}
-	dc, err := rc.DebitCards.Create(&dcp)
+	dc, err := rc.DebitCards.Create(context.Background(), &dcp)
 	if err != nil {
 		log.Fatal("Error creating Debit Card\n", err)
 	}
@@ -69,7 +70,7 @@ func main() {
 	log.Println("Create Debit Card:", string(output))
 
 	// Get Debit Card
-	dg, err := rc.DebitCards.Get("EhrQZJNjCd79LLYq")
+	dg, err := rc.DebitCards.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Debit Card\n", err)
 	}
@@ -82,7 +83,7 @@ func main() {
 		CVV:                "012",
 		ExpiryDate:         "2023-08",
 	}
-	da, err := rc.DebitCards.Activate("h9MzupcjtA3LPW2e", &dap)
+	da, err := rc.DebitCards.Activate(context.Background(), "h9MzupcjtA3LPW2e", &dap)
 	if err != nil {
 		log.Fatal("Error activating Debit Card\n", err)
 	}
@@ -90,7 +91,7 @@ func main() {
 	log.Println("Activate Debit Card:", string(output))
 
 	// Lock Debit Card
-	dlk, err := rc.DebitCards.Lock("Lt6qjTNnYLjFfEWL", "lost")
+	dlk, err := rc.DebitCards.Lock(context.Background(), "Lt6qjTNnYLjFfEWL", "lost")
 	if err != nil {
 		log.Fatal("Error locking Debit Card\n", err)
 	}
@@ -98,7 +99,7 @@ func main() {
 	log.Println("Lock Debit Card:", string(output))
 
 	// Unlock Debit Card
-	duk, err := rc.DebitCards.Unlock("Lt6qjTNnYLjFfEWL")
+	duk, err := rc.DebitCards.Unlock(context.Background(), "Lt6qjTNnYLjFfEWL")
 	if err != nil {
 		log.Fatal("Error unlocking Debit Card\n", err)
 	}
@@ -117,7 +118,7 @@ func main() {
 			PostalCode: "12345",
 		},
 	}
-	dr, err := rc.DebitCards.Reissue("h9MzupcjtA3LPW2e", &drp)
+	dr, err := rc.DebitCards.Reissue(context.Background(), "h9MzupcjtA3LPW2e", &drp)
 	if err != nil {
 		log.Fatal("Error reissuing Debit Card\n", err)
 	}
@@ -125,7 +126,7 @@ func main() {
 	log.Println("Reissue Debit Card:", string(output))
 
 	// Get Debit Card PIN Token
-	dpt, err := rc.DebitCards.GetPINToken("Lt6qjTNnYLjFfEWL", true)
+	dpt, err := rc.DebitCards.GetPINToken(context.Background(), "Lt6qjTNnYLjFfEWL", true)
 	if err != nil {
 		log.Fatal("Error fetching Debit Card PIN Token\n", err)
 	}
@@ -133,7 +134,7 @@ func main() {
 	log.Println("Get Debit Card PIN Token:", string(output))
 
 	// Get Debit Card Access Token
-	dat, err := rc.DebitCards.GetAccessToken("Lt6qjTNnYLjFfEWL")
+	dat, err := rc.DebitCards.GetAccessToken(context.Background(), "Lt6qjTNnYLjFfEWL")
 	if err != nil {
 		log.Fatal("Error fetching Debit Card Access Token\n", err)
 	}
@@ -152,7 +153,7 @@ func main() {
 			PostalCode: "12345",
 		},
 	}
-	vm, err := rc.DebitCards.MigrateVirtualDebitCard("h9MzupcjtA3LPW2e", &vmp)
+	vm, err := rc.DebitCards.MigrateVirtualDebitCard(context.Background(), "h9MzupcjtA3LPW2e", &vmp)
 	if err != nil {
 		log.Fatal("Error migrating Debit Card\n", err)
 	}
@@ -160,7 +161,7 @@ func main() {
 	log.Println("Migrating Virtual Debit Card:", string(output))
 
 	// Get Virtual Debit Card Image
-	vi, err := rc.DebitCards.GetVirtualDebitCardImage("Lt6qjTNnYLjFfEWL", "h9MzupcjtA3LPW2e")
+	vi, err := rc.DebitCards.GetVirtualDebitCardImage(context.Background(), "Lt6qjTNnYLjFfEWL", "h9MzupcjtA3LPW2e")
 	if err != nil {
 		log.Fatal("Error fetching Virtual Debit Card Image\n", err)
 	}

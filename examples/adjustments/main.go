@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -39,7 +40,7 @@ func main() {
 		USDAdjustmentAmountMin: 5,
 		Sort:                   "adjustment_type_name_asc",
 	}
-	al, err := rc.Adjustments.List(&alp)
+	al, err := rc.Adjustments.List(context.Background(), &alp)
 	if err != nil {
 		log.Fatal("Error fetching Adjustments\n", err)
 	}
@@ -53,7 +54,7 @@ func main() {
 		USDAdjustmentAmount: 2.43,
 		AdjustmentTypeUID:   "KM2eKbR98t4tdAyZ",
 	}
-	ac, err := rc.Adjustments.Create(&acp)
+	ac, err := rc.Adjustments.Create(context.Background(), &acp)
 	if err != nil {
 		log.Fatal("Error creating Adjustment\n", err)
 	}
@@ -61,7 +62,7 @@ func main() {
 	log.Println("Create Adjustment:", string(output))
 
 	// Get Adjustment
-	ag, err := rc.Adjustments.Get("exMDShw6yM3NHLYV")
+	ag, err := rc.Adjustments.Get(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		log.Fatal("Error fetching Adjustment\n", err)
 	}
@@ -73,7 +74,7 @@ func main() {
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		ProgramUID:  "DbxJUHVuqt3C7hGK",
 	}
-	lat, err := rc.Adjustments.ListAdjustmentTypes(&atp)
+	lat, err := rc.Adjustments.ListAdjustmentTypes(context.Background(), &atp)
 	if err != nil {
 		log.Fatal("Error fetching Adjustment Types\n", err)
 	}
@@ -81,7 +82,7 @@ func main() {
 	log.Println("List Adjustment Types:", string(output))
 
 	// Get Adjustment Type
-	gat, err := rc.Adjustments.GetAdjustmentType("EhrQZJNjCd79LLYq")
+	gat, err := rc.Adjustments.GetAdjustmentType(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Adjustment Type\n", err)
 	}

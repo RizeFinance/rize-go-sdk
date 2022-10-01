@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -31,7 +32,7 @@ type SandboxResponse struct {
 }
 
 // Create a Transaction by simulating the attributes that would be expected from reading an actual transaction received from a third party system
-func (s *sandboxService) Create(scp *SandboxCreateParams) (*SandboxResponse, error) {
+func (s *sandboxService) Create(ctx context.Context, scp *SandboxCreateParams) (*SandboxResponse, error) {
 	if scp.TransactionType == "" ||
 		scp.CustomerUID == "" ||
 		scp.DebitCardUID == "" ||
@@ -44,7 +45,7 @@ func (s *sandboxService) Create(scp *SandboxCreateParams) (*SandboxResponse, err
 		return nil, err
 	}
 
-	res, err := s.client.doRequest(http.MethodPost, "sandbox/mock_transactions", nil, bytes.NewBuffer(bytesMessage))
+	res, err := s.client.doRequest(ctx, http.MethodPost, "sandbox/mock_transactions", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}

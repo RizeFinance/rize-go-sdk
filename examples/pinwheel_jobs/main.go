@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -37,7 +38,7 @@ func main() {
 		Limit:               100,
 		Offset:              0,
 	}
-	pl, err := rc.PinwheelJobs.List(&plp)
+	pl, err := rc.PinwheelJobs.List(context.Background(), &plp)
 	if err != nil {
 		log.Fatal("Error fetching Pinwheel Jobs\n", err)
 	}
@@ -53,7 +54,7 @@ func main() {
 		OrganizationName:     "Chipotle Mexican Grill, Inc.",
 		SkipWelcomeScreen:    false,
 	}
-	pc, err := rc.PinwheelJobs.Create(&pcp)
+	pc, err := rc.PinwheelJobs.Create(context.Background(), &pcp)
 	if err != nil {
 		log.Fatal("Error creating Pinwheel Job\n", err)
 	}
@@ -61,7 +62,7 @@ func main() {
 	log.Println("Create Pinwheel Job:", string(output))
 
 	// Get PinwheelJob
-	pg, err := rc.PinwheelJobs.Get("EhrQZJNjCd79LLYq")
+	pg, err := rc.PinwheelJobs.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Pinwheel Job\n", err)
 	}

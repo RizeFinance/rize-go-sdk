@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -49,7 +50,7 @@ type KYCDocumentResponse struct {
 }
 
 // List retrieves a list of KYC Documents for a given evaluation
-func (k *kycDocumentService) List(evaluationUID string) (*KYCDocumentResponse, error) {
+func (k *kycDocumentService) List(ctx context.Context, evaluationUID string) (*KYCDocumentResponse, error) {
 	if evaluationUID == "" {
 		return nil, fmt.Errorf("evaluationUID is required")
 	}
@@ -57,7 +58,7 @@ func (k *kycDocumentService) List(evaluationUID string) (*KYCDocumentResponse, e
 	v := url.Values{}
 	v.Set("evaluation_uid", evaluationUID)
 
-	res, err := k.client.doRequest(http.MethodGet, "kyc_documents", v, nil)
+	res, err := k.client.doRequest(ctx, http.MethodGet, "kyc_documents", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +78,7 @@ func (k *kycDocumentService) List(evaluationUID string) (*KYCDocumentResponse, e
 }
 
 // Upload a KYC Document for review
-func (k *kycDocumentService) Upload(p *KYCDocumentUploadParams) (*KYCDocumentUploadResponse, error) {
+func (k *kycDocumentService) Upload(ctx context.Context, p *KYCDocumentUploadParams) (*KYCDocumentUploadResponse, error) {
 	if p.EvaluationUID == "" ||
 		p.Filename == "" ||
 		p.FileContent == "" ||
@@ -91,7 +92,7 @@ func (k *kycDocumentService) Upload(p *KYCDocumentUploadParams) (*KYCDocumentUpl
 		return nil, err
 	}
 
-	res, err := k.client.doRequest(http.MethodPost, "kyc_documents", nil, bytes.NewBuffer(bytesMessage))
+	res, err := k.client.doRequest(ctx, http.MethodPost, "kyc_documents", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -111,12 +112,12 @@ func (k *kycDocumentService) Upload(p *KYCDocumentUploadParams) (*KYCDocumentUpl
 }
 
 // Get is used to retrieve metadata for a KYC Document previously uploaded
-func (k *kycDocumentService) Get(uid string) (*KYCDocument, error) {
+func (k *kycDocumentService) Get(ctx context.Context, uid string) (*KYCDocument, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := k.client.doRequest(http.MethodGet, fmt.Sprintf("kyc_documents/%s", uid), nil, nil)
+	res, err := k.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("kyc_documents/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -136,13 +137,13 @@ func (k *kycDocumentService) Get(uid string) (*KYCDocument, error) {
 }
 
 // View is used to retrieve a KYC Document (image, PDF, etc) previously uploaded
-func (k *kycDocumentService) View(uid string) (*http.Response, error) {
+func (k *kycDocumentService) View(ctx context.Context, uid string) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
 	// TODO: Does this require a different Accept header type (image/png)?
-	res, err := k.client.doRequest(http.MethodGet, fmt.Sprintf("kyc_documents/%s/view", uid), nil, nil)
+	res, err := k.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("kyc_documents/%s/view", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

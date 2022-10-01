@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -43,7 +44,7 @@ func main() {
 		MerchantNumber:   "000067107015968",
 		Description:      "test transaction",
 	}
-	sc, err := rc.Sandbox.Create(&scp)
+	sc, err := rc.Sandbox.Create(context.Background(), &scp)
 	if err != nil {
 		log.Fatal("Error creating Sandbox transactions\n", err)
 	}

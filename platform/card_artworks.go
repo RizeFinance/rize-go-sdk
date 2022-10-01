@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -36,14 +37,14 @@ type CardArtworkResponse struct {
 }
 
 // List retrieves a list of Card Artworks, optionally filtering by program
-func (c *cardArtworkService) List(clp *CardArtworkListParams) (*CardArtworkResponse, error) {
+func (c *cardArtworkService) List(ctx context.Context, clp *CardArtworkListParams) (*CardArtworkResponse, error) {
 	// Build CardArtworkListParams into query string params
 	v, err := query.Values(clp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodGet, "card_artworks", v, nil)
+	res, err := c.client.doRequest(ctx, http.MethodGet, "card_artworks", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -63,12 +64,12 @@ func (c *cardArtworkService) List(clp *CardArtworkListParams) (*CardArtworkRespo
 }
 
 // Get returns a single Card Artwork resource
-func (c *cardArtworkService) Get(uid string) (*CardArtwork, error) {
+func (c *cardArtworkService) Get(ctx context.Context, uid string) (*CardArtwork, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := c.client.doRequest(http.MethodGet, fmt.Sprintf("card_artworks/%s", uid), nil, nil)
+	res, err := c.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("card_artworks/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

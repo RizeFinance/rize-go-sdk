@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -53,14 +54,14 @@ type EvaluationResponse struct {
 }
 
 // List retrieves a list of Evaluations filtered by the given parameters
-func (p *evaluationService) List(plp *EvaluationListParams) (*EvaluationResponse, error) {
+func (p *evaluationService) List(ctx context.Context, plp *EvaluationListParams) (*EvaluationResponse, error) {
 	// Build EvaluationListParams into query string params
 	v, err := query.Values(plp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := p.client.doRequest(http.MethodGet, "evaluations", v, nil)
+	res, err := p.client.doRequest(ctx, http.MethodGet, "evaluations", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -80,12 +81,12 @@ func (p *evaluationService) List(plp *EvaluationListParams) (*EvaluationResponse
 }
 
 // Get returns a single Evaluation
-func (p *evaluationService) Get(uid string) (*Evaluation, error) {
+func (p *evaluationService) Get(ctx context.Context, uid string) (*Evaluation, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := p.client.doRequest(http.MethodGet, fmt.Sprintf("evaluations/%s", uid), nil, nil)
+	res, err := p.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("evaluations/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

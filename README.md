@@ -74,7 +74,7 @@ func main() {
 		CustomerUID:              "h9MzupcjtA3LPW2e",
 		ProductCompliancePlanUID: "25NQX3GGXpAtpUmP",
 	}
-	c, err := rc.ComplianceWorkflows.Create(&wcp)
+	c, err := rc.ComplianceWorkflows.Create(context.Background(), &wcp)
 	if err != nil {
 		log.Fatal("Error creating new Compliance Workflow\n", err)
 	}

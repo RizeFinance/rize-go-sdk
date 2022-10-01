@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -70,14 +71,14 @@ type AdjustmentTypeResponse struct {
 }
 
 // List retrieves a list of Adjustments filtered by the given parameters
-func (a *adjustmentService) List(alp *AdjustmentListParams) (*AdjustmentResponse, error) {
+func (a *adjustmentService) List(ctx context.Context, alp *AdjustmentListParams) (*AdjustmentResponse, error) {
 	// Build AdjustmentListParams into query string params
 	v, err := query.Values(alp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := a.client.doRequest(http.MethodGet, "adjustments", v, nil)
+	res, err := a.client.doRequest(ctx, http.MethodGet, "adjustments", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +98,7 @@ func (a *adjustmentService) List(alp *AdjustmentListParams) (*AdjustmentResponse
 }
 
 // Create a new Adjustment with the provided specification
-func (a *adjustmentService) Create(acp *AdjustmentCreateParams) (*Adjustment, error) {
+func (a *adjustmentService) Create(ctx context.Context, acp *AdjustmentCreateParams) (*Adjustment, error) {
 	if acp.CustomerUID == "" ||
 		acp.USDAdjustmentAmount == 0 ||
 		acp.AdjustmentTypeUID == "" {
@@ -109,7 +110,7 @@ func (a *adjustmentService) Create(acp *AdjustmentCreateParams) (*Adjustment, er
 		return nil, err
 	}
 
-	res, err := a.client.doRequest(http.MethodPost, "adjustments", nil, bytes.NewBuffer(bytesMessage))
+	res, err := a.client.doRequest(ctx, http.MethodPost, "adjustments", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -129,12 +130,12 @@ func (a *adjustmentService) Create(acp *AdjustmentCreateParams) (*Adjustment, er
 }
 
 // Get returns a single Adjustment
-func (a *adjustmentService) Get(uid string) (*Adjustment, error) {
+func (a *adjustmentService) Get(ctx context.Context, uid string) (*Adjustment, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := a.client.doRequest(http.MethodGet, fmt.Sprintf("adjustments/%s", uid), nil, nil)
+	res, err := a.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("adjustments/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -154,13 +155,13 @@ func (a *adjustmentService) Get(uid string) (*Adjustment, error) {
 }
 
 // ListAdjustmentTypes retrieves a list of Adjustment Types filtered by the given parameters
-func (a *adjustmentService) ListAdjustmentTypes(alp *AdjustmentTypeListParams) (*AdjustmentTypeResponse, error) {
+func (a *adjustmentService) ListAdjustmentTypes(ctx context.Context, alp *AdjustmentTypeListParams) (*AdjustmentTypeResponse, error) {
 	v, err := query.Values(alp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := a.client.doRequest(http.MethodGet, "adjustment_types", v, nil)
+	res, err := a.client.doRequest(ctx, http.MethodGet, "adjustment_types", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -180,12 +181,12 @@ func (a *adjustmentService) ListAdjustmentTypes(alp *AdjustmentTypeListParams) (
 }
 
 // GetAdjustmentType returns a single Adjustment Type
-func (a *adjustmentService) GetAdjustmentType(uid string) (*AdjustmentType, error) {
+func (a *adjustmentService) GetAdjustmentType(ctx context.Context, uid string) (*AdjustmentType, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := a.client.doRequest(http.MethodGet, fmt.Sprintf("adjustment_types/%s", uid), nil, nil)
+	res, err := a.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("adjustment_types/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

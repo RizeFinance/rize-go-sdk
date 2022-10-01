@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -118,14 +119,14 @@ type WorkflowResponse struct {
 }
 
 // Retrieves a list of Compliance Workflows filtered by the given parameters
-func (c *complianceWorkflowService) List(wlp *WorkflowListParams) (*WorkflowResponse, error) {
+func (c *complianceWorkflowService) List(ctx context.Context, wlp *WorkflowListParams) (*WorkflowResponse, error) {
 	// Build WorkflowListParams into query string params
 	v, err := query.Values(wlp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodGet, "compliance_workflows", v, nil)
+	res, err := c.client.doRequest(ctx, http.MethodGet, "compliance_workflows", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -145,7 +146,7 @@ func (c *complianceWorkflowService) List(wlp *WorkflowListParams) (*WorkflowResp
 }
 
 // Associates a new Compliance Workflow and set of Compliance Documents (for acknowledgment) with a Customer
-func (c *complianceWorkflowService) Create(wcp *WorkflowCreateParams) (*Workflow, error) {
+func (c *complianceWorkflowService) Create(ctx context.Context, wcp *WorkflowCreateParams) (*Workflow, error) {
 	if wcp.CustomerUID == "" || wcp.ProductCompliancePlanUID == "" {
 		return nil, fmt.Errorf("CustomerUID and ProductCompliancePlanUID values are required")
 	}
@@ -155,7 +156,7 @@ func (c *complianceWorkflowService) Create(wcp *WorkflowCreateParams) (*Workflow
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodPost, "compliance_workflows", nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodPost, "compliance_workflows", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -176,7 +177,7 @@ func (c *complianceWorkflowService) Create(wcp *WorkflowCreateParams) (*Workflow
 
 // ViewLatest is a helper endpoint for retrieving the most recent Compliance Workflow for a Customer.
 // A Customer UID must be supplied as the path parameter.
-func (c *complianceWorkflowService) ViewLatest(customerUID string, wlp *WorkflowLatestParams) (*Workflow, error) {
+func (c *complianceWorkflowService) ViewLatest(ctx context.Context, customerUID string, wlp *WorkflowLatestParams) (*Workflow, error) {
 	if customerUID == "" {
 		return nil, fmt.Errorf("customerUID is required")
 	}
@@ -186,7 +187,7 @@ func (c *complianceWorkflowService) ViewLatest(customerUID string, wlp *Workflow
 	if err != nil {
 		return nil, err
 	}
-	res, err := c.client.doRequest(http.MethodGet, fmt.Sprintf("compliance_workflows/latest/%s", customerUID), v, nil)
+	res, err := c.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("compliance_workflows/latest/%s", customerUID), v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -206,7 +207,7 @@ func (c *complianceWorkflowService) ViewLatest(customerUID string, wlp *Workflow
 }
 
 // AcknowledgeDocument is used to indicate acceptance or rejection of a Compliance Document within a given Compliance Workflow
-func (c *complianceWorkflowService) AcknowledgeDocument(uid string, wd *WorkflowDocumentParams) (*Workflow, error) {
+func (c *complianceWorkflowService) AcknowledgeDocument(ctx context.Context, uid string, wd *WorkflowDocumentParams) (*Workflow, error) {
 	if uid == "" || wd.Accept == "" || wd.DocumentUID == "" || wd.CustomerUID == "" {
 		return nil, fmt.Errorf("UID, Accept, DocumentUID and CustomerUID values are required")
 	}
@@ -216,7 +217,7 @@ func (c *complianceWorkflowService) AcknowledgeDocument(uid string, wd *Workflow
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("compliance_workflows/%s/acknowledge_document", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("compliance_workflows/%s/acknowledge_document", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -236,7 +237,7 @@ func (c *complianceWorkflowService) AcknowledgeDocument(uid string, wd *Workflow
 }
 
 // AcknowledgeDocuments is used to indicate acceptance or rejection of multiple Compliance Documents within a given Compliance Workflow
-func (c *complianceWorkflowService) AcknowledgeDocuments(uid string, wdp *WorkflowDocumentsParams) (*Workflow, error) {
+func (c *complianceWorkflowService) AcknowledgeDocuments(ctx context.Context, uid string, wdp *WorkflowDocumentsParams) (*Workflow, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -255,7 +256,7 @@ func (c *complianceWorkflowService) AcknowledgeDocuments(uid string, wdp *Workfl
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("compliance_workflows/%s/batch_acknowledge_documents", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("compliance_workflows/%s/batch_acknowledge_documents", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}

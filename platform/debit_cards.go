@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -103,14 +104,14 @@ type DebitCardAccessTokenResponse struct {
 }
 
 // List retrieves a list of Debit Cards filtered by the given parameters
-func (d *debitCardService) List(plp *DebitCardListParams) (*DebitCardResponse, error) {
+func (d *debitCardService) List(ctx context.Context, plp *DebitCardListParams) (*DebitCardResponse, error) {
 	// Build DebitCardListParams into query string params
 	v, err := query.Values(plp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := d.client.doRequest(http.MethodGet, "debit_cards", v, nil)
+	res, err := d.client.doRequest(ctx, http.MethodGet, "debit_cards", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -130,7 +131,7 @@ func (d *debitCardService) List(plp *DebitCardListParams) (*DebitCardResponse, e
 }
 
 // Create is used to a new Debit Card and attach it to the supplied Customer and Pool
-func (d *debitCardService) Create(dcp *DebitCardCreateParams) (*DebitCard, error) {
+func (d *debitCardService) Create(ctx context.Context, dcp *DebitCardCreateParams) (*DebitCard, error) {
 	if dcp.CustomerUID == "" || dcp.PoolUID == "" {
 		return nil, fmt.Errorf("CustomerUID and PoolUID are required")
 	}
@@ -140,7 +141,7 @@ func (d *debitCardService) Create(dcp *DebitCardCreateParams) (*DebitCard, error
 		return nil, err
 	}
 
-	res, err := d.client.doRequest(http.MethodPost, "debit_cards", nil, bytes.NewBuffer(bytesMessage))
+	res, err := d.client.doRequest(ctx, http.MethodPost, "debit_cards", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -160,12 +161,12 @@ func (d *debitCardService) Create(dcp *DebitCardCreateParams) (*DebitCard, error
 }
 
 // Get returns a single DebitCard
-func (d *debitCardService) Get(uid string) (*DebitCard, error) {
+func (d *debitCardService) Get(ctx context.Context, uid string) (*DebitCard, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := d.client.doRequest(http.MethodGet, fmt.Sprintf("debit_cards/%s", uid), nil, nil)
+	res, err := d.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("debit_cards/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -185,7 +186,7 @@ func (d *debitCardService) Get(uid string) (*DebitCard, error) {
 }
 
 // Activate a Debit Card
-func (d *debitCardService) Activate(uid string, dap *DebitCardActivateParams) (*DebitCard, error) {
+func (d *debitCardService) Activate(ctx context.Context, uid string, dap *DebitCardActivateParams) (*DebitCard, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -199,7 +200,7 @@ func (d *debitCardService) Activate(uid string, dap *DebitCardActivateParams) (*
 		return nil, err
 	}
 
-	res, err := d.client.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/activate", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := d.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("debit_cards/%s/activate", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -219,14 +220,14 @@ func (d *debitCardService) Activate(uid string, dap *DebitCardActivateParams) (*
 }
 
 // Lock will temporarily lock the Debit Card
-func (d *debitCardService) Lock(uid string, lockReason string) (*DebitCard, error) {
+func (d *debitCardService) Lock(ctx context.Context, uid string, lockReason string) (*DebitCard, error) {
 	if uid == "" || lockReason == "" {
 		return nil, fmt.Errorf("UID and lockReason are required")
 	}
 
 	payload := strings.NewReader(fmt.Sprintf("{\"lock_reason\":\"%s\"}", lockReason))
 
-	res, err := d.client.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/lock", uid), nil, payload)
+	res, err := d.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("debit_cards/%s/lock", uid), nil, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -246,12 +247,12 @@ func (d *debitCardService) Lock(uid string, lockReason string) (*DebitCard, erro
 }
 
 // Unlock will attempt to remove a lock placed on a Debit Card
-func (d *debitCardService) Unlock(uid string) (*DebitCard, error) {
+func (d *debitCardService) Unlock(ctx context.Context, uid string) (*DebitCard, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := d.client.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/unlock", uid), nil, nil)
+	res, err := d.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("debit_cards/%s/unlock", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -271,7 +272,7 @@ func (d *debitCardService) Unlock(uid string) (*DebitCard, error) {
 }
 
 // Reissue a Debit Card that is lost or stolen, or when it has suffered damage
-func (d *debitCardService) Reissue(uid string, dr *DebitCardReissueParams) (*DebitCard, error) {
+func (d *debitCardService) Reissue(ctx context.Context, uid string, dr *DebitCardReissueParams) (*DebitCard, error) {
 	if uid == "" || dr.ReissueReason == "" {
 		return nil, fmt.Errorf("UID and ReissueReason are required")
 	}
@@ -281,7 +282,7 @@ func (d *debitCardService) Reissue(uid string, dr *DebitCardReissueParams) (*Deb
 		return nil, err
 	}
 
-	res, err := d.client.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/reissue", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := d.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("debit_cards/%s/reissue", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -301,7 +302,7 @@ func (d *debitCardService) Reissue(uid string, dr *DebitCardReissueParams) (*Deb
 }
 
 // GetPINToken is used to retrieve a token necessary to change a Debit Card's PIN
-func (d *debitCardService) GetPINToken(uid string, forceReset bool) (*DebitCardPINTokenResponse, error) {
+func (d *debitCardService) GetPINToken(ctx context.Context, uid string, forceReset bool) (*DebitCardPINTokenResponse, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -309,7 +310,7 @@ func (d *debitCardService) GetPINToken(uid string, forceReset bool) (*DebitCardP
 	v := url.Values{}
 	v.Set("force_reset", fmt.Sprintf("%t", forceReset))
 
-	res, err := d.client.doRequest(http.MethodGet, fmt.Sprintf("debit_cards/%s/pin_change_token", uid), v, nil)
+	res, err := d.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("debit_cards/%s/pin_change_token", uid), v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -329,12 +330,12 @@ func (d *debitCardService) GetPINToken(uid string, forceReset bool) (*DebitCardP
 }
 
 // GetAccessToken  is used to retrieve the configuration ID and token necessary to retrieve a virtual Debit Card image
-func (d *debitCardService) GetAccessToken(uid string) (*DebitCardAccessTokenResponse, error) {
+func (d *debitCardService) GetAccessToken(ctx context.Context, uid string) (*DebitCardAccessTokenResponse, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := d.client.doRequest(http.MethodGet, fmt.Sprintf("debit_cards/%s/access_token", uid), nil, nil)
+	res, err := d.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("debit_cards/%s/access_token", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -354,7 +355,7 @@ func (d *debitCardService) GetAccessToken(uid string) (*DebitCardAccessTokenResp
 }
 
 // MigrateVirtualDebitCard will result in a physical version of the virtual debit card being issued to a Customer
-func (d *debitCardService) MigrateVirtualDebitCard(uid string, vd *VirtualDebitCardMigrateParams) (*DebitCard, error) {
+func (d *debitCardService) MigrateVirtualDebitCard(ctx context.Context, uid string, vd *VirtualDebitCardMigrateParams) (*DebitCard, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -364,7 +365,7 @@ func (d *debitCardService) MigrateVirtualDebitCard(uid string, vd *VirtualDebitC
 		return nil, err
 	}
 
-	res, err := d.client.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/migrate", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := d.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("debit_cards/%s/migrate", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -384,13 +385,13 @@ func (d *debitCardService) MigrateVirtualDebitCard(uid string, vd *VirtualDebitC
 }
 
 // GetVirtualDebitCardImage is used to retrieve a virtual Debit Card image
-func (d *debitCardService) GetVirtualDebitCardImage(config string, token string) (*http.Response, error) {
+func (d *debitCardService) GetVirtualDebitCardImage(ctx context.Context, config string, token string) (*http.Response, error) {
 	if config == "" || token == "" {
 		return nil, fmt.Errorf("config and token params are required")
 	}
 
 	// TODO: Does this require a different Accept header type (image/jpeg)?
-	res, err := d.client.doRequest(http.MethodGet, "assets/virtual_card_image", nil, nil)
+	res, err := d.client.doRequest(ctx, http.MethodGet, "assets/virtual_card_image", nil, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -48,7 +49,7 @@ func main() {
 		Offset:                         0,
 		Sort:                           "id_asc",
 	}
-	tl, err := rc.Transactions.List(&tlp)
+	tl, err := rc.Transactions.List(context.Background(), &tlp)
 	if err != nil {
 		log.Fatal("Error fetching transactions\n", err)
 	}
@@ -56,7 +57,7 @@ func main() {
 	log.Println("List Transactions:", string(output))
 
 	// Get Transaction
-	tg, err := rc.Transactions.Get("SMwKC1osz77DTEiu")
+	tg, err := rc.Transactions.Get(context.Background(), "SMwKC1osz77DTEiu")
 	if err != nil {
 		log.Fatal("Error fetching transaction\n", err)
 	}
@@ -74,7 +75,7 @@ func main() {
 		Offset:                         0,
 		Sort:                           "created_at_asc",
 	}
-	te, err := rc.Transactions.ListTransactionEvents(&tep)
+	te, err := rc.Transactions.ListTransactionEvents(context.Background(), &tep)
 	if err != nil {
 		log.Fatal("Error fetching Transaction Events\n", err)
 	}
@@ -82,7 +83,7 @@ func main() {
 	log.Println("List Transaction Events:", string(output))
 
 	// Get Transaction Event
-	teg, err := rc.Transactions.GetTransactionEvents("MB2yqBrm3c4bUbou")
+	teg, err := rc.Transactions.GetTransactionEvents(context.Background(), "MB2yqBrm3c4bUbou")
 	if err != nil {
 		log.Fatal("Error fetching Transaction Event\n", err)
 	}
@@ -100,7 +101,7 @@ func main() {
 		Status:              "in_progress",
 		Sort:                "created_at_asc",
 	}
-	sl, err := rc.Transactions.ListSyntheticLineItems(&slp)
+	sl, err := rc.Transactions.ListSyntheticLineItems(context.Background(), &slp)
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Line Items\n", err)
 	}
@@ -108,7 +109,7 @@ func main() {
 	log.Println("List Synthetic Line Items:", string(output))
 
 	// Get Synthetic Line Item
-	sg, err := rc.Transactions.GetSyntheticLineItems("j56aHgLBqkNu1KwK")
+	sg, err := rc.Transactions.GetSyntheticLineItems(context.Background(), "j56aHgLBqkNu1KwK")
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Line Item\n", err)
 	}
@@ -128,7 +129,7 @@ func main() {
 		Offset:              0,
 		Sort:                "created_at_asc",
 	}
-	cl, err := rc.Transactions.ListCustodialLineItems(&clp)
+	cl, err := rc.Transactions.ListCustodialLineItems(context.Background(), &clp)
 	if err != nil {
 		log.Fatal("Error fetching Custodial Line Items\n", err)
 	}
@@ -136,7 +137,7 @@ func main() {
 	log.Println("List Custodial Line Items:", string(output))
 
 	// Get Custodial Line Item
-	cg, err := rc.Transactions.GetCustodialLineItems("j56aHgLBqkNu1KwK")
+	cg, err := rc.Transactions.GetCustodialLineItems(context.Background(), "j56aHgLBqkNu1KwK")
 	if err != nil {
 		log.Fatal("Error fetching Custodial Line Item\n", err)
 	}

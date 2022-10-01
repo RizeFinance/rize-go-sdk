@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -24,8 +25,8 @@ type CustodialPartnerResponse struct {
 }
 
 // List retrieves a list of CustodialPartners filtered by the given parameters
-func (c *custodialPartnerService) List() (*CustodialPartnerResponse, error) {
-	res, err := c.client.doRequest(http.MethodGet, "custodial_partners", nil, nil)
+func (c *custodialPartnerService) List(ctx context.Context) (*CustodialPartnerResponse, error) {
+	res, err := c.client.doRequest(ctx, http.MethodGet, "custodial_partners", nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -45,12 +46,12 @@ func (c *custodialPartnerService) List() (*CustodialPartnerResponse, error) {
 }
 
 // Get returns a single CustodialPartner
-func (c *custodialPartnerService) Get(uid string) (*CustodialPartner, error) {
+func (c *custodialPartnerService) Get(ctx context.Context, uid string) (*CustodialPartner, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := c.client.doRequest(http.MethodGet, fmt.Sprintf("custodial_partners/%s", uid), nil, nil)
+	res, err := c.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("custodial_partners/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

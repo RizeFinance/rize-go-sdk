@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -20,8 +21,9 @@ type AuthTokenResponse struct {
 	Token string `json:"token"`
 }
 
-// Generate an authorization token
-func (a *authService) getToken() (*AuthTokenResponse, error) {
+// GetToken generates an authorization token if the existing token is expired or not found.
+// Otherwise, it will return the existing active token,
+func (a *authService) GetToken(ctx context.Context) (*AuthTokenResponse, error) {
 	// Check for missing or expired token
 	if a.client.TokenCache.Token == "" || isExpired(a.client.TokenCache) {
 		log.Println("Token is expired or does not exist. Fetching new token...")
@@ -33,7 +35,7 @@ func (a *authService) getToken() (*AuthTokenResponse, error) {
 		// Store the refresh token (valid for 30 seconds)
 		a.client.TokenCache.Token = refreshToken
 
-		res, err := a.client.doRequest(http.MethodPost, "auth", nil, nil)
+		res, err := a.client.doRequest(ctx, http.MethodPost, "auth", nil, nil)
 		if err != nil {
 			return nil, err
 		}

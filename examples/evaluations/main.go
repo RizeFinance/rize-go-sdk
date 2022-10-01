@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -35,7 +36,7 @@ func main() {
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		Latest:      true,
 	}
-	el, err := rc.Evaluations.List(&elp)
+	el, err := rc.Evaluations.List(context.Background(), &elp)
 	if err != nil {
 		log.Fatal("Error fetching Evaluations\n", err)
 	}
@@ -43,7 +44,7 @@ func main() {
 	log.Println("List Evaluations:", string(output))
 
 	// Get Evaluation
-	eg, err := rc.Evaluations.Get("EhrQZJNjCd79LLYq")
+	eg, err := rc.Evaluations.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Evaluation\n", err)
 	}

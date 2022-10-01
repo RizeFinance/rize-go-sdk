@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -133,14 +134,14 @@ type CustomerResponse struct {
 }
 
 // List retrieves a list of Customers filtered by the given parameters
-func (c *customerService) List(clp *CustomerListParams) (*CustomerResponse, error) {
+func (c *customerService) List(ctx context.Context, clp *CustomerListParams) (*CustomerResponse, error) {
 	// Build CustomerListParams into query string params
 	v, err := query.Values(clp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodGet, "customers", v, nil)
+	res, err := c.client.doRequest(ctx, http.MethodGet, "customers", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +161,7 @@ func (c *customerService) List(clp *CustomerListParams) (*CustomerResponse, erro
 }
 
 // Create is used to initialize a new Customer with an email and external_uid
-func (c *customerService) Create(ccp *CustomerCreateParams) (*Customer, error) {
+func (c *customerService) Create(ctx context.Context, ccp *CustomerCreateParams) (*Customer, error) {
 	if ccp.Email == "" {
 		return nil, fmt.Errorf("Email is required")
 	}
@@ -170,7 +171,7 @@ func (c *customerService) Create(ccp *CustomerCreateParams) (*Customer, error) {
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodPost, "customers", nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodPost, "customers", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -190,12 +191,12 @@ func (c *customerService) Create(ccp *CustomerCreateParams) (*Customer, error) {
 }
 
 // Get retrieves overall status about a Customer as well as their total Asset Balances across all accounts
-func (c *customerService) Get(uid string) (*Customer, error) {
+func (c *customerService) Get(ctx context.Context, uid string) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := c.client.doRequest(http.MethodGet, fmt.Sprintf("customers/%s", uid), nil, nil)
+	res, err := c.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("customers/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -215,7 +216,7 @@ func (c *customerService) Get(uid string) (*Customer, error) {
 }
 
 // Update will submit or update a Customer's personally identifiable information (PII) after they are created
-func (c *customerService) Update(uid string, cu *CustomerUpdateParams) (*Customer, error) {
+func (c *customerService) Update(ctx context.Context, uid string, cu *CustomerUpdateParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -225,7 +226,7 @@ func (c *customerService) Update(uid string, cu *CustomerUpdateParams) (*Custome
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("customers/%s", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -245,7 +246,7 @@ func (c *customerService) Update(uid string, cu *CustomerUpdateParams) (*Custome
 }
 
 // Delete will archive a Customer
-func (c *customerService) Delete(uid string, archiveNote string) (*http.Response, error) {
+func (c *customerService) Delete(ctx context.Context, uid string, archiveNote string) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -260,7 +261,7 @@ func (c *customerService) Delete(uid string, archiveNote string) (*http.Response
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodDelete, fmt.Sprintf("customers/%s", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodDelete, fmt.Sprintf("customers/%s", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -270,12 +271,12 @@ func (c *customerService) Delete(uid string, archiveNote string) (*http.Response
 }
 
 // ConfirmPIIData is used to explicitly confirm a Customer's PII data is up-to-date in order to add additional products
-func (c *customerService) ConfirmPIIData(uid string) (*Customer, error) {
+func (c *customerService) ConfirmPIIData(ctx context.Context, uid string) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/identity_confirmation", uid), nil, nil)
+	res, err := c.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("customers/%s/identity_confirmation", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -295,7 +296,7 @@ func (c *customerService) ConfirmPIIData(uid string) (*Customer, error) {
 }
 
 // Lock will freeze all activities relating to the Customer
-func (c *customerService) Lock(uid string, lockNote string, lockReason string) (*Customer, error) {
+func (c *customerService) Lock(ctx context.Context, uid string, lockNote string, lockReason string) (*Customer, error) {
 	if uid == "" || lockReason == "" {
 		return nil, fmt.Errorf("UID and lockReason are required")
 	}
@@ -312,7 +313,7 @@ func (c *customerService) Lock(uid string, lockNote string, lockReason string) (
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/lock", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("customers/%s/lock", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -332,7 +333,7 @@ func (c *customerService) Lock(uid string, lockNote string, lockReason string) (
 }
 
 // Unlock will remove the Customer lock, returning their state to normal
-func (c *customerService) Unlock(uid string, lockNote string, unlockReason string) (*Customer, error) {
+func (c *customerService) Unlock(ctx context.Context, uid string, lockNote string, unlockReason string) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -349,7 +350,7 @@ func (c *customerService) Unlock(uid string, lockNote string, unlockReason strin
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/unlock", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("customers/%s/unlock", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -369,7 +370,7 @@ func (c *customerService) Unlock(uid string, lockNote string, unlockReason strin
 }
 
 // UpdateProfileResponses is used to submit a Customer's Profile Responses to Profile Requirements
-func (c *customerService) UpdateProfileResponses(uid string, cpp []*CustomerProfileResponseParams) (*Customer, error) {
+func (c *customerService) UpdateProfileResponses(ctx context.Context, uid string, cpp []*CustomerProfileResponseParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -391,7 +392,7 @@ func (c *customerService) UpdateProfileResponses(uid string, cpp []*CustomerProf
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -411,7 +412,7 @@ func (c *customerService) UpdateProfileResponses(uid string, cpp []*CustomerProf
 }
 
 // UpdateProfileResponsesOrderedList is used to update Customer's Profile Responses with the `ordered_list` requirement type
-func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cpp []*CustomerProfileResponseOrderedListParams) (*Customer, error) {
+func (c *customerService) UpdateProfileResponsesOrderedList(ctx context.Context, uid string, cpp []*CustomerProfileResponseOrderedListParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -433,7 +434,7 @@ func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cpp []*C
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -453,7 +454,7 @@ func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cpp []*C
 }
 
 // CreateSecondaryCustomer is used to create a new Secondary Customer
-func (c *customerService) CreateSecondaryCustomer(scp *SecondaryCustomerParams) (*Customer, error) {
+func (c *customerService) CreateSecondaryCustomer(ctx context.Context, scp *SecondaryCustomerParams) (*Customer, error) {
 	if scp.PrimaryCustomerUID == "" {
 		return nil, fmt.Errorf("PrimaryCustomerUID is required")
 	}
@@ -463,7 +464,7 @@ func (c *customerService) CreateSecondaryCustomer(scp *SecondaryCustomerParams) 
 		return nil, err
 	}
 
-	res, err := c.client.doRequest(http.MethodPost, "customers/create_secondary", nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(ctx, http.MethodPost, "customers/create_secondary", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}

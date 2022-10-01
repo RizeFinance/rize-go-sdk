@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -41,7 +42,7 @@ func main() {
 		Limit:               100,
 		Offset:              0,
 	}
-	dl, err := rc.Documents.List(&dlp)
+	dl, err := rc.Documents.List(context.Background(), &dlp)
 	if err != nil {
 		log.Fatal("Error fetching Documents\n", err)
 	}
@@ -49,7 +50,7 @@ func main() {
 	log.Println("List Documents:", string(output))
 
 	// Get Document
-	dg, err := rc.Documents.Get("EhrQZJNjCd79LLYq")
+	dg, err := rc.Documents.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Document\n", err)
 	}
@@ -57,7 +58,7 @@ func main() {
 	log.Println("Get Document:", string(output))
 
 	// View Document
-	dv, err := rc.Documents.View("u8EHFJnWvJxRJZxa")
+	dv, err := rc.Documents.View(context.Background(), "u8EHFJnWvJxRJZxa")
 	if err != nil {
 		log.Fatal("Error viewing document\n", err)
 	}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -39,7 +40,7 @@ func main() {
 		Liability:   true,
 		Type:        "dda",
 	}
-	cl, err := rc.CustodialAccounts.List(&cap)
+	cl, err := rc.CustodialAccounts.List(context.Background(), &cap)
 	if err != nil {
 		log.Fatal("Error fetching Custodial Accounts\n", err)
 	}
@@ -47,7 +48,7 @@ func main() {
 	log.Println("List Custodial Accounts:", string(output))
 
 	// Get Custodial Account
-	ca, err := rc.CustodialAccounts.Get("EhrQZJNjCd79LLYq")
+	ca, err := rc.CustodialAccounts.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Custodial Account\n", err)
 	}

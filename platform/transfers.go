@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -53,14 +54,14 @@ type TransferResponse struct {
 }
 
 // List retrieves a list of Transfers filtered by the given parameters
-func (t *transferService) List(tlp *TransferListParams) (*TransferResponse, error) {
+func (t *transferService) List(ctx context.Context, tlp *TransferListParams) (*TransferResponse, error) {
 	// Build TransferListParams into query string params
 	v, err := query.Values(tlp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := t.client.doRequest(http.MethodGet, "transfers", v, nil)
+	res, err := t.client.doRequest(ctx, http.MethodGet, "transfers", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +81,7 @@ func (t *transferService) List(tlp *TransferListParams) (*TransferResponse, erro
 }
 
 // Create will initiate a Transfer between two Synthetic Accounts
-func (t *transferService) Create(tc *TransferCreateParams) (*Transfer, error) {
+func (t *transferService) Create(ctx context.Context, tc *TransferCreateParams) (*Transfer, error) {
 	if tc.SourceSyntheticAccountUID == "" ||
 		tc.DestinationSyntheticAccountUID == "" ||
 		tc.InitiatingCustomerUID == "" ||
@@ -93,7 +94,7 @@ func (t *transferService) Create(tc *TransferCreateParams) (*Transfer, error) {
 		return nil, err
 	}
 
-	res, err := t.client.doRequest(http.MethodPost, "transfers", nil, bytes.NewBuffer(bytesMessage))
+	res, err := t.client.doRequest(ctx, http.MethodPost, "transfers", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -113,12 +114,12 @@ func (t *transferService) Create(tc *TransferCreateParams) (*Transfer, error) {
 }
 
 // Get returns a single Transfer
-func (t *transferService) Get(uid string) (*Transfer, error) {
+func (t *transferService) Get(ctx context.Context, uid string) (*Transfer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := t.client.doRequest(http.MethodGet, fmt.Sprintf("transfers/%s", uid), nil, nil)
+	res, err := t.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("transfers/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

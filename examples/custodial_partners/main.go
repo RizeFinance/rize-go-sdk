@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -31,7 +32,7 @@ func main() {
 	}
 
 	// List Custodial Partner
-	cl, err := rc.CustodialPartners.List()
+	cl, err := rc.CustodialPartners.List(context.Background())
 	if err != nil {
 		log.Fatal("Error fetching Custodial Partners\n", err)
 	}
@@ -39,7 +40,7 @@ func main() {
 	log.Println("List Custodial Partners:", string(output))
 
 	// Get Custodial Partner
-	cg, err := rc.CustodialPartners.Get("EhrQZJNjCd79LLYq")
+	cg, err := rc.CustodialPartners.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching CustodialPartner\n", err)
 	}

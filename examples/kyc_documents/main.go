@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/base64"
 	"encoding/json"
 	"io/ioutil"
@@ -33,7 +34,7 @@ func main() {
 	}
 
 	// List documents
-	kl, err := rc.KYCDocuments.List("QSskNJkryskRXeYt")
+	kl, err := rc.KYCDocuments.List(context.Background(), "QSskNJkryskRXeYt")
 	if err != nil {
 		log.Fatal("Error fetching documents\n", err)
 	}
@@ -53,7 +54,7 @@ func main() {
 		Note:          "Uploaded via SDK",
 		Type:          "license",
 	}
-	ku, err := rc.KYCDocuments.Upload(&kup)
+	ku, err := rc.KYCDocuments.Upload(context.Background(), &kup)
 	if err != nil {
 		log.Fatal("Error uploading document\n", err)
 	}
@@ -61,7 +62,7 @@ func main() {
 	log.Println("Upload Document:", string(output))
 
 	// Get Document
-	kg, err := rc.KYCDocuments.Get("u8EHFJnWvJxRJZxa")
+	kg, err := rc.KYCDocuments.Get(context.Background(), "u8EHFJnWvJxRJZxa")
 	if err != nil {
 		log.Fatal("Error fetching document\n", err)
 	}
@@ -69,7 +70,7 @@ func main() {
 	log.Println("Get Document:", string(output))
 
 	// View Document
-	kv, err := rc.KYCDocuments.View("u8EHFJnWvJxRJZxa")
+	kv, err := rc.KYCDocuments.View(context.Background(), "u8EHFJnWvJxRJZxa")
 	if err != nil {
 		log.Fatal("Error viewing document\n", err)
 	}

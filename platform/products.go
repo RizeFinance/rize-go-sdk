@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -40,11 +41,11 @@ type ProductResponse struct {
 }
 
 // List retrieves a list of Products filtered by the given parameters
-func (p *productService) List(programUID string) (*ProductResponse, error) {
+func (p *productService) List(ctx context.Context, programUID string) (*ProductResponse, error) {
 	v := url.Values{}
 	v.Set("program_uid", programUID)
 
-	res, err := p.client.doRequest(http.MethodGet, "products", v, nil)
+	res, err := p.client.doRequest(ctx, http.MethodGet, "products", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -64,12 +65,12 @@ func (p *productService) List(programUID string) (*ProductResponse, error) {
 }
 
 // Get returns a single Product
-func (p *productService) Get(uid string) (*Product, error) {
+func (p *productService) Get(ctx context.Context, uid string) (*Product, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := p.client.doRequest(http.MethodGet, fmt.Sprintf("products/%s", uid), nil, nil)
+	res, err := p.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("products/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

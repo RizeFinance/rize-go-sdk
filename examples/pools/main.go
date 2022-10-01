@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -37,7 +38,7 @@ func main() {
 		Limit:       100,
 		Offset:      0,
 	}
-	pl, err := rc.Pools.List(&plp)
+	pl, err := rc.Pools.List(context.Background(), &plp)
 	if err != nil {
 		log.Fatal("Error fetching pools\n", err)
 	}
@@ -45,7 +46,7 @@ func main() {
 	log.Println("List Pools:", string(output))
 
 	// Get Pool
-	pg, err := rc.Pools.Get("EhrQZJNjCd79LLYq")
+	pg, err := rc.Pools.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching pool\n", err)
 	}

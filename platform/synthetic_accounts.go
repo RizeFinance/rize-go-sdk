@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -109,14 +110,14 @@ type SyntheticAccountTypeResponse struct {
 }
 
 // List retrieves a list of Synthetic Account filtered by the given parameters
-func (sa *syntheticAccountService) List(plp *SyntheticAccountListParams) (*SyntheticAccountResponse, error) {
+func (sa *syntheticAccountService) List(ctx context.Context, plp *SyntheticAccountListParams) (*SyntheticAccountResponse, error) {
 	// Build SyntheticAccountListParams into query string params
 	v, err := query.Values(plp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := sa.client.doRequest(http.MethodGet, "synthetic_accounts", v, nil)
+	res, err := sa.client.doRequest(ctx, http.MethodGet, "synthetic_accounts", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +137,7 @@ func (sa *syntheticAccountService) List(plp *SyntheticAccountListParams) (*Synth
 }
 
 // Create a new Synthetic Account in the Pool with the provided specification
-func (sa *syntheticAccountService) Create(sac *SyntheticAccountCreateParams) (*SyntheticAccount, error) {
+func (sa *syntheticAccountService) Create(ctx context.Context, sac *SyntheticAccountCreateParams) (*SyntheticAccount, error) {
 	if sac.Name == "" || sac.PoolUID == "" || sac.SyntheticAccountTypeUID == "" {
 		return nil, fmt.Errorf("Name, PoolUID and SyntheticAccountTypeUID are required")
 	}
@@ -146,7 +147,7 @@ func (sa *syntheticAccountService) Create(sac *SyntheticAccountCreateParams) (*S
 		return nil, err
 	}
 
-	res, err := sa.client.doRequest(http.MethodPost, "synthetic_accounts", nil, bytes.NewBuffer(bytesMessage))
+	res, err := sa.client.doRequest(ctx, http.MethodPost, "synthetic_accounts", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -166,12 +167,12 @@ func (sa *syntheticAccountService) Create(sac *SyntheticAccountCreateParams) (*S
 }
 
 // Get returns a single Synthetic Account resource along with supporting details and account balances
-func (sa *syntheticAccountService) Get(uid string) (*SyntheticAccount, error) {
+func (sa *syntheticAccountService) Get(ctx context.Context, uid string) (*SyntheticAccount, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := sa.client.doRequest(http.MethodGet, fmt.Sprintf("synthetic_accounts/%s", uid), nil, nil)
+	res, err := sa.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("synthetic_accounts/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -191,7 +192,7 @@ func (sa *syntheticAccountService) Get(uid string) (*SyntheticAccount, error) {
 }
 
 // Update the Synthetic Account metadata
-func (sa *syntheticAccountService) Update(uid string, su *SyntheticAccountUpdateParams) (*SyntheticAccount, error) {
+func (sa *syntheticAccountService) Update(ctx context.Context, uid string, su *SyntheticAccountUpdateParams) (*SyntheticAccount, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -201,7 +202,7 @@ func (sa *syntheticAccountService) Update(uid string, su *SyntheticAccountUpdate
 		return nil, err
 	}
 
-	res, err := sa.client.doRequest(http.MethodPut, fmt.Sprintf("synthetic_accounts/%s", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := sa.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("synthetic_accounts/%s", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -221,12 +222,12 @@ func (sa *syntheticAccountService) Update(uid string, su *SyntheticAccountUpdate
 }
 
 // Delete will archive a Synthetic Account
-func (sa *syntheticAccountService) Delete(uid string) (*http.Response, error) {
+func (sa *syntheticAccountService) Delete(ctx context.Context, uid string) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := sa.client.doRequest(http.MethodDelete, fmt.Sprintf("synthetic_accounts/%s", uid), nil, nil)
+	res, err := sa.client.doRequest(ctx, http.MethodDelete, fmt.Sprintf("synthetic_accounts/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -236,14 +237,14 @@ func (sa *syntheticAccountService) Delete(uid string) (*http.Response, error) {
 }
 
 // ListAccountTypes retrieves a list of Synthetic Account Types filtered by the given parameters
-func (sa *syntheticAccountService) ListAccountTypes(plp *SyntheticAccountTypeListParams) (*SyntheticAccountTypeResponse, error) {
+func (sa *syntheticAccountService) ListAccountTypes(ctx context.Context, plp *SyntheticAccountTypeListParams) (*SyntheticAccountTypeResponse, error) {
 	// Build SyntheticAccountTypeListParams into query string params
 	v, err := query.Values(plp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := sa.client.doRequest(http.MethodGet, "synthetic_account_types", v, nil)
+	res, err := sa.client.doRequest(ctx, http.MethodGet, "synthetic_account_types", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -263,12 +264,12 @@ func (sa *syntheticAccountService) ListAccountTypes(plp *SyntheticAccountTypeLis
 }
 
 // GetAccountType returns a single Synthetic Account Type resource along with supporting details
-func (sa *syntheticAccountService) GetAccountType(uid string) (*SyntheticAccountType, error) {
+func (sa *syntheticAccountService) GetAccountType(ctx context.Context, uid string) (*SyntheticAccountType, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := sa.client.doRequest(http.MethodGet, fmt.Sprintf("synthetic_account_types/%s", uid), nil, nil)
+	res, err := sa.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("synthetic_account_types/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

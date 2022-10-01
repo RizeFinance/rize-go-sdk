@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 
@@ -43,7 +44,7 @@ func main() {
 		Status:                   "Active",
 		Sort:                     "name_asc",
 	}
-	sl, err := rc.SyntheticAccounts.List(&lp)
+	sl, err := rc.SyntheticAccounts.List(context.Background(), &lp)
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Accounts\n", err)
 	}
@@ -60,7 +61,7 @@ func main() {
 		RoutingNumber:           "123456789",
 		ExternalProcessorToken:  "processor-sandbox-96d86f35-ef58-4e4a-826f-4870b5d677f2",
 	}
-	sc, err := rc.SyntheticAccounts.Create(&cp)
+	sc, err := rc.SyntheticAccounts.Create(context.Background(), &cp)
 	if err != nil {
 		log.Fatal("Error creating Synthetic Account\n", err)
 	}
@@ -68,7 +69,7 @@ func main() {
 	log.Println("Create Synthetic Account:", string(output))
 
 	// Get Synthetic Account
-	sg, err := rc.SyntheticAccounts.Get("exMDShw6yM3NHLYV")
+	sg, err := rc.SyntheticAccounts.Get(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Account\n", err)
 	}
@@ -80,7 +81,7 @@ func main() {
 		Name: "New Resource Name",
 		Note: "note",
 	}
-	su, err := rc.SyntheticAccounts.Update("EhrQZJNjCd79LLYq", &up)
+	su, err := rc.SyntheticAccounts.Update(context.Background(), "EhrQZJNjCd79LLYq", &up)
 	if err != nil {
 		log.Fatal("Error updating Synthetic Account\n", err)
 	}
@@ -88,7 +89,7 @@ func main() {
 	log.Println("Update Synthetic Account:", string(output))
 
 	// Delete Synthetic Account
-	sd, err := rc.SyntheticAccounts.Delete("exMDShw6yM3NHLYV")
+	sd, err := rc.SyntheticAccounts.Delete(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		log.Fatal("Error deleting Synthetic Account\n", err)
 	}
@@ -101,7 +102,7 @@ func main() {
 		Limit:      100,
 		Offset:     0,
 	}
-	stl, err := rc.SyntheticAccounts.ListAccountTypes(&stp)
+	stl, err := rc.SyntheticAccounts.ListAccountTypes(context.Background(), &stp)
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Account Types\n", err)
 	}
@@ -109,7 +110,7 @@ func main() {
 	log.Println("List Synthetic Account Types:", string(output))
 
 	// Get Synthetic Account Type
-	stg, err := rc.SyntheticAccounts.GetAccountType("EhrQZJNjCd79LLYq")
+	stg, err := rc.SyntheticAccounts.GetAccountType(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Account Type\n", err)
 	}

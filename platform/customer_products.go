@@ -2,6 +2,7 @@ package platform
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -44,13 +45,13 @@ type CustomerProductResponse struct {
 }
 
 // List Customers and the Products they have onboarded onto, filtered by the given parameters
-func (cp *customerProductService) List(cpp *CustomerProductListParams) (*CustomerProductResponse, error) {
+func (cp *customerProductService) List(ctx context.Context, cpp *CustomerProductListParams) (*CustomerProductResponse, error) {
 	v, err := query.Values(cpp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := cp.client.doRequest(http.MethodGet, "customer_products", v, nil)
+	res, err := cp.client.doRequest(ctx, http.MethodGet, "customer_products", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +71,7 @@ func (cp *customerProductService) List(cpp *CustomerProductListParams) (*Custome
 }
 
 // Create will submit a request to onboard a Customer onto a new product
-func (cp *customerProductService) Create(ccp *CustomerProductCreateParams) (*CustomerProduct, error) {
+func (cp *customerProductService) Create(ctx context.Context, ccp *CustomerProductCreateParams) (*CustomerProduct, error) {
 	if ccp.CustomerUID == "" || ccp.ProductUID == "" {
 		return nil, fmt.Errorf("CustomerUID and ProductUID are required")
 	}
@@ -80,7 +81,7 @@ func (cp *customerProductService) Create(ccp *CustomerProductCreateParams) (*Cus
 		return nil, err
 	}
 
-	res, err := cp.client.doRequest(http.MethodPost, "customer_products", nil, bytes.NewBuffer(bytesMessage))
+	res, err := cp.client.doRequest(ctx, http.MethodPost, "customer_products", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -100,12 +101,12 @@ func (cp *customerProductService) Create(ccp *CustomerProductCreateParams) (*Cus
 }
 
 // Get a single Customer Product
-func (cp *customerProductService) Get(uid string) (*CustomerProduct, error) {
+func (cp *customerProductService) Get(ctx context.Context, uid string) (*CustomerProduct, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := cp.client.doRequest(http.MethodGet, fmt.Sprintf("customer_products/%s", uid), nil, nil)
+	res, err := cp.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("customer_products/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

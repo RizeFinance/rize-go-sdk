@@ -1,6 +1,7 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -183,14 +184,14 @@ type CustodialLineItemResponse struct {
 }
 
 // List retrieves a list of Transactions filtered by the given parameters
-func (t *transactionService) List(tlp *TransactionListParams) (*TransactionResponse, error) {
+func (t *transactionService) List(ctx context.Context, tlp *TransactionListParams) (*TransactionResponse, error) {
 	// Build TransactionListParams into query string params
 	v, err := query.Values(tlp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := t.client.doRequest(http.MethodGet, "transactions", v, nil)
+	res, err := t.client.doRequest(ctx, http.MethodGet, "transactions", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -210,12 +211,12 @@ func (t *transactionService) List(tlp *TransactionListParams) (*TransactionRespo
 }
 
 // Get returns a single Transaction
-func (t *transactionService) Get(uid string) (*Transaction, error) {
+func (t *transactionService) Get(ctx context.Context, uid string) (*Transaction, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := t.client.doRequest(http.MethodGet, fmt.Sprintf("transactions/%s", uid), nil, nil)
+	res, err := t.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("transactions/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -235,14 +236,14 @@ func (t *transactionService) Get(uid string) (*Transaction, error) {
 }
 
 // ListTransactionEvents retrieves a list of Transaction Events filtered by the given parameters
-func (t *transactionService) ListTransactionEvents(tlp *TransactionEventListParams) (*TransactionEventResponse, error) {
+func (t *transactionService) ListTransactionEvents(ctx context.Context, tlp *TransactionEventListParams) (*TransactionEventResponse, error) {
 	// Build TransactionEventListParams into query string params
 	v, err := query.Values(tlp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := t.client.doRequest(http.MethodGet, "transaction_events", v, nil)
+	res, err := t.client.doRequest(ctx, http.MethodGet, "transaction_events", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -262,12 +263,12 @@ func (t *transactionService) ListTransactionEvents(tlp *TransactionEventListPara
 }
 
 // GetTransactionEvents returns a single Transaction Event
-func (t *transactionService) GetTransactionEvents(uid string) (*TransactionEvent, error) {
+func (t *transactionService) GetTransactionEvents(ctx context.Context, uid string) (*TransactionEvent, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := t.client.doRequest(http.MethodGet, fmt.Sprintf("transaction_events/%s", uid), nil, nil)
+	res, err := t.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("transaction_events/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -287,14 +288,14 @@ func (t *transactionService) GetTransactionEvents(uid string) (*TransactionEvent
 }
 
 // ListSyntheticLineItems retrieves a list of Synthetic Line Items filtered by the given parameters
-func (t *transactionService) ListSyntheticLineItems(tlp *SyntheticLineItemListParams) (*SyntheticLineItemResponse, error) {
+func (t *transactionService) ListSyntheticLineItems(ctx context.Context, tlp *SyntheticLineItemListParams) (*SyntheticLineItemResponse, error) {
 	// Build SyntheticLineItemListParams into query string params
 	v, err := query.Values(tlp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := t.client.doRequest(http.MethodGet, "synthetic_line_items", v, nil)
+	res, err := t.client.doRequest(ctx, http.MethodGet, "synthetic_line_items", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -314,12 +315,12 @@ func (t *transactionService) ListSyntheticLineItems(tlp *SyntheticLineItemListPa
 }
 
 // GetSyntheticLineItems returns a single Synthetic Line Item
-func (t *transactionService) GetSyntheticLineItems(uid string) (*SyntheticLineItem, error) {
+func (t *transactionService) GetSyntheticLineItems(ctx context.Context, uid string) (*SyntheticLineItem, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := t.client.doRequest(http.MethodGet, fmt.Sprintf("synthetic_line_items/%s", uid), nil, nil)
+	res, err := t.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("synthetic_line_items/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -339,14 +340,14 @@ func (t *transactionService) GetSyntheticLineItems(uid string) (*SyntheticLineIt
 }
 
 // ListCustodialLineItems retrieves a list of Custodial Line Items filtered by the given parameters
-func (t *transactionService) ListCustodialLineItems(tlp *CustodialLineItemListParams) (*CustodialLineItemResponse, error) {
+func (t *transactionService) ListCustodialLineItems(ctx context.Context, tlp *CustodialLineItemListParams) (*CustodialLineItemResponse, error) {
 	// Build CustodialLineItemListParams into query string params
 	v, err := query.Values(tlp)
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := t.client.doRequest(http.MethodGet, "custodial_line_items", v, nil)
+	res, err := t.client.doRequest(ctx, http.MethodGet, "custodial_line_items", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -366,12 +367,12 @@ func (t *transactionService) ListCustodialLineItems(tlp *CustodialLineItemListPa
 }
 
 // GetCustodialLineItems returns a single Custodial Line Item
-func (t *transactionService) GetCustodialLineItems(uid string) (*CustodialLineItem, error) {
+func (t *transactionService) GetCustodialLineItems(ctx context.Context, uid string) (*CustodialLineItem, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := t.client.doRequest(http.MethodGet, fmt.Sprintf("custodial_line_items/%s", uid), nil, nil)
+	res, err := t.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("custodial_line_items/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
