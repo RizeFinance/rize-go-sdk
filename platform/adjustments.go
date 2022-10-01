@@ -77,7 +77,7 @@ func (a *adjustmentService) List(alp *AdjustmentListParams) (*AdjustmentResponse
 		return nil, err
 	}
 
-	res, err := a.rizeClient.doRequest(http.MethodGet, "adjustments", v, nil)
+	res, err := a.client.doRequest(http.MethodGet, "adjustments", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (a *adjustmentService) Create(acp *AdjustmentCreateParams) (*Adjustment, er
 		return nil, err
 	}
 
-	res, err := a.rizeClient.doRequest(http.MethodPost, "adjustments", nil, bytes.NewBuffer(bytesMessage))
+	res, err := a.client.doRequest(http.MethodPost, "adjustments", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ func (a *adjustmentService) Get(uid string) (*Adjustment, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := a.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("adjustments/%s", uid), nil, nil)
+	res, err := a.client.doRequest(http.MethodGet, fmt.Sprintf("adjustments/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +160,7 @@ func (a *adjustmentService) ListAdjustmentTypes(alp *AdjustmentTypeListParams) (
 		return nil, err
 	}
 
-	res, err := a.rizeClient.doRequest(http.MethodGet, "adjustment_types", v, nil)
+	res, err := a.client.doRequest(http.MethodGet, "adjustment_types", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -185,7 +185,7 @@ func (a *adjustmentService) GetAdjustmentType(uid string) (*AdjustmentType, erro
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := a.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("adjustment_types/%s", uid), nil, nil)
+	res, err := a.client.doRequest(http.MethodGet, fmt.Sprintf("adjustment_types/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

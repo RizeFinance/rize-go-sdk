@@ -60,7 +60,7 @@ func (p *evaluationService) List(plp *EvaluationListParams) (*EvaluationResponse
 		return nil, err
 	}
 
-	res, err := p.rizeClient.doRequest(http.MethodGet, "evaluations", v, nil)
+	res, err := p.client.doRequest(http.MethodGet, "evaluations", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func (p *evaluationService) Get(uid string) (*Evaluation, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := p.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("evaluations/%s", uid), nil, nil)
+	res, err := p.client.doRequest(http.MethodGet, fmt.Sprintf("evaluations/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

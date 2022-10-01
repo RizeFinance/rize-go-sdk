@@ -140,7 +140,7 @@ func (c *customerService) List(clp *CustomerListParams) (*CustomerResponse, erro
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodGet, "customers", v, nil)
+	res, err := c.client.doRequest(http.MethodGet, "customers", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -170,7 +170,7 @@ func (c *customerService) Create(ccp *CustomerCreateParams) (*Customer, error) {
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPost, "customers", nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodPost, "customers", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -195,7 +195,7 @@ func (c *customerService) Get(uid string) (*Customer, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("customers/%s", uid), nil, nil)
+	res, err := c.client.doRequest(http.MethodGet, fmt.Sprintf("customers/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -225,7 +225,7 @@ func (c *customerService) Update(uid string, cu *CustomerUpdateParams) (*Custome
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -260,7 +260,7 @@ func (c *customerService) Delete(uid string, archiveNote string) (*http.Response
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodDelete, fmt.Sprintf("customers/%s", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodDelete, fmt.Sprintf("customers/%s", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -275,7 +275,7 @@ func (c *customerService) ConfirmPIIData(uid string) (*Customer, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/identity_confirmation", uid), nil, nil)
+	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/identity_confirmation", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -312,7 +312,7 @@ func (c *customerService) Lock(uid string, lockNote string, lockReason string) (
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/lock", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/lock", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -349,7 +349,7 @@ func (c *customerService) Unlock(uid string, lockNote string, unlockReason strin
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/unlock", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/unlock", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -391,7 +391,7 @@ func (c *customerService) UpdateProfileResponses(uid string, cpp []*CustomerProf
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -433,7 +433,7 @@ func (c *customerService) UpdateProfileResponsesOrderedList(uid string, cpp []*C
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -463,7 +463,7 @@ func (c *customerService) CreateSecondaryCustomer(scp *SecondaryCustomerParams) 
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPost, "customers/create_secondary", nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodPost, "customers/create_secondary", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}

@@ -43,7 +43,7 @@ func (c *cardArtworkService) List(clp *CardArtworkListParams) (*CardArtworkRespo
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodGet, "card_artworks", v, nil)
+	res, err := c.client.doRequest(http.MethodGet, "card_artworks", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (c *cardArtworkService) Get(uid string) (*CardArtwork, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("card_artworks/%s", uid), nil, nil)
+	res, err := c.client.doRequest(http.MethodGet, fmt.Sprintf("card_artworks/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

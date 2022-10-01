@@ -53,7 +53,7 @@ func (d *documentService) List(dlp *DocumentListParams) (*DocumentResponse, erro
 		return nil, err
 	}
 
-	res, err := d.rizeClient.doRequest(http.MethodGet, "documents", v, nil)
+	res, err := d.client.doRequest(http.MethodGet, "documents", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +78,7 @@ func (d *documentService) Get(uid string) (*Document, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := d.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("documents/%s", uid), nil, nil)
+	res, err := d.client.doRequest(http.MethodGet, fmt.Sprintf("documents/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func (d *documentService) View(uid string) (*http.Response, error) {
 	}
 
 	// TODO: Does this require a different Accept header type (application/pdf)?
-	res, err := d.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("documents/%s/view", uid), nil, nil)
+	res, err := d.client.doRequest(http.MethodGet, fmt.Sprintf("documents/%s/view", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

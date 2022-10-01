@@ -44,7 +44,7 @@ func (p *productService) List(programUID string) (*ProductResponse, error) {
 	v := url.Values{}
 	v.Set("program_uid", programUID)
 
-	res, err := p.rizeClient.doRequest(http.MethodGet, "products", v, nil)
+	res, err := p.client.doRequest(http.MethodGet, "products", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (p *productService) Get(uid string) (*Product, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := p.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("products/%s", uid), nil, nil)
+	res, err := p.client.doRequest(http.MethodGet, fmt.Sprintf("products/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

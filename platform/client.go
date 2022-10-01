@@ -16,7 +16,7 @@ import (
 
 // Service type to store the client reference
 type service struct {
-	rizeClient *RizeClient
+	client *RizeClient
 }
 
 // BaseResponse is the default 'List' endpoint response.
@@ -47,8 +47,6 @@ type RizeConfig struct {
 type RizeClient struct {
 	// All configuration values
 	cfg *RizeConfig
-	// Stores a reference to the RizeClient for child services to use internally
-	svc service
 	// Allows additional configuration options like proxy, timeouts, etc
 	httpClient *http.Client
 	// Cached Auth token data
@@ -110,30 +108,29 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 
 	r := &RizeClient{}
 	r.cfg = cfg
-	r.svc.rizeClient = r // Store a reference to the RizeClient rather than creating one for each service
 	r.httpClient = cfg.HTTPClient
 	r.TokenCache = &TokenCache{}
 
 	// Initialize API Services
-	r.Adjustments = (*adjustmentService)(&r.svc)
-	r.Auth = (*authService)(&r.svc)
-	r.CardArtworks = (*cardArtworkService)(&r.svc)
-	r.ComplianceWorkflows = (*complianceWorkflowService)(&r.svc)
-	r.CustodialAccounts = (*custodialAccountService)(&r.svc)
-	r.CustodialPartners = (*custodialPartnerService)(&r.svc)
-	r.CustomerProducts = (*customerProductService)(&r.svc)
-	r.Customers = (*customerService)(&r.svc)
-	r.DebitCards = (*debitCardService)(&r.svc)
-	r.Documents = (*documentService)(&r.svc)
-	r.Evaluations = (*evaluationService)(&r.svc)
-	r.KYCDocuments = (*kycDocumentService)(&r.svc)
-	r.PinwheelJobs = (*pinwheelJobService)(&r.svc)
-	r.Pools = (*poolService)(&r.svc)
-	r.Products = (*productService)(&r.svc)
-	r.Sandbox = (*sandboxService)(&r.svc)
-	r.SyntheticAccounts = (*syntheticAccountService)(&r.svc)
-	r.Transactions = (*transactionService)(&r.svc)
-	r.Transfers = (*transferService)(&r.svc)
+	r.Adjustments = &adjustmentService{client: r}
+	r.Auth = &authService{client: r}
+	r.CardArtworks = &cardArtworkService{client: r}
+	r.ComplianceWorkflows = &complianceWorkflowService{client: r}
+	r.CustodialAccounts = &custodialAccountService{client: r}
+	r.CustodialPartners = &custodialPartnerService{client: r}
+	r.CustomerProducts = &customerProductService{client: r}
+	r.Customers = &customerService{client: r}
+	r.DebitCards = &debitCardService{client: r}
+	r.Documents = &documentService{client: r}
+	r.Evaluations = &evaluationService{client: r}
+	r.KYCDocuments = &kycDocumentService{client: r}
+	r.PinwheelJobs = &pinwheelJobService{client: r}
+	r.Pools = &poolService{client: r}
+	r.Products = &productService{client: r}
+	r.Sandbox = &sandboxService{client: r}
+	r.SyntheticAccounts = &syntheticAccountService{client: r}
+	r.Transactions = &transactionService{client: r}
+	r.Transfers = &transferService{client: r}
 
 	// Generate Auth Token
 	_, err := r.Auth.getToken()

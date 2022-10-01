@@ -116,7 +116,7 @@ func (sa *syntheticAccountService) List(plp *SyntheticAccountListParams) (*Synth
 		return nil, err
 	}
 
-	res, err := sa.rizeClient.doRequest(http.MethodGet, "synthetic_accounts", v, nil)
+	res, err := sa.client.doRequest(http.MethodGet, "synthetic_accounts", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -146,7 +146,7 @@ func (sa *syntheticAccountService) Create(sac *SyntheticAccountCreateParams) (*S
 		return nil, err
 	}
 
-	res, err := sa.rizeClient.doRequest(http.MethodPost, "synthetic_accounts", nil, bytes.NewBuffer(bytesMessage))
+	res, err := sa.client.doRequest(http.MethodPost, "synthetic_accounts", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -171,7 +171,7 @@ func (sa *syntheticAccountService) Get(uid string) (*SyntheticAccount, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := sa.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("synthetic_accounts/%s", uid), nil, nil)
+	res, err := sa.client.doRequest(http.MethodGet, fmt.Sprintf("synthetic_accounts/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -201,7 +201,7 @@ func (sa *syntheticAccountService) Update(uid string, su *SyntheticAccountUpdate
 		return nil, err
 	}
 
-	res, err := sa.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("synthetic_accounts/%s", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := sa.client.doRequest(http.MethodPut, fmt.Sprintf("synthetic_accounts/%s", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -226,7 +226,7 @@ func (sa *syntheticAccountService) Delete(uid string) (*http.Response, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := sa.rizeClient.doRequest(http.MethodDelete, fmt.Sprintf("synthetic_accounts/%s", uid), nil, nil)
+	res, err := sa.client.doRequest(http.MethodDelete, fmt.Sprintf("synthetic_accounts/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -243,7 +243,7 @@ func (sa *syntheticAccountService) ListAccountTypes(plp *SyntheticAccountTypeLis
 		return nil, err
 	}
 
-	res, err := sa.rizeClient.doRequest(http.MethodGet, "synthetic_account_types", v, nil)
+	res, err := sa.client.doRequest(http.MethodGet, "synthetic_account_types", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -268,7 +268,7 @@ func (sa *syntheticAccountService) GetAccountType(uid string) (*SyntheticAccount
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := sa.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("synthetic_account_types/%s", uid), nil, nil)
+	res, err := sa.client.doRequest(http.MethodGet, fmt.Sprintf("synthetic_account_types/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

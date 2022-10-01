@@ -44,7 +44,7 @@ func (s *sandboxService) Create(scp *SandboxCreateParams) (*SandboxResponse, err
 		return nil, err
 	}
 
-	res, err := s.rizeClient.doRequest(http.MethodPost, "sandbox/mock_transactions", nil, bytes.NewBuffer(bytesMessage))
+	res, err := s.client.doRequest(http.MethodPost, "sandbox/mock_transactions", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}

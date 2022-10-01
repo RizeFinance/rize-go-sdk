@@ -50,7 +50,7 @@ func (cp *customerProductService) List(cpp *CustomerProductListParams) (*Custome
 		return nil, err
 	}
 
-	res, err := cp.rizeClient.doRequest(http.MethodGet, "customer_products", v, nil)
+	res, err := cp.client.doRequest(http.MethodGet, "customer_products", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func (cp *customerProductService) Create(ccp *CustomerProductCreateParams) (*Cus
 		return nil, err
 	}
 
-	res, err := cp.rizeClient.doRequest(http.MethodPost, "customer_products", nil, bytes.NewBuffer(bytesMessage))
+	res, err := cp.client.doRequest(http.MethodPost, "customer_products", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -105,7 +105,7 @@ func (cp *customerProductService) Get(uid string) (*CustomerProduct, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := cp.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("customer_products/%s", uid), nil, nil)
+	res, err := cp.client.doRequest(http.MethodGet, fmt.Sprintf("customer_products/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

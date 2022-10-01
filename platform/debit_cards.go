@@ -110,7 +110,7 @@ func (d *debitCardService) List(plp *DebitCardListParams) (*DebitCardResponse, e
 		return nil, err
 	}
 
-	res, err := d.rizeClient.doRequest(http.MethodGet, "debit_cards", v, nil)
+	res, err := d.client.doRequest(http.MethodGet, "debit_cards", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +140,7 @@ func (d *debitCardService) Create(dcp *DebitCardCreateParams) (*DebitCard, error
 		return nil, err
 	}
 
-	res, err := d.rizeClient.doRequest(http.MethodPost, "debit_cards", nil, bytes.NewBuffer(bytesMessage))
+	res, err := d.client.doRequest(http.MethodPost, "debit_cards", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +165,7 @@ func (d *debitCardService) Get(uid string) (*DebitCard, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := d.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("debit_cards/%s", uid), nil, nil)
+	res, err := d.client.doRequest(http.MethodGet, fmt.Sprintf("debit_cards/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -199,7 +199,7 @@ func (d *debitCardService) Activate(uid string, dap *DebitCardActivateParams) (*
 		return nil, err
 	}
 
-	res, err := d.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/activate", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := d.client.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/activate", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -226,7 +226,7 @@ func (d *debitCardService) Lock(uid string, lockReason string) (*DebitCard, erro
 
 	payload := strings.NewReader(fmt.Sprintf("{\"lock_reason\":\"%s\"}", lockReason))
 
-	res, err := d.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/lock", uid), nil, payload)
+	res, err := d.client.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/lock", uid), nil, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -251,7 +251,7 @@ func (d *debitCardService) Unlock(uid string) (*DebitCard, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := d.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/unlock", uid), nil, nil)
+	res, err := d.client.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/unlock", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -281,7 +281,7 @@ func (d *debitCardService) Reissue(uid string, dr *DebitCardReissueParams) (*Deb
 		return nil, err
 	}
 
-	res, err := d.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/reissue", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := d.client.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/reissue", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -309,7 +309,7 @@ func (d *debitCardService) GetPINToken(uid string, forceReset bool) (*DebitCardP
 	v := url.Values{}
 	v.Set("force_reset", fmt.Sprintf("%t", forceReset))
 
-	res, err := d.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("debit_cards/%s/pin_change_token", uid), v, nil)
+	res, err := d.client.doRequest(http.MethodGet, fmt.Sprintf("debit_cards/%s/pin_change_token", uid), v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -334,7 +334,7 @@ func (d *debitCardService) GetAccessToken(uid string) (*DebitCardAccessTokenResp
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := d.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("debit_cards/%s/access_token", uid), nil, nil)
+	res, err := d.client.doRequest(http.MethodGet, fmt.Sprintf("debit_cards/%s/access_token", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -364,7 +364,7 @@ func (d *debitCardService) MigrateVirtualDebitCard(uid string, vd *VirtualDebitC
 		return nil, err
 	}
 
-	res, err := d.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/migrate", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := d.client.doRequest(http.MethodPut, fmt.Sprintf("debit_cards/%s/migrate", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -390,7 +390,7 @@ func (d *debitCardService) GetVirtualDebitCardImage(config string, token string)
 	}
 
 	// TODO: Does this require a different Accept header type (image/jpeg)?
-	res, err := d.rizeClient.doRequest(http.MethodGet, "assets/virtual_card_image", nil, nil)
+	res, err := d.client.doRequest(http.MethodGet, "assets/virtual_card_image", nil, nil)
 	if err != nil {
 		return nil, err
 	}

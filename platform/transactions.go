@@ -190,7 +190,7 @@ func (t *transactionService) List(tlp *TransactionListParams) (*TransactionRespo
 		return nil, err
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodGet, "transactions", v, nil)
+	res, err := t.client.doRequest(http.MethodGet, "transactions", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -215,7 +215,7 @@ func (t *transactionService) Get(uid string) (*Transaction, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("transactions/%s", uid), nil, nil)
+	res, err := t.client.doRequest(http.MethodGet, fmt.Sprintf("transactions/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -242,7 +242,7 @@ func (t *transactionService) ListTransactionEvents(tlp *TransactionEventListPara
 		return nil, err
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodGet, "transaction_events", v, nil)
+	res, err := t.client.doRequest(http.MethodGet, "transaction_events", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -267,7 +267,7 @@ func (t *transactionService) GetTransactionEvents(uid string) (*TransactionEvent
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("transaction_events/%s", uid), nil, nil)
+	res, err := t.client.doRequest(http.MethodGet, fmt.Sprintf("transaction_events/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -294,7 +294,7 @@ func (t *transactionService) ListSyntheticLineItems(tlp *SyntheticLineItemListPa
 		return nil, err
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodGet, "synthetic_line_items", v, nil)
+	res, err := t.client.doRequest(http.MethodGet, "synthetic_line_items", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -319,7 +319,7 @@ func (t *transactionService) GetSyntheticLineItems(uid string) (*SyntheticLineIt
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("synthetic_line_items/%s", uid), nil, nil)
+	res, err := t.client.doRequest(http.MethodGet, fmt.Sprintf("synthetic_line_items/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -346,7 +346,7 @@ func (t *transactionService) ListCustodialLineItems(tlp *CustodialLineItemListPa
 		return nil, err
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodGet, "custodial_line_items", v, nil)
+	res, err := t.client.doRequest(http.MethodGet, "custodial_line_items", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -371,7 +371,7 @@ func (t *transactionService) GetCustodialLineItems(uid string) (*CustodialLineIt
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("custodial_line_items/%s", uid), nil, nil)
+	res, err := t.client.doRequest(http.MethodGet, fmt.Sprintf("custodial_line_items/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

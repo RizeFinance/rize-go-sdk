@@ -57,7 +57,7 @@ func (k *kycDocumentService) List(evaluationUID string) (*KYCDocumentResponse, e
 	v := url.Values{}
 	v.Set("evaluation_uid", evaluationUID)
 
-	res, err := k.rizeClient.doRequest(http.MethodGet, "kyc_documents", v, nil)
+	res, err := k.client.doRequest(http.MethodGet, "kyc_documents", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +91,7 @@ func (k *kycDocumentService) Upload(p *KYCDocumentUploadParams) (*KYCDocumentUpl
 		return nil, err
 	}
 
-	res, err := k.rizeClient.doRequest(http.MethodPost, "kyc_documents", nil, bytes.NewBuffer(bytesMessage))
+	res, err := k.client.doRequest(http.MethodPost, "kyc_documents", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +116,7 @@ func (k *kycDocumentService) Get(uid string) (*KYCDocument, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := k.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("kyc_documents/%s", uid), nil, nil)
+	res, err := k.client.doRequest(http.MethodGet, fmt.Sprintf("kyc_documents/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -142,7 +142,7 @@ func (k *kycDocumentService) View(uid string) (*http.Response, error) {
 	}
 
 	// TODO: Does this require a different Accept header type (image/png)?
-	res, err := k.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("kyc_documents/%s/view", uid), nil, nil)
+	res, err := k.client.doRequest(http.MethodGet, fmt.Sprintf("kyc_documents/%s/view", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

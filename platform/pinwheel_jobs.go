@@ -58,7 +58,7 @@ func (p *pinwheelJobService) List(plp *PinwheelJobListParams) (*PinwheelJobRespo
 		return nil, err
 	}
 
-	res, err := p.rizeClient.doRequest(http.MethodGet, "pinwheel_jobs", v, nil)
+	res, err := p.client.doRequest(http.MethodGet, "pinwheel_jobs", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (p *pinwheelJobService) Create(pcp *PinwheelJobCreateParams) (*PinwheelJob,
 		return nil, err
 	}
 
-	res, err := p.rizeClient.doRequest(http.MethodPost, "pinwheel_jobs", nil, bytes.NewBuffer(bytesMessage))
+	res, err := p.client.doRequest(http.MethodPost, "pinwheel_jobs", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -113,7 +113,7 @@ func (p *pinwheelJobService) Get(uid string) (*PinwheelJob, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := p.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("pinwheel_jobs/%s", uid), nil, nil)
+	res, err := p.client.doRequest(http.MethodGet, fmt.Sprintf("pinwheel_jobs/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

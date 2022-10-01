@@ -23,7 +23,7 @@ type AuthTokenResponse struct {
 // Generate an authorization token
 func (a *authService) getToken() (*AuthTokenResponse, error) {
 	// Check for missing or expired token
-	if a.rizeClient.TokenCache.Token == "" || isExpired(a.rizeClient.TokenCache) {
+	if a.client.TokenCache.Token == "" || isExpired(a.client.TokenCache) {
 		log.Println("Token is expired or does not exist. Fetching new token...")
 
 		refreshToken, err := a.buildRefreshToken()
@@ -31,9 +31,9 @@ func (a *authService) getToken() (*AuthTokenResponse, error) {
 			return nil, err
 		}
 		// Store the refresh token (valid for 30 seconds)
-		a.rizeClient.TokenCache.Token = refreshToken
+		a.client.TokenCache.Token = refreshToken
 
-		res, err := a.rizeClient.doRequest(http.MethodPost, "auth", nil, nil)
+		res, err := a.client.doRequest(http.MethodPost, "auth", nil, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -57,14 +57,14 @@ func (a *authService) getToken() (*AuthTokenResponse, error) {
 		}
 
 		//  Save token to client. Auth token is valid for 24hrs
-		a.rizeClient.TokenCache.Timestamp = time.Now().Unix()
-		a.rizeClient.TokenCache.Token = response.Token
+		a.client.TokenCache.Timestamp = time.Now().Unix()
+		a.client.TokenCache.Token = response.Token
 		return response, nil
 	}
 
 	log.Println("Token is valid. Using existing auth token...")
 
-	return &AuthTokenResponse{Token: a.rizeClient.TokenCache.Token}, nil
+	return &AuthTokenResponse{Token: a.client.TokenCache.Token}, nil
 }
 
 // Generates a JWT refresh token
@@ -72,11 +72,11 @@ func (a *authService) buildRefreshToken() (string, error) {
 	// Encode JWT token with current time and programUID
 	token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
 		"iat": time.Now().Unix(),
-		"sub": a.rizeClient.cfg.ProgramUID,
+		"sub": a.client.cfg.ProgramUID,
 	})
 
 	// Sign JWT token with the HMAC key
-	signedToken, err := token.SignedString([]byte(a.rizeClient.cfg.HMACKey))
+	signedToken, err := token.SignedString([]byte(a.client.cfg.HMACKey))
 	if err != nil {
 		return "", err
 	}

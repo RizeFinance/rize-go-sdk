@@ -60,7 +60,7 @@ func (t *transferService) List(tlp *TransferListParams) (*TransferResponse, erro
 		return nil, err
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodGet, "transfers", v, nil)
+	res, err := t.client.doRequest(http.MethodGet, "transfers", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +93,7 @@ func (t *transferService) Create(tc *TransferCreateParams) (*Transfer, error) {
 		return nil, err
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodPost, "transfers", nil, bytes.NewBuffer(bytesMessage))
+	res, err := t.client.doRequest(http.MethodPost, "transfers", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func (t *transferService) Get(uid string) (*Transfer, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := t.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("transfers/%s", uid), nil, nil)
+	res, err := t.client.doRequest(http.MethodGet, fmt.Sprintf("transfers/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

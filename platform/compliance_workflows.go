@@ -125,7 +125,7 @@ func (c *complianceWorkflowService) List(wlp *WorkflowListParams) (*WorkflowResp
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodGet, "compliance_workflows", v, nil)
+	res, err := c.client.doRequest(http.MethodGet, "compliance_workflows", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +155,7 @@ func (c *complianceWorkflowService) Create(wcp *WorkflowCreateParams) (*Workflow
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPost, "compliance_workflows", nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodPost, "compliance_workflows", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func (c *complianceWorkflowService) ViewLatest(customerUID string, wlp *Workflow
 	if err != nil {
 		return nil, err
 	}
-	res, err := c.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("compliance_workflows/latest/%s", customerUID), v, nil)
+	res, err := c.client.doRequest(http.MethodGet, fmt.Sprintf("compliance_workflows/latest/%s", customerUID), v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -216,7 +216,7 @@ func (c *complianceWorkflowService) AcknowledgeDocument(uid string, wd *Workflow
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("compliance_workflows/%s/acknowledge_document", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("compliance_workflows/%s/acknowledge_document", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -255,7 +255,7 @@ func (c *complianceWorkflowService) AcknowledgeDocuments(uid string, wdp *Workfl
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodPut, fmt.Sprintf("compliance_workflows/%s/batch_acknowledge_documents", uid), nil, bytes.NewBuffer(bytesMessage))
+	res, err := c.client.doRequest(http.MethodPut, fmt.Sprintf("compliance_workflows/%s/batch_acknowledge_documents", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}

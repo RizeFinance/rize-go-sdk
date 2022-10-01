@@ -42,7 +42,7 @@ func (p *poolService) List(plp *PoolListParams) (*PoolResponse, error) {
 		return nil, err
 	}
 
-	res, err := p.rizeClient.doRequest(http.MethodGet, "pools", v, nil)
+	res, err := p.client.doRequest(http.MethodGet, "pools", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (p *poolService) Get(uid string) (*Pool, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := p.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("pools/%s", uid), nil, nil)
+	res, err := p.client.doRequest(http.MethodGet, fmt.Sprintf("pools/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

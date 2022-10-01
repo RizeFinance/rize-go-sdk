@@ -75,7 +75,7 @@ func (c *custodialAccountService) List(plp *CustodialAccountListParams) (*Custod
 		return nil, err
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodGet, "custodial_accounts", v, nil)
+	res, err := c.client.doRequest(http.MethodGet, "custodial_accounts", v, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func (c *custodialAccountService) Get(uid string) (*CustodialAccount, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("custodial_accounts/%s", uid), nil, nil)
+	res, err := c.client.doRequest(http.MethodGet, fmt.Sprintf("custodial_accounts/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}

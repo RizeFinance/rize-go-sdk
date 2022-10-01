@@ -25,7 +25,7 @@ type CustodialPartnerResponse struct {
 
 // List retrieves a list of CustodialPartners filtered by the given parameters
 func (c *custodialPartnerService) List() (*CustodialPartnerResponse, error) {
-	res, err := c.rizeClient.doRequest(http.MethodGet, "custodial_partners", nil, nil)
+	res, err := c.client.doRequest(http.MethodGet, "custodial_partners", nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (c *custodialPartnerService) Get(uid string) (*CustodialPartner, error) {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	res, err := c.rizeClient.doRequest(http.MethodGet, fmt.Sprintf("custodial_partners/%s", uid), nil, nil)
+	res, err := c.client.doRequest(http.MethodGet, fmt.Sprintf("custodial_partners/%s", uid), nil, nil)
 	if err != nil {
 		return nil, err
 	}
