@@ -1,6 +1,3 @@
-# Dependency directories
-vendor/
-
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -13,6 +10,12 @@ vendor/
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
 
 # Config
 .env

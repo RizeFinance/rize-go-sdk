@@ -33,7 +33,9 @@ go get github.com/rizefinance/rize-go-sdk@v1.0.0
 
 ### Configuration
 
-The SDK requires program configuration credentials in order to interact with the API. You can find these in the [**Rize Admin Portal**](https://admin-sandbox.rizefs.com/).
+The SDK requires program configuration credentials in order to interact with the API.
+
+You can find these in the [**Rize Admin Portal**](https://admin-sandbox.rizefs.com/).
 
 | Parameter   | Description                                                  | Default   |
 | ----------- | ------------------------------------------------------------ | --------- |
@@ -81,7 +83,9 @@ func main() {
 
 ## Examples
 
-The [examples](examples/) directory provides basic implementation examples for each API endpoint. They require configuration credentials to be set as environment variables. Use the provided dotenv file to set those credentials for local testing. 
+The [examples](examples/) directory provides basic implementation examples for each API endpoint. They require configuration credentials to be set as environment variables. 
+
+Use the provided `dotenv` file to set those credentials for local testing. 
 
 ```sh
 # Generate a local configuration file
