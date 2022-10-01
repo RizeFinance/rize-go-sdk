@@ -7,7 +7,9 @@
 
 # Rize Go SDK
 
-Rize makes financial services simple and accessible by enabling fintechs, financial institutions and brands to build across multiple account types with one API. The Rize GO SDK enables access to all platform services in our sandbox, integration and production environment. When you're ready to build, [open a sandbox environment](https://rizefs.com/get-access/). If you have questions, feedback, or a use case you want to discuss with us, contact us at [hello@rizemoney.com](mailto:hello@rizemoney.com).
+Rize makes financial services simple and accessible by enabling fintechs, financial institutions and brands to build across multiple account types with one API. The Rize Go SDK enables access to all platform services in our sandbox, integration and production environments.
+
+When you're ready to build, [open a sandbox environment](https://rizefs.com/get-access/). If you have questions, feedback, or a use case you want to discuss with us, contact us at [hello@rizemoney.com](mailto:hello@rizemoney.com).
 
 For more information, check out our [Platform API Documentation](https://developer.rizefs.com/).
 
@@ -21,7 +23,7 @@ We currently support **Go v1.18 and higher**.
 
 ### Installation
 
-To install the latest Rize Go SDK, add the module as dependency using go mod:
+To install the latest Rize Go SDK, add the module as a dependency using go mod:
 ```
 go get github.com/rizefinance/rize-go-sdk@latest
 ```
@@ -81,9 +83,9 @@ func main() {
 }
 ```
 
-### Configure http.Client
+### Configure `http.Client`
 
-You have the option to supply your own http.Client. By default, the SDK uses `DefaultClient` with a 30s timeout.
+You have the option to supply your own `http.Client`. By default, the SDK uses `DefaultClient` with a 30s timeout.
 
 To set a proxy for all requests, configure the Transport for the HTTPClient:
 
