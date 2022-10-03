@@ -41,7 +41,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Customer Products\n", err)
 	}
-	output, _ := json.Marshal(pl)
+	output, _ := json.MarshalIndent(pl, "", "\t")
 	log.Println("List Customer Products:", string(output))
 
 	// Create Customer Product
@@ -53,7 +53,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating Customer Product\n", err)
 	}
-	output, _ = json.Marshal(cc)
+	output, _ = json.MarshalIndent(cc, "", "\t")
 	log.Println("Create Customer Product:", string(output))
 
 	// Get Customer Product
@@ -61,6 +61,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Customer Product\n", err)
 	}
-	output, _ = json.Marshal(cp)
+	output, _ = json.MarshalIndent(cp, "", "\t")
 	log.Println("Get Customer Product:", string(output))
 }

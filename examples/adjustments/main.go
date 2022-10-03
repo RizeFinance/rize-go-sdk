@@ -44,7 +44,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Adjustments\n", err)
 	}
-	output, _ := json.Marshal(al)
+	output, _ := json.MarshalIndent(al, "", "\t")
 	log.Println("List Adjustments:", string(output))
 
 	// Create Adjustment
@@ -58,7 +58,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating Adjustment\n", err)
 	}
-	output, _ = json.Marshal(ac)
+	output, _ = json.MarshalIndent(ac, "", "\t")
 	log.Println("Create Adjustment:", string(output))
 
 	// Get Adjustment
@@ -66,7 +66,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Adjustment\n", err)
 	}
-	output, _ = json.Marshal(ag)
+	output, _ = json.MarshalIndent(ag, "", "\t")
 	log.Println("Get Adjustment:", string(output))
 
 	// List Adjustment Types
@@ -78,7 +78,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Adjustment Types\n", err)
 	}
-	output, _ = json.Marshal(lat)
+	output, _ = json.MarshalIndent(lat, "", "\t")
 	log.Println("List Adjustment Types:", string(output))
 
 	// Get Adjustment Type
@@ -86,6 +86,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Adjustment Type\n", err)
 	}
-	output, _ = json.Marshal(gat)
+	output, _ = json.MarshalIndent(gat, "", "\t")
 	log.Println("Get Adjustment Type:", string(output))
 }

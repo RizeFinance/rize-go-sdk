@@ -44,7 +44,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Transfers\n", err)
 	}
-	output, _ := json.Marshal(tl)
+	output, _ := json.MarshalIndent(tl, "", "\t")
 	log.Println("List Transfers:", string(output))
 
 	// Create Transfer
@@ -59,7 +59,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating Transfer\n", err)
 	}
-	output, _ = json.Marshal(tc)
+	output, _ = json.MarshalIndent(tc, "", "\t")
 	log.Println("Create Transfer:", string(output))
 
 	// Get Transfer
@@ -67,6 +67,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Transfer\n", err)
 	}
-	output, _ = json.Marshal(tg)
+	output, _ = json.MarshalIndent(tg, "", "\t")
 	log.Println("Get Transfer:", string(output))
 }

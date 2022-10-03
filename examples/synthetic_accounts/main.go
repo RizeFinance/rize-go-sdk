@@ -48,7 +48,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Accounts\n", err)
 	}
-	output, _ := json.Marshal(sl)
+	output, _ := json.MarshalIndent(sl, "", "\t")
 	log.Println("List Synthetic Accounts:", string(output))
 
 	// Create Synthetic Account
@@ -65,7 +65,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating Synthetic Account\n", err)
 	}
-	output, _ = json.Marshal(sc)
+	output, _ = json.MarshalIndent(sc, "", "\t")
 	log.Println("Create Synthetic Account:", string(output))
 
 	// Get Synthetic Account
@@ -73,7 +73,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Account\n", err)
 	}
-	output, _ = json.Marshal(sg)
+	output, _ = json.MarshalIndent(sg, "", "\t")
 	log.Println("Get Synthetic Account:", string(output))
 
 	// Update Synthetic Account
@@ -85,7 +85,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error updating Synthetic Account\n", err)
 	}
-	output, _ = json.Marshal(su)
+	output, _ = json.MarshalIndent(su, "", "\t")
 	log.Println("Update Synthetic Account:", string(output))
 
 	// Delete Synthetic Account
@@ -93,7 +93,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error deleting Synthetic Account\n", err)
 	}
-	output, _ = json.Marshal(sd)
+	output, _ = json.MarshalIndent(sd, "", "\t")
 	log.Println("Delete Synthetic Account:", string(output))
 
 	// List Synthetic Account Types
@@ -106,7 +106,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Account Types\n", err)
 	}
-	output, _ = json.Marshal(stl)
+	output, _ = json.MarshalIndent(stl, "", "\t")
 	log.Println("List Synthetic Account Types:", string(output))
 
 	// Get Synthetic Account Type
@@ -114,6 +114,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Account Type\n", err)
 	}
-	output, _ = json.Marshal(stg)
+	output, _ = json.MarshalIndent(stg, "", "\t")
 	log.Println("Get Synthetic Account Type:", string(output))
 }

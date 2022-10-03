@@ -38,7 +38,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching documents\n", err)
 	}
-	output, _ := json.Marshal(kl)
+	output, _ := json.MarshalIndent(kl, "", "\t")
 	log.Println("List Documents:", string(output))
 
 	// Upload Document
@@ -58,7 +58,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error uploading document\n", err)
 	}
-	output, _ = json.Marshal(ku)
+	output, _ = json.MarshalIndent(ku, "", "\t")
 	log.Println("Upload Document:", string(output))
 
 	// Get Document
@@ -66,7 +66,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching document\n", err)
 	}
-	output, _ = json.Marshal(kg)
+	output, _ = json.MarshalIndent(kg, "", "\t")
 	log.Println("Get Document:", string(output))
 
 	// View Document
@@ -74,6 +74,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error viewing document\n", err)
 	}
-	output, _ = json.Marshal(kv)
+	output, _ = json.MarshalIndent(kv, "", "\t")
 	log.Println("View Document:", string(output))
 }

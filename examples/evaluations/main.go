@@ -40,7 +40,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Evaluations\n", err)
 	}
-	output, _ := json.Marshal(el)
+	output, _ := json.MarshalIndent(el, "", "\t")
 	log.Println("List Evaluations:", string(output))
 
 	// Get Evaluation
@@ -48,6 +48,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Evaluation\n", err)
 	}
-	output, _ = json.Marshal(eg)
+	output, _ = json.MarshalIndent(eg, "", "\t")
 	log.Println("Get Evaluation:", string(output))
 }

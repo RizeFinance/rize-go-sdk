@@ -41,7 +41,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Card Artwork\n", err)
 	}
-	output, _ := json.Marshal(cl)
+	output, _ := json.MarshalIndent(cl, "", "\t")
 	log.Println("List Card Artwork:", string(output))
 
 	// Get Card Artwork
@@ -49,6 +49,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching CardArtwork\n", err)
 	}
-	output, _ = json.Marshal(cg)
+	output, _ = json.MarshalIndent(cg, "", "\t")
 	log.Println("Get CardArtwork:", string(output))
 }

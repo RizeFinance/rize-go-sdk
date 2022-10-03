@@ -53,7 +53,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching transactions\n", err)
 	}
-	output, _ := json.Marshal(tl)
+	output, _ := json.MarshalIndent(tl, "", "\t")
 	log.Println("List Transactions:", string(output))
 
 	// Get Transaction
@@ -61,7 +61,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching transaction\n", err)
 	}
-	output, _ = json.Marshal(tg)
+	output, _ = json.MarshalIndent(tg, "", "\t")
 	log.Println("Get Transaction:", string(output))
 
 	// List Transaction Events
@@ -79,7 +79,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Transaction Events\n", err)
 	}
-	output, _ = json.Marshal(te)
+	output, _ = json.MarshalIndent(te, "", "\t")
 	log.Println("List Transaction Events:", string(output))
 
 	// Get Transaction Event
@@ -87,7 +87,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Transaction Event\n", err)
 	}
-	output, _ = json.Marshal(teg)
+	output, _ = json.MarshalIndent(teg, "", "\t")
 	log.Println("Get Transaction Event:", string(output))
 
 	// List Synthetic Line Items
@@ -105,7 +105,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Line Items\n", err)
 	}
-	output, _ = json.Marshal(sl)
+	output, _ = json.MarshalIndent(sl, "", "\t")
 	log.Println("List Synthetic Line Items:", string(output))
 
 	// Get Synthetic Line Item
@@ -113,7 +113,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Line Item\n", err)
 	}
-	output, _ = json.Marshal(sg)
+	output, _ = json.MarshalIndent(sg, "", "\t")
 	log.Println("Get Synthetic Line Item:", string(output))
 
 	// List Custodial Line Items
@@ -133,7 +133,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Custodial Line Items\n", err)
 	}
-	output, _ = json.Marshal(cl)
+	output, _ = json.MarshalIndent(cl, "", "\t")
 	log.Println("List Custodial Line Items:", string(output))
 
 	// Get Custodial Line Item
@@ -141,6 +141,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Custodial Line Item\n", err)
 	}
-	output, _ = json.Marshal(cg)
+	output, _ = json.MarshalIndent(cg, "", "\t")
 	log.Println("Get Custodial Line Item:", string(output))
 }

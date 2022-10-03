@@ -44,7 +44,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Custodial Accounts\n", err)
 	}
-	output, _ := json.Marshal(cl)
+	output, _ := json.MarshalIndent(cl, "", "\t")
 	log.Println("List Custodial Accounts:", string(output))
 
 	// Get Custodial Account
@@ -52,6 +52,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Custodial Account\n", err)
 	}
-	output, _ = json.Marshal(ca)
+	output, _ = json.MarshalIndent(ca, "", "\t")
 	log.Println("Get Custodial Account:", string(output))
 }

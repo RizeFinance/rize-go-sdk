@@ -48,6 +48,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating Sandbox transactions\n", err)
 	}
-	output, _ := json.Marshal(sc)
+	output, _ := json.MarshalIndent(sc, "", "\t")
 	log.Println("Create Sandbox Transactions:", string(output))
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -33,5 +34,6 @@ func main() {
 	}
 
 	// Confirm existence of Auth token
-	log.Println("Auth Token:", rc.TokenCache.Token)
+	o, _ := json.MarshalIndent(&rc.TokenCache, "", "\t")
+	log.Println("Token Cache:", string(o))
 }

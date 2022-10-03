@@ -36,7 +36,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching products\n", err)
 	}
-	output, _ := json.Marshal(pl)
+	output, _ := json.MarshalIndent(pl, "", "\t")
 	log.Println("List Products:", string(output))
 
 	// Get Product
@@ -44,6 +44,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching product\n", err)
 	}
-	output, _ = json.Marshal(pg)
+	output, _ = json.MarshalIndent(pg, "", "\t")
 	log.Println("Get Product:", string(output))
 }

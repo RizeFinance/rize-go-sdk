@@ -39,7 +39,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching customers\n", err)
 	}
-	output, _ := json.Marshal(cl)
+	output, _ := json.MarshalIndent(cl, "", "\t")
 	log.Println("List Customers:", string(output))
 
 	// Create new customer
@@ -51,7 +51,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating new customer\n", err)
 	}
-	output, _ = json.Marshal(cc)
+	output, _ = json.MarshalIndent(cc, "", "\t")
 	log.Println("New Customer:", string(output))
 
 	// Get customer
@@ -59,7 +59,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching customer\n", err)
 	}
-	output, _ = json.Marshal(cg)
+	output, _ = json.MarshalIndent(cg, "", "\t")
 	log.Println("Get Customer:", string(output))
 
 	// Update customer
@@ -74,7 +74,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error updating customer\n", err)
 	}
-	output, _ = json.Marshal(cu)
+	output, _ = json.MarshalIndent(cu, "", "\t")
 	log.Println("Update Customer:", string(output))
 
 	// Delete customer
@@ -82,7 +82,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error archiving customer\n", err)
 	}
-	output, _ = json.Marshal(cdl)
+	output, _ = json.MarshalIndent(cdl, "", "\t")
 	log.Println("Delete Customer:", string(output))
 
 	// Confirm Identity
@@ -90,7 +90,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error confirming identity\n", err)
 	}
-	output, _ = json.Marshal(ci)
+	output, _ = json.MarshalIndent(ci, "", "\t")
 	log.Println("Confirm customer identity:", string(output))
 
 	// Lock customer
@@ -98,7 +98,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error locking customer\n", err)
 	}
-	output, _ = json.Marshal(clk)
+	output, _ = json.MarshalIndent(clk, "", "\t")
 	log.Println("Lock Customer:", string(output))
 
 	// Unlock Customer
@@ -106,7 +106,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error unlocking customer\n", err)
 	}
-	output, _ = json.Marshal(cul)
+	output, _ = json.MarshalIndent(cul, "", "\t")
 	log.Println("Unlock Customer:", string(output))
 
 	// Update Profile Response
@@ -120,7 +120,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error updating profile response\n", err)
 	}
-	output, _ = json.Marshal(cpr)
+	output, _ = json.MarshalIndent(cpr, "", "\t")
 	log.Println("Update Profile Response:", string(output))
 
 	// Update Profile Response (ordered_list)
@@ -134,7 +134,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error updating profile response (ordered_list)\n", err)
 	}
-	output, _ = json.Marshal(col)
+	output, _ = json.MarshalIndent(col, "", "\t")
 	log.Println("Update Profile Response (ordered_list):", string(output))
 
 	// Secondary Customers
@@ -152,6 +152,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating secondary customer\n", err)
 	}
-	output, _ = json.Marshal(sc)
+	output, _ = json.MarshalIndent(sc, "", "\t")
 	log.Println("Secondary Customer:", string(output))
 }

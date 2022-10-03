@@ -42,7 +42,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching pools\n", err)
 	}
-	output, _ := json.Marshal(pl)
+	output, _ := json.MarshalIndent(pl, "", "\t")
 	log.Println("List Pools:", string(output))
 
 	// Get Pool
@@ -50,6 +50,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching pool\n", err)
 	}
-	output, _ = json.Marshal(pg)
+	output, _ = json.MarshalIndent(pg, "", "\t")
 	log.Println("Get Pool:", string(output))
 }

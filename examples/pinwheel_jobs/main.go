@@ -42,7 +42,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Pinwheel Jobs\n", err)
 	}
-	output, _ := json.Marshal(pl)
+	output, _ := json.MarshalIndent(pl, "", "\t")
 	log.Println("List Pinwheel Jobs:", string(output))
 
 	// Create Pinwheel Job
@@ -58,7 +58,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating Pinwheel Job\n", err)
 	}
-	output, _ = json.Marshal(pc)
+	output, _ = json.MarshalIndent(pc, "", "\t")
 	log.Println("Create Pinwheel Job:", string(output))
 
 	// Get PinwheelJob
@@ -66,6 +66,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Pinwheel Job\n", err)
 	}
-	output, _ = json.Marshal(pg)
+	output, _ = json.MarshalIndent(pg, "", "\t")
 	log.Println("Get Pinwheel Job:", string(output))
 }

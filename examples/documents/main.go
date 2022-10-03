@@ -46,7 +46,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Documents\n", err)
 	}
-	output, _ := json.Marshal(dl)
+	output, _ := json.MarshalIndent(dl, "", "\t")
 	log.Println("List Documents:", string(output))
 
 	// Get Document
@@ -54,7 +54,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Document\n", err)
 	}
-	output, _ = json.Marshal(dg)
+	output, _ = json.MarshalIndent(dg, "", "\t")
 	log.Println("Get Document:", string(output))
 
 	// View Document
@@ -62,6 +62,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error viewing document\n", err)
 	}
-	output, _ = json.Marshal(dv)
+	output, _ = json.MarshalIndent(dv, "", "\t")
 	log.Println("View Document:", string(output))
 }

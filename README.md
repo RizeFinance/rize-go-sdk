@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://rizefs.com" target="_blank" align="center">
-    <img src="https://rizefs.com/wp-content/uploads/2021/01/rizelogo-grey.svg" width="200">
+  <a href="https://developer.rizefs.com/" target="_blank" align="center">
+    <img src="https://cdn.rizefs.com/web-content/rize-github.png" width="200">
   </a>
   <br />
 </p>
@@ -46,7 +46,7 @@ You can find these in the [**Rize Admin Portal**](https://admin-sandbox.rizefs.c
 | Environment | The Rize environment to be used:<br> `"sandbox"`, `"integration"` or `"production"` | "sandbox" |
 | Debug  | Enable debug logging | false |
 
-### Import SDK
+### Import the SDK
 
 Import the SDK module into your code:
 
@@ -126,6 +126,14 @@ Use the provided `dotenv` file to set those credentials for local testing.
 ```sh
 # Generate a local configuration file
 $ cp .env-example .env
+```
+
+## Generate API Test Stubs
+
+Use the generator script to feed in an OpenAPI json schema file and output parameter and response stubs for unit testing. Each stub is written to a json file in [testdata](testdata/).
+
+```go
+$ go run tools/generator/main.go openapi.json
 ```
 
 ## Documentation

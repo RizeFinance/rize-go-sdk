@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -42,7 +43,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching compliance workflows\n", err)
 	}
-	log.Printf("%+v", l)
+	output, _ := json.MarshalIndent(l, "", "\t")
+	log.Println("List Workflows", string(output))
 
 	// Create workflow
 	wcp := rize.WorkflowCreateParams{
@@ -53,7 +55,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating new compliance workflow\n", err)
 	}
-	log.Printf("%+v", c)
+	output, _ = json.MarshalIndent(c, "", "\t")
+	log.Println("Create Workflow", string(output))
 
 	// View latest workflow for a customer
 	lp := rize.WorkflowLatestParams{
@@ -63,7 +66,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching latest customer workflow\n", err)
 	}
-	log.Printf("%+v", cw)
+	output, _ = json.MarshalIndent(cw, "", "\t")
+	log.Println("View Latest Workflow", string(output))
 
 	// Acknowledge document
 	wd := rize.WorkflowDocumentParams{
@@ -77,7 +81,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Error acknowledging compliance document\n", err)
 	}
-	log.Printf("%+v", ad)
+	output, _ = json.MarshalIndent(ad, "", "\t")
+	log.Println("Acknowledge Document", string(output))
 
 	// Acknowledge multiple documents
 	wdp := rize.WorkflowDocumentsParams{
@@ -96,5 +101,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error acknowledging compliance documents\n", err)
 	}
-	log.Printf("%+v", ads)
+	output, _ = json.MarshalIndent(ads, "", "\t")
+	log.Println("Acknowledge Document", string(output))
 }

@@ -45,7 +45,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Debit Cards\n", err)
 	}
-	output, _ := json.Marshal(dl)
+	output, _ := json.MarshalIndent(dl, "", "\t")
 	log.Println("List Debit Cards:", string(output))
 
 	// Create Debit Card
@@ -66,7 +66,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error creating Debit Card\n", err)
 	}
-	output, _ = json.Marshal(dc)
+	output, _ = json.MarshalIndent(dc, "", "\t")
 	log.Println("Create Debit Card:", string(output))
 
 	// Get Debit Card
@@ -74,7 +74,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Debit Card\n", err)
 	}
-	output, _ = json.Marshal(dg)
+	output, _ = json.MarshalIndent(dg, "", "\t")
 	log.Println("Get Debit Card:", string(output))
 
 	// Activate Debit Card
@@ -87,7 +87,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error activating Debit Card\n", err)
 	}
-	output, _ = json.Marshal(da)
+	output, _ = json.MarshalIndent(da, "", "\t")
 	log.Println("Activate Debit Card:", string(output))
 
 	// Lock Debit Card
@@ -95,7 +95,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error locking Debit Card\n", err)
 	}
-	output, _ = json.Marshal(dlk)
+	output, _ = json.MarshalIndent(dlk, "", "\t")
 	log.Println("Lock Debit Card:", string(output))
 
 	// Unlock Debit Card
@@ -103,7 +103,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error unlocking Debit Card\n", err)
 	}
-	output, _ = json.Marshal(duk)
+	output, _ = json.MarshalIndent(duk, "", "\t")
 	log.Println("Unlock Debit Card:", string(output))
 
 	// Reissue Debit Card
@@ -122,7 +122,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error reissuing Debit Card\n", err)
 	}
-	output, _ = json.Marshal(dr)
+	output, _ = json.MarshalIndent(dr, "", "\t")
 	log.Println("Reissue Debit Card:", string(output))
 
 	// Get Debit Card PIN Token
@@ -130,7 +130,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Debit Card PIN Token\n", err)
 	}
-	output, _ = json.Marshal(dpt)
+	output, _ = json.MarshalIndent(dpt, "", "\t")
 	log.Println("Get Debit Card PIN Token:", string(output))
 
 	// Get Debit Card Access Token
@@ -138,7 +138,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Debit Card Access Token\n", err)
 	}
-	output, _ = json.Marshal(dat)
+	output, _ = json.MarshalIndent(dat, "", "\t")
 	log.Println("Get Debit Card Access Token:", string(output))
 
 	// Migrate a Virtual Debit Card to a Physical Debit Card
@@ -157,7 +157,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error migrating Debit Card\n", err)
 	}
-	output, _ = json.Marshal(vm)
+	output, _ = json.MarshalIndent(vm, "", "\t")
 	log.Println("Migrating Virtual Debit Card:", string(output))
 
 	// Get Virtual Debit Card Image
@@ -165,7 +165,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Error fetching Virtual Debit Card Image\n", err)
 	}
-	output, _ = json.Marshal(vi)
+	output, _ = json.MarshalIndent(vi, "", "\t")
 	log.Println("Get Virtual Debit Card Image:", string(output))
 
 }
