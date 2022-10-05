@@ -168,6 +168,7 @@ func (r *RizeClient) doRequest(ctx context.Context, method string, path string, 
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("User-Agent", r.userAgent)
 	req.Header.Add("Authorization", r.TokenCache.Token)
+	req.URL.RawQuery = query.Encode()
 
 	res, err := r.httpClient.Do(req)
 	if err != nil {

@@ -128,12 +128,10 @@ Use the provided `dotenv` file to set those credentials for local testing.
 $ cp .env-example .env
 ```
 
-## Generate API Test Stubs
-
-Use the generator script to feed in an OpenAPI json schema file and output parameter and response stubs for unit testing. Each stub is written to a json file in [testdata](testdata/).
+## Unit Tests
 
 ```go
-$ go run tools/generator/main.go openapi.json
+$ go test ./platform -v
 ```
 
 ## Documentation

@@ -31,7 +31,7 @@ type Customer struct {
 	PIIConfirmedAt        time.Time                  `json:"pii_confirmed_at,omitempty"`
 	PoolUIDs              []string                   `json:"pool_uids,omitempty"`
 	PrimaryCustomerUID    string                     `json:"primary_customer_uid,omitempty"`
-	ProfileResponses      *[]CustomerProfileResponse `json:"profile_responses,omitempty"`
+	ProfileResponses      []*CustomerProfileResponse `json:"profile_responses,omitempty"`
 	ProgramUID            string                     `json:"program_uid,omitempty"`
 	SecondaryCustomerUIDs []string                   `json:"secondary_customer_uids,omitempty"`
 	Status                string                     `json:"status,omitempty"`
