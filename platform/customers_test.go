@@ -79,11 +79,13 @@ func TestList(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	// Validate request schema
 	input, err := internal.ValidateRequest(http.MethodGet, "customers", v, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
 
+	// Validate response schema
 	customers := append([]*Customer{}, customer)
 	bytesMessage, err := json.Marshal(&CustomerResponse{Data: customers})
 	if err != nil {
@@ -91,5 +93,22 @@ func TestList(t *testing.T) {
 	}
 	if err := internal.ValidateResponse(200, bytesMessage, input); err != nil {
 		t.Fatal(err)
+	}
+
+	// Generate list of keys from OpenAPI schema response
+	keys := internal.RecurseResponseKeys(http.MethodGet, "/customers", 200)
+
+	// Generate list of keys from Customers struct json
+	data := make(map[string]interface{})
+	if err := json.Unmarshal(bytesMessage, &data); err != nil {
+		t.Fatal(err)
+	}
+	k := internal.JSONKeys(data)
+
+	// Compare OpenAPI spec response keys with keys from SDK struct
+	diff := internal.Difference(keys, k)
+	if len(diff) > 0 {
+		t.Fail()
+		t.Log("Customer response is missing the following keys that are present in the OpenAPI schema:\n", diff)
 	}
 }

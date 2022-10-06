@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
@@ -17,6 +18,7 @@ var (
 	doc    *openapi3.T
 	router routers.Router
 	err    error
+	keys   []string
 	server = "https://sandbox.rizefs.com/api/v1/"
 	ctx    = context.Background()
 )
@@ -107,4 +109,125 @@ func ValidateResponse(status int, body []byte, requestValidationInput *openapi3f
 	}
 
 	return nil
+}
+
+// RecurseResponseKeys recursively traverse the response object for a given OpenAPI path and returns a list of all properties
+func RecurseResponseKeys(method string, path string, status int) []string {
+	schema := doc.Paths.Find(path).GetOperation(method).Responses.Get(status).Value.Content.Get("application/json").Schema.Value
+
+	// TODO: Add support for schema.OneOf and schema.AnyOf
+
+	if schema.AllOf != nil {
+		traverseRefs(schema.AllOf)
+	}
+
+	if schema.Properties != nil {
+		traverseProps(schema.Properties)
+	}
+
+	return keys
+}
+
+// Traverse openapi3.SchemaRefs
+func traverseRefs(refs openapi3.SchemaRefs) {
+	for _, r := range refs {
+		if r.Value.AllOf != nil {
+			traverseRefs(r.Value.AllOf)
+		}
+
+		if r.Value.Properties != nil {
+			traverseProps(r.Value.Properties)
+		}
+
+		if r.Value.Items != nil {
+			traverseRef(r.Value.Items)
+		}
+	}
+}
+
+// Traverse openapi3.SchemaRef
+func traverseRef(ref *openapi3.SchemaRef) {
+	if ref.Value.AllOf != nil {
+		traverseRefs(ref.Value.AllOf)
+	}
+
+	if ref.Value.Properties != nil {
+		traverseProps(ref.Value.Properties)
+	}
+
+	if ref.Value.Items != nil {
+		traverseRef(ref.Value.Items)
+	}
+}
+
+// Traverse openapi3.Schema.Properties
+func traverseProps(props openapi3.Schemas) {
+	if data, ok := props["data"]; ok {
+		traverseRef(data)
+	} else if details, ok := props["details"]; ok {
+		traverseRef(details)
+	} else {
+		for k, v := range props {
+			// Check for keys that are ints and convert
+			if _, err := strconv.Atoi(k); err == nil {
+				k = fmt.Sprintf("Num%s", k)
+			}
+
+			// Note the key that was found
+			keys = append(keys, k)
+
+			// Check for nested items
+			if v.Value.Items != nil {
+				traverseRef(v.Value.Items)
+			}
+
+			// Check for nested properties
+			if v.Value.Properties != nil {
+				traverseProps(v.Value.Properties)
+			}
+		}
+	}
+}
+
+// JSONKeys will extract key values from a JSON object
+func JSONKeys(data map[string]interface{}) []string {
+	keys := []string{}
+
+	for key, value := range data {
+		// Check for json object
+		if val, ok := value.(map[string]interface{}); ok {
+			keys = append(keys, key)
+			for _, subkey := range JSONKeys(val) {
+				keys = append(keys, subkey)
+			}
+		} else if val, ok := value.([]interface{}); ok {
+			// Check for json array
+			for _, subkey := range val {
+				// Check for json object
+				if subObject, ok := subkey.(map[string]interface{}); ok {
+					for _, subObjectKey := range JSONKeys(subObject) {
+						keys = append(keys, subObjectKey)
+					}
+				}
+			}
+		} else {
+			keys = append(keys, key)
+		}
+	}
+	return keys
+}
+
+// Difference will find any string from a[] that are not present in b[]
+func Difference(a, b []string) []string {
+	mb := make(map[string]struct{}, len(b))
+	for _, x := range b {
+		mb[x] = struct{}{}
+	}
+	var diff []string
+	for _, x := range a {
+		if _, found := mb[x]; !found {
+			diff = append(diff, x)
+		}
+	}
+	return diff
 }
