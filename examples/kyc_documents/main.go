@@ -8,8 +8,8 @@ import (
 	"log"
 
 	"github.com/joho/godotenv"
+	"github.com/rizefinance/rize-go-sdk"
 	"github.com/rizefinance/rize-go-sdk/internal"
-	rize "github.com/rizefinance/rize-go-sdk/platform"
 )
 
 func init() {

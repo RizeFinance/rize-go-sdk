@@ -1,4 +1,4 @@
-package platform
+package rize
 
 import (
 	"context"

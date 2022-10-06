@@ -51,13 +51,13 @@ You can find these in the [**Rize Admin Portal**](https://admin-sandbox.rizefs.c
 Import the SDK module into your code:
 
 ```go
-import rize "github.com/rizefinance/rize-go-sdk/platform"
+import "github.com/rizefinance/rize-go-sdk"
 ```
 
 ### Start Making API Calls
 
 ```go
-import rize "github.com/rizefinance/rize-go-sdk/platform"
+import "github.com/rizefinance/rize-go-sdk"
 
 func main() {
 	config := rize.Config{
@@ -131,7 +131,7 @@ $ cp .env-example .env
 ## Unit Tests
 
 ```go
-$ go test ./platform -v
+$ go test -v -cover
 ```
 
 ## Documentation
