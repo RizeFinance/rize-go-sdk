@@ -66,7 +66,7 @@ func main() {
 		Environment: environment,
 		Debug:       false,
 	}
-	rc, err := rize.NewRizeClient(&config)
+	rc, err := rize.NewClient(&config)
 	if err != nil {
 		log.Fatal("Error building RizeClient\n", err)
 	}
@@ -137,6 +137,7 @@ $ go test -v -cover
 ## Documentation
 
 * [Platform API Documentation](https://developer.rizefs.com/)
+* [Message Queue Documentation](https://developer.rizefs.com/docs/rize-message-queue)
 * [Rize Postman](https://www.postman.com/rizemoney/)
 * [Rize GitHub](https://github.com/RizeFinance)
 * [Rize JS SDK](https://github.com/RizeFinance/rize-js)

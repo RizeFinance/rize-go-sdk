@@ -86,7 +86,7 @@ func TestList(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(mockHandler))
 	defer ts.Close()
 
-	config := RizeConfig{
+	config := Config{
 		ProgramUID:  "program_uid",
 		HMACKey:     "hmac_key",
 		Environment: "sandbox",
@@ -95,7 +95,7 @@ func TestList(t *testing.T) {
 	}
 
 	// Create new Rize client
-	rc, err := NewRizeClient(&config)
+	rc, err := NewClient(&config)
 	if err != nil {
 		t.Fatal("Error building RizeClient\n", err)
 	}

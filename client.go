@@ -18,7 +18,7 @@ import (
 
 // Service type to store the client reference
 type service struct {
-	client *RizeClient
+	client *Client
 }
 
 // BaseResponse is the default 'List' endpoint response.
@@ -31,8 +31,8 @@ type BaseResponse struct {
 	Offset     int `json:"offset"`
 }
 
-// RizeConfig stores Rize configuration values
-type RizeConfig struct {
+// Config stores Rize configuration values
+type Config struct {
 	// Program within the target environment
 	ProgramUID string
 	// HMAC key for the target environment
@@ -47,10 +47,10 @@ type RizeConfig struct {
 	Debug bool
 }
 
-// RizeClient is the top-level client containing all APIs
-type RizeClient struct {
+// Client is the top-level client containing all APIs
+type Client struct {
 	// All configuration values
-	cfg *RizeConfig
+	cfg *Config
 	// Allows additional configuration options like proxy, timeouts, etc
 	httpClient *http.Client
 	// Set custom `user-agent` header string
@@ -85,8 +85,8 @@ type TokenCache struct {
 	Timestamp int64
 }
 
-// RizeError is the default API error format
-type RizeError struct {
+// Error is the default API error format
+type Error struct {
 	Errors []struct {
 		Code       int       `json:"code"`
 		Title      string    `json:"title"`
@@ -96,12 +96,13 @@ type RizeError struct {
 	Status int `json:"status"`
 }
 
-func (e *RizeError) Error() string {
+// Format error output
+func (e *Error) Error() string {
 	return fmt.Sprintf("Error status %d and output:\n%+v\n", e.Status, e.Errors)
 }
 
-// NewRizeClient initializes the RizeClient and all services
-func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
+// NewClient initializes the Client and all services
+func NewClient(cfg *Config) (*Client, error) {
 	// Enable debug logging
 	internal.EnableLogging(cfg.Debug)
 
@@ -112,52 +113,52 @@ func NewRizeClient(cfg *RizeConfig) (*RizeClient, error) {
 		return nil, err
 	}
 
-	r := &RizeClient{}
-	r.cfg = cfg
-	r.httpClient = cfg.HTTPClient
-	r.userAgent = fmt.Sprintf("%s/%s (Go: %s)", "rize-go-sdk", internal.SDKVersion, runtime.Version())
-	r.TokenCache = &TokenCache{}
+	rc := &Client{}
+	rc.cfg = cfg
+	rc.httpClient = cfg.HTTPClient
+	rc.userAgent = fmt.Sprintf("%s/%s (Go: %s)", "rize-go-sdk", internal.SDKVersion, runtime.Version())
+	rc.TokenCache = &TokenCache{}
 
 	// Initialize API Services
-	r.Adjustments = &adjustmentService{client: r}
-	r.Auth = &authService{client: r}
-	r.CardArtworks = &cardArtworkService{client: r}
-	r.ComplianceWorkflows = &complianceWorkflowService{client: r}
-	r.CustodialAccounts = &custodialAccountService{client: r}
-	r.CustodialPartners = &custodialPartnerService{client: r}
-	r.CustomerProducts = &customerProductService{client: r}
-	r.Customers = &customerService{client: r}
-	r.DebitCards = &debitCardService{client: r}
-	r.Documents = &documentService{client: r}
-	r.Evaluations = &evaluationService{client: r}
-	r.KYCDocuments = &kycDocumentService{client: r}
-	r.PinwheelJobs = &pinwheelJobService{client: r}
-	r.Pools = &poolService{client: r}
-	r.Products = &productService{client: r}
-	r.Sandbox = &sandboxService{client: r}
-	r.SyntheticAccounts = &syntheticAccountService{client: r}
-	r.Transactions = &transactionService{client: r}
-	r.Transfers = &transferService{client: r}
+	rc.Adjustments = &adjustmentService{client: rc}
+	rc.Auth = &authService{client: rc}
+	rc.CardArtworks = &cardArtworkService{client: rc}
+	rc.ComplianceWorkflows = &complianceWorkflowService{client: rc}
+	rc.CustodialAccounts = &custodialAccountService{client: rc}
+	rc.CustodialPartners = &custodialPartnerService{client: rc}
+	rc.CustomerProducts = &customerProductService{client: rc}
+	rc.Customers = &customerService{client: rc}
+	rc.DebitCards = &debitCardService{client: rc}
+	rc.Documents = &documentService{client: rc}
+	rc.Evaluations = &evaluationService{client: rc}
+	rc.KYCDocuments = &kycDocumentService{client: rc}
+	rc.PinwheelJobs = &pinwheelJobService{client: rc}
+	rc.Pools = &poolService{client: rc}
+	rc.Products = &productService{client: rc}
+	rc.Sandbox = &sandboxService{client: rc}
+	rc.SyntheticAccounts = &syntheticAccountService{client: rc}
+	rc.Transactions = &transactionService{client: rc}
+	rc.Transfers = &transferService{client: rc}
 
 	// Generate Auth Token
-	_, err := r.Auth.GetToken(context.Background())
+	_, err := rc.Auth.GetToken(context.Background())
 	if err != nil {
 		return nil, err
 	}
 
-	return r, nil
+	return rc, nil
 }
 
 // Make the API request and return an http.Response. Checks for valid auth token.
-func (r *RizeClient) doRequest(ctx context.Context, method string, path string, query url.Values, data io.Reader) (*http.Response, error) {
+func (rc *Client) doRequest(ctx context.Context, method string, path string, query url.Values, data io.Reader) (*http.Response, error) {
 	// Check for valid auth token and refresh if necessary
 	if path != "auth" {
-		if _, err := r.Auth.GetToken(ctx); err != nil {
+		if _, err := rc.Auth.GetToken(ctx); err != nil {
 			return nil, err
 		}
 	}
 
-	url := fmt.Sprintf("%s/%s/%s", r.cfg.BaseURL, internal.BasePath, path)
+	url := fmt.Sprintf("%s/%s/%s", rc.cfg.BaseURL, internal.BasePath, path)
 
 	log.Println(fmt.Sprintf("Sending %s request to %s", method, url))
 
@@ -168,11 +169,11 @@ func (r *RizeClient) doRequest(ctx context.Context, method string, path string, 
 
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("User-Agent", r.userAgent)
-	req.Header.Add("Authorization", r.TokenCache.Token)
+	req.Header.Add("User-Agent", rc.userAgent)
+	req.Header.Add("Authorization", rc.TokenCache.Token)
 	req.URL.RawQuery = query.Encode()
 
-	res, err := r.httpClient.Do(req)
+	res, err := rc.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +185,7 @@ func (r *RizeClient) doRequest(ctx context.Context, method string, path string, 
 		if err != nil {
 			return nil, err
 		}
-		var errorOut = &RizeError{}
+		var errorOut = &Error{}
 		if err = json.Unmarshal(body, &errorOut); err != nil {
 			return nil, err
 		}
@@ -196,13 +197,13 @@ func (r *RizeClient) doRequest(ctx context.Context, method string, path string, 
 }
 
 // Make sure that we have the proper configuration variables
-func (cfg *RizeConfig) validateConfig() error {
+func (cfg *Config) validateConfig() error {
 	if cfg.ProgramUID == "" {
-		return fmt.Errorf("RizeConfig error: ProgramUID is required")
+		return fmt.Errorf("Config error: ProgramUID is required")
 	}
 
 	if cfg.HMACKey == "" {
-		return fmt.Errorf("RizeConfig error: HMACKey is required")
+		return fmt.Errorf("Config error: HMACKey is required")
 	}
 
 	if ok := slices.Contains(internal.Environments, strings.ToLower(cfg.Environment)); !ok {

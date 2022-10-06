@@ -18,7 +18,7 @@ func init() {
 }
 
 func main() {
-	config := rize.RizeConfig{
+	config := rize.Config{
 		ProgramUID:  internal.CheckEnvVariable("program_uid"),
 		HMACKey:     internal.CheckEnvVariable("hmac_key"),
 		Environment: internal.CheckEnvVariable("environment"),
@@ -26,7 +26,7 @@ func main() {
 	}
 
 	// Create new Rize client
-	rc, err := rize.NewRizeClient(&config)
+	rc, err := rize.NewClient(&config)
 	if err != nil {
 		log.Fatal("Error building RizeClient\n", err)
 	}
