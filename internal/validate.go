@@ -27,7 +27,11 @@ var (
 func ValidateRequest(method string, path string, params url.Values, body io.Reader) (*openapi3filter.RequestValidationInput, error) {
 	// Load openapi specification file
 	if doc == nil {
-		doc, err = openapi3.NewLoader().LoadFromFile("../testdata/rize_external.yaml")
+		u, err := url.Parse("https://cdn.rizefs.com/web-content/openapi/rize_external.yaml")
+		if err != nil {
+			return nil, err
+		}
+		doc, err = openapi3.NewLoader().LoadFromURI(u)
 		if err != nil {
 			return nil, err
 		}

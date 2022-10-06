@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://developer.rizefs.com/" target="_blank" align="center">
-    <img src="https://cdn.rizefs.com/web-content/rize-github.png" width="200">
+    <img src="https://cdn.rizefs.com/web-content/logos/rize-github.png" width="200">
   </a>
   <br />
 </p>
