@@ -1,8 +1,10 @@
 package platform
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 	"time"
 
@@ -10,6 +12,7 @@ import (
 	"github.com/rizefinance/rize-go-sdk/internal"
 )
 
+// Complete Customer{} response data
 var customer = &Customer{
 	UID:                "y9reyPMNEWuuYSC1",
 	ExternalUID:        "partner-generated-id",
@@ -57,7 +60,46 @@ var customer = &Customer{
 	},
 }
 
+// Mock HTTP request handler
+func mockHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.String() == "/api/v1/auth" {
+		bytesMessage, err := json.Marshal(&AuthTokenResponse{Token: "auth-header.payload.signature"})
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+		w.Write(bytesMessage)
+	} else {
+		customers := append([]*Customer{}, customer)
+		bytesMessage, err := json.Marshal(&CustomerResponse{Data: customers})
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write(bytesMessage)
+	}
+}
+
 func TestList(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(mockHandler))
+	defer ts.Close()
+
+	config := RizeConfig{
+		ProgramUID:  "program_uid",
+		HMACKey:     "hmac_key",
+		Environment: "sandbox",
+		BaseURL:     ts.URL,
+		Debug:       true,
+	}
+
+	// Create new Rize client
+	rc, err := NewRizeClient(&config)
+	if err != nil {
+		t.Fatal("Error building RizeClient\n", err)
+	}
+
 	params := CustomerListParams{
 		Status:           "identity_verified",
 		IncludeInitiated: true,
@@ -79,6 +121,13 @@ func TestList(t *testing.T) {
 		t.Fatal(err)
 	}
 
+	resp, err := rc.Customers.List(context.Background(), &params)
+	if err != nil {
+		t.Fatal("Error fetching customers\n", err)
+	}
+	output, _ := json.MarshalIndent(resp, "", "\t")
+	t.Log("List Customers:", string(output))
+
 	// Validate request schema
 	input, err := internal.ValidateRequest(http.MethodGet, "customers", v, nil)
 	if err != nil {
@@ -86,12 +135,11 @@ func TestList(t *testing.T) {
 	}
 
 	// Validate response schema
-	customers := append([]*Customer{}, customer)
-	bytesMessage, err := json.Marshal(&CustomerResponse{Data: customers})
+	bytesResp, err := json.Marshal(&resp)
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := internal.ValidateResponse(200, bytesMessage, input); err != nil {
+	if err := internal.ValidateResponse(200, bytesResp, input); err != nil {
 		t.Fatal(err)
 	}
 
@@ -100,7 +148,7 @@ func TestList(t *testing.T) {
 
 	// Generate list of keys from Customers struct json
 	data := make(map[string]interface{})
-	if err := json.Unmarshal(bytesMessage, &data); err != nil {
+	if err := json.Unmarshal(bytesResp, &data); err != nil {
 		t.Fatal(err)
 	}
 	k := internal.JSONKeys(data)
