@@ -131,17 +131,7 @@ func RecurseResponseKeys(method string, path string, status int) []string {
 // Traverse openapi3.SchemaRefs
 func traverseRefs(refs openapi3.SchemaRefs) {
 	for _, r := range refs {
-		if r.Value.AllOf != nil {
-			traverseRefs(r.Value.AllOf)
-		}
-
-		if r.Value.Properties != nil {
-			traverseProps(r.Value.Properties)
-		}
-
-		if r.Value.Items != nil {
-			traverseRef(r.Value.Items)
-		}
+		traverseRef(r)
 	}
 }
 
@@ -197,14 +187,14 @@ func JSONKeys(data map[string]interface{}) []string {
 		// Check for json object
 		if val, ok := value.(map[string]interface{}); ok {
 			keys = append(keys, key)
-			for _, subkey := range JSONKeys(val) {
-				keys = append(keys, subkey)
+			for _, k := range JSONKeys(val) {
+				keys = append(keys, k)
 			}
 		} else if val, ok := value.([]interface{}); ok {
 			// Check for json array
-			for _, subkey := range val {
+			for _, v := range val {
 				// Check for json object
-				if subObject, ok := subkey.(map[string]interface{}); ok {
+				if subObject, ok := v.(map[string]interface{}); ok {
 					for _, subObjectKey := range JSONKeys(subObject) {
 						keys = append(keys, subObjectKey)
 					}

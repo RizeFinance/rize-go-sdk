@@ -41,6 +41,8 @@ type RizeConfig struct {
 	Environment string
 	// Provide your own HTTPClient configuration (optional)
 	HTTPClient *http.Client
+	// Change the API base URL for local/unit testing
+	BaseURL string
 	// Enable debug logging
 	Debug bool
 }
@@ -155,7 +157,7 @@ func (r *RizeClient) doRequest(ctx context.Context, method string, path string, 
 		}
 	}
 
-	url := fmt.Sprintf("https://%s.rizefs.com/%s/%s", r.cfg.Environment, internal.APIBasePath, path)
+	url := fmt.Sprintf("%s/%s/%s", r.cfg.BaseURL, internal.BasePath, path)
 
 	log.Println(fmt.Sprintf("Sending %s request to %s", method, url))
 
@@ -210,8 +212,12 @@ func (cfg *RizeConfig) validateConfig() error {
 
 	if cfg.HTTPClient == nil {
 		cfg.HTTPClient = &http.Client{
-			Timeout: internal.APITimeoutSeconds,
+			Timeout: internal.TimeoutSeconds,
 		}
+	}
+
+	if cfg.BaseURL == "" {
+		cfg.BaseURL = fmt.Sprintf("https://%s.rizefs.com", cfg.Environment)
 	}
 
 	return nil

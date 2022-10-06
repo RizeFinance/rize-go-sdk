@@ -91,7 +91,7 @@ func (a *authService) buildRefreshToken() (string, error) {
 // Checks to see if the current Auth token should be refreshed
 func isExpired(tc *TokenCache) bool {
 	currentTime := time.Now().Unix()
-	if tc.Timestamp == 0 || ((currentTime - tc.Timestamp) > internal.APITokenMaxAge) {
+	if tc.Timestamp == 0 || ((currentTime - tc.Timestamp) > internal.TokenMaxAge) {
 		return true
 	}
 
