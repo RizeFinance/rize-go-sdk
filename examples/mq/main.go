@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/joho/godotenv"
@@ -25,10 +24,10 @@ func main() {
 		Debug:       true,
 	}
 
-	// Create new Rize client
+	// Create new Rize MQ client
 	rc, err := mq.NewClient(&config)
 	if err != nil {
-		log.Fatal("Error building RizeClient\n", err)
+		log.Fatal("Error building MQ client\n", err)
 	}
 
 	// Create MQ connection
@@ -36,11 +35,13 @@ func main() {
 		log.Fatal("Error creation MQ connection:\n", err)
 	}
 
-	sub, err := rc.MessageQueue.Subscribe(fmt.Sprintf("%s.%s.customer", config.ClientID, config.Environment))
+	// Subscribe to customer MQ topics
+	sub, err := rc.MessageQueue.Subscribe("customer", "customerSubscription")
 	if err != nil {
 		log.Printf("Subscribe failed: %s\n", err)
 	}
 
+	// Unsubscribe from a subscription
 	if err := rc.MessageQueue.Unsubscribe(sub); err != nil {
 		log.Printf("Unsubscribe failed: %s\n", err)
 	}

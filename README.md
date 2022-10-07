@@ -117,6 +117,48 @@ config := rize.Config{
 }
 ```
 
+### Rize Message Queue
+
+The SDK provides a package to connect to the [Rize Message Queue](https://developer.rizefs.com/docs/rize-message-queue) using the STOMP protocol. The `mq` package wraps [go-stomp](https://pkg.go.dev/github.com/go-stomp/stomp/v3) with configuration settings necessary for connecting and subscribing to events from the RMQ.
+
+Invoking `MessageQueue.Subscribe` will return a [*stomp.Subscription](https://pkg.go.dev/github.com/go-stomp/stomp/v3#Subscription) type containing a channel from which to receive event messages.
+
+```go
+import "github.com/rizefinance/rize-go-sdk/mq"
+
+func main() {
+	config := mq.Config{
+		Username:    "mq_username",
+		Password:    "mq_password",
+		ClientID:    "mq_client_id",
+		Environment: "environment",
+		Debug:       true,
+	}
+
+	// Create new Rize MQ client
+	mc, err := mq.NewClient(&config)
+	if err != nil {
+		log.Fatal("Error building MQ client\n", err)
+	}
+
+	// Create MQ connection
+	if err := mc.MessageQueue.Connect(); err != nil {
+		log.Fatal("Error creation MQ connection:\n", err)
+	}
+
+	// Subscribe to customer MQ topics
+	sub, err := mc.MessageQueue.Subscribe("customer", "customerSubscription")
+	if err != nil {
+		log.Printf("Subscribe failed: %s\n", err)
+	}
+
+	// Unsubscribe from a subscription
+	if err := mc.MessageQueue.Unsubscribe(sub); err != nil {
+		log.Printf("Unsubscribe failed: %s\n", err)
+	}
+}
+```
+
 ## Examples
 
 The [examples](examples/) directory provides basic implementation examples for each API endpoint. They require configuration credentials to be set as environment variables. 

@@ -4,9 +4,11 @@ import (
 	"crypto/tls"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/go-stomp/stomp/v3"
 	"github.com/rizefinance/rize-go-sdk/internal"
+	"golang.org/x/exp/slices"
 )
 
 // Handles all Message Queue related functionality
@@ -38,9 +40,19 @@ func (m *messageQueueService) Connect() error {
 	return nil
 }
 
-// Subscribe will create a new STOMP topic subscription
-func (m *messageQueueService) Subscribe(topic string) (*stomp.Subscription, error) {
-	sub, err := m.client.Connection.Subscribe(fmt.Sprintf("/topic/%s", topic), stomp.AckAuto)
+// Subscribe will create a new STOMP topic subscription. Requires an active connection.
+// `subscriptionName“ can be any name you choose to identify the subscription
+func (m *messageQueueService) Subscribe(topic string, subscriptionName string) (*stomp.Subscription, error) {
+	// Validate topic name
+	if ok := slices.Contains(internal.MQServices, strings.ToLower(topic)); !ok {
+		return nil, fmt.Errorf("Topic %s not recognized", topic)
+	}
+
+	sub, err := m.client.Connection.Subscribe(
+		fmt.Sprintf("/topic/%s.%s.%s", m.client.cfg.ClientID, m.client.cfg.Environment, topic),
+		stomp.AckAuto,
+		stomp.SubscribeOpt.Header("activemq.subscriptionName", subscriptionName),
+	)
 	if err != nil {
 		return nil, err
 	}
