@@ -6,7 +6,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"strconv"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3filter"
@@ -162,11 +161,6 @@ func traverseProps(props openapi3.Schemas) {
 		traverseRef(details)
 	} else {
 		for k, v := range props {
-			// Check for keys that are ints and convert
-			if _, err := strconv.Atoi(k); err == nil {
-				k = fmt.Sprintf("Num%s", k)
-			}
-
 			// Note the key that was found
 			keys = append(keys, k)
 
@@ -194,8 +188,9 @@ func JSONKeys(data map[string]interface{}) []string {
 			for _, k := range JSONKeys(val) {
 				keys = append(keys, k)
 			}
-		} else if val, ok := value.([]interface{}); ok {
 			// Check for json array
+		} else if val, ok := value.([]interface{}); ok {
+			keys = append(keys, key)
 			for _, v := range val {
 				// Check for json object
 				if subObject, ok := v.(map[string]interface{}); ok {
@@ -203,6 +198,7 @@ func JSONKeys(data map[string]interface{}) []string {
 						keys = append(keys, subObjectKey)
 					}
 				}
+
 			}
 		} else {
 			keys = append(keys, key)
