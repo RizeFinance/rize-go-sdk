@@ -1,15 +1,26 @@
 package rize
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
+	"io"
+	"log"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 	"time"
 
 	"github.com/google/go-querystring/query"
 	"github.com/rizefinance/rize-go-sdk/internal"
+)
+
+var (
+	rc  *Client
+	ts  *httptest.Server
+	err error
 )
 
 // Complete Customer{} response data
@@ -47,8 +58,8 @@ var customer = &Customer{
 		Suffix:       "Jr.",
 		Phone:        "5555551212",
 		BusinessName: "Oliver's Olive Emporium",
-		DOB:          time.Now(),
-		SSN:          "111111111",
+		DOB:          internal.DOB(time.Now()),
+		SSN:          "111-11-1111",
 		Address: &CustomerAddress{
 			Street1:    "123 Abc St.",
 			Street2:    "Apt 2",
@@ -60,32 +71,11 @@ var customer = &Customer{
 	},
 }
 
-// Mock HTTP request handler
-func mockHandler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.String() == "/api/v1/auth" {
-		bytesMessage, err := json.Marshal(&AuthTokenResponse{Token: "auth-header.payload.signature"})
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
-		}
-		w.Write(bytesMessage)
-	} else {
-		customers := append([]*Customer{}, customer)
-		bytesMessage, err := json.Marshal(&CustomerResponse{Data: customers})
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
-		}
+func init() {
+	// Create mock test server
+	ts = httptest.NewServer(http.HandlerFunc(mockHandler))
 
-		w.WriteHeader(http.StatusOK)
-		w.Write(bytesMessage)
-	}
-}
-
-func TestList(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(mockHandler))
-	defer ts.Close()
-
+	// Create new Rize client for tests
 	config := Config{
 		ProgramUID:  "program_uid",
 		HMACKey:     "hmac_key",
@@ -93,14 +83,52 @@ func TestList(t *testing.T) {
 		BaseURL:     ts.URL,
 		Debug:       true,
 	}
-
-	// Create new Rize client
-	rc, err := NewClient(&config)
+	rc, err = NewClient(&config)
 	if err != nil {
-		t.Fatal("Error building RizeClient\n", err)
+		log.Fatal(err.Error())
 	}
+}
 
+// Mock HTTP request handler
+func mockHandler(w http.ResponseWriter, r *http.Request) {
+	switch r.URL.Path {
+	case "/api/v1/auth":
+		bytesMessage, err := json.Marshal(&AuthTokenResponse{Token: "auth-header.payload.signature"})
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+		}
+		w.Write(bytesMessage)
+	case "/api/v1/customers":
+		switch r.Method {
+		case http.MethodGet:
+			customers := append([]*Customer{}, customer)
+			bytesMessage, err := json.Marshal(&CustomerResponse{Data: customers})
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(err.Error()))
+			}
+			w.WriteHeader(http.StatusOK)
+			w.Write(bytesMessage)
+		case http.MethodPost:
+			bytesMessage, err := json.Marshal(customer)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(err.Error()))
+			}
+			w.WriteHeader(http.StatusOK)
+			w.Write(bytesMessage)
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	default:
+		w.WriteHeader(http.StatusNotFound)
+	}
+}
+
+func TestList(t *testing.T) {
 	params := CustomerListParams{
+		UID:              "uKxmLxUEiSj5h4M3",
 		Status:           "identity_verified",
 		IncludeInitiated: true,
 		KYCStatus:        "denied",
@@ -111,52 +139,122 @@ func TestList(t *testing.T) {
 		Locked:           false,
 		ProgramUID:       "pQtTCSXz57fuefzp",
 		BusinessName:     "Business inc",
+		ExternalUID:      "client-generated-id",
 		PoolUID:          "wTSMX1GubP21ev2h",
 		Limit:            100,
 		Offset:           0,
 		Sort:             "first_name_asc",
-	}
-	v, err := query.Values(params)
-	if err != nil {
-		t.Fatal(err)
 	}
 
 	resp, err := rc.Customers.List(context.Background(), &params)
 	if err != nil {
 		t.Fatal("Error fetching customers\n", err)
 	}
-	output, _ := json.MarshalIndent(resp, "", "\t")
-	t.Log("List Customers:", string(output))
+
+	if err := validateSchema(http.MethodGet, "/customers", http.StatusOK, params, nil, resp); err != nil {
+		t.Fatalf(err.Error())
+	}
+}
+
+func TestCreate(t *testing.T) {
+	params := CustomerCreateParams{
+		ExternalUID:  "client-generated-id",
+		CustomerType: "primary",
+		Email:        "olive.oyl@popeyes.com",
+	}
+
+	resp, err := rc.Customers.Create(context.Background(), &params)
+	if err != nil {
+		t.Fatal("Error creating customer\n", err)
+	}
+
+	if err := validateSchema(http.MethodPost, "/customers", http.StatusCreated, nil, params, resp); err != nil {
+		t.Fatalf(err.Error())
+	}
+}
+
+func validateSchema(method string, path string, status int, queryParams interface{}, bodyParams interface{}, resp interface{}) error {
+	var (
+		v   url.Values
+		b   io.Reader
+		err error
+	)
+
+	// Handle query params
+	if queryParams != nil {
+		v, err = query.Values(queryParams)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Handle body params
+	if bodyParams != nil {
+		bytesMessage, err := json.Marshal(bodyParams)
+		if err != nil {
+			return err
+		}
+		b = bytes.NewBuffer(bytesMessage)
+	}
 
 	// Validate request schema
-	input, err := internal.ValidateRequest(http.MethodGet, "customers", v, nil)
+	input, err := internal.ValidateRequest(method, path, v, b)
 	if err != nil {
-		t.Fatal(err)
+		return err
 	}
 
 	// Validate response schema
 	bytesResp, err := json.Marshal(&resp)
 	if err != nil {
-		t.Fatal(err)
+		return err
 	}
-	if err := internal.ValidateResponse(200, bytesResp, input); err != nil {
-		t.Fatal(err)
+	if err := internal.ValidateResponse(status, bytesResp, input); err != nil {
+		return err
 	}
 
-	// Generate list of keys from OpenAPI schema response
-	keys := internal.RecurseResponseKeys(http.MethodGet, "/customers", 200)
-
-	// Generate list of keys from Customers struct json
-	data := make(map[string]interface{})
-	if err := json.Unmarshal(bytesResp, &data); err != nil {
-		t.Fatal(err)
+	// Generate list of request keys (query string or body param) from OpenAPI schema request
+	schemaReq, _, err := internal.GetRequestKeys(method, path)
+	if err != nil {
+		return err
 	}
-	k := internal.JSONKeys(data)
 
-	// Compare OpenAPI spec response keys with keys from SDK struct
-	diff := internal.Difference(keys, k)
-	if len(diff) > 0 {
-		t.Fail()
-		t.Log("Customer response is missing the following keys that are present in the OpenAPI schema:\n", diff)
+	// Generate list of response keys from OpenAPI schema response
+	schemaResp := internal.RecurseResponseKeys(method, path, status)
+
+	// Generate list of keys from SDK request parameter json
+	var sdkReq = []string{}
+	if queryParams != nil || bodyParams != nil {
+		var bytesParams []byte
+		if queryParams != nil {
+			bytesParams, err = json.Marshal(&queryParams)
+		} else {
+			bytesParams, err = json.Marshal(&bodyParams)
+		}
+		p := make(map[string]interface{})
+		if err := json.Unmarshal(bytesParams, &p); err != nil {
+			return err
+		}
+		sdkReq = internal.JSONKeys(p)
 	}
+
+	// Generate list of keys from SDK response json
+	k := make(map[string]interface{})
+	if err := json.Unmarshal(bytesResp, &k); err != nil {
+		return err
+	}
+	sdkResp := internal.JSONKeys(k)
+
+	// Compare request keys from OpenAPI spec with keys from SDK struct
+	reqDiff := internal.Difference(schemaReq, sdkReq)
+	if len(reqDiff) > 0 {
+		return fmt.Errorf("Request is missing the following keys that are present in the OpenAPI schema:\n%s", reqDiff)
+	}
+
+	// Compare response keys from OpenAPI spec with keys from SDK struct
+	respDiff := internal.Difference(schemaResp, sdkResp)
+	if len(respDiff) > 0 {
+		return fmt.Errorf("Response is missing the following keys that are present in the OpenAPI schema:\n%s", respDiff)
+	}
+
+	return nil
 }

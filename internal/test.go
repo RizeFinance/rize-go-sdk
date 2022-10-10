@@ -2,6 +2,7 @@ package internal
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -50,7 +51,7 @@ func ValidateRequest(method string, path string, params url.Values, body io.Read
 	}
 
 	// Create a new request
-	req, _ := http.NewRequest(method, fmt.Sprintf("%s/%s", server, path), body)
+	req, _ := http.NewRequest(method, fmt.Sprintf("%s%s", server, path), body)
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
 	req.URL.RawQuery = params.Encode()
@@ -114,6 +115,32 @@ func ValidateResponse(status int, body []byte, requestValidationInput *openapi3f
 	return nil
 }
 
+// GetRequestKeys returns any request keys (query string or body params) from the OpenAPI schema
+func GetRequestKeys(method string, path string) ([]string, []string, error) {
+	var paramKeys, bodyKeys []string
+
+	params := doc.Paths.Find(path).GetOperation(method).Parameters
+	for _, s := range params {
+		paramKeys = append(paramKeys, s.Value.Name)
+	}
+
+	reqBody := doc.Paths.Find(path).GetOperation(method).RequestBody
+	if reqBody != nil {
+		body, err := doc.Paths.Find(path).GetOperation(method).RequestBody.Value.Content.Get("application/json").Schema.MarshalJSON()
+		if err != nil {
+			return nil, nil, err
+		}
+		data := make(map[string]interface{})
+		if err := json.Unmarshal(body, &data); err != nil {
+			return nil, nil, err
+		}
+		bodyKeys = JSONKeys(data)
+
+	}
+
+	return paramKeys, bodyKeys, nil
+}
+
 // RecurseResponseKeys recursively traverse the response object for a given OpenAPI path and returns a list of all properties
 func RecurseResponseKeys(method string, path string, status int) []string {
 	schema := doc.Paths.Find(path).GetOperation(method).Responses.Get(status).Value.Content.Get("application/json").Schema.Value
@@ -128,7 +155,11 @@ func RecurseResponseKeys(method string, path string, status int) []string {
 		traverseProps(schema.Properties)
 	}
 
-	return keys
+	// Clear slice between tests
+	list := keys
+	keys = nil
+
+	return list
 }
 
 // Traverse openapi3.SchemaRefs
@@ -175,49 +206,4 @@ func traverseProps(props openapi3.Schemas) {
 			}
 		}
 	}
-}
-
-// JSONKeys will extract key values from a JSON object
-func JSONKeys(data map[string]interface{}) []string {
-	keys := []string{}
-
-	for key, value := range data {
-		// Check for json object
-		if val, ok := value.(map[string]interface{}); ok {
-			keys = append(keys, key)
-			for _, k := range JSONKeys(val) {
-				keys = append(keys, k)
-			}
-			// Check for json array
-		} else if val, ok := value.([]interface{}); ok {
-			keys = append(keys, key)
-			for _, v := range val {
-				// Check for json object
-				if subObject, ok := v.(map[string]interface{}); ok {
-					for _, subObjectKey := range JSONKeys(subObject) {
-						keys = append(keys, subObjectKey)
-					}
-				}
-
-			}
-		} else {
-			keys = append(keys, key)
-		}
-	}
-	return keys
-}
-
-// Difference will find any string from a[] that are not present in b[]
-func Difference(a, b []string) []string {
-	mb := make(map[string]struct{}, len(b))
-	for _, x := range b {
-		mb[x] = struct{}{}
-	}
-	var diff []string
-	for _, x := range a {
-		if _, found := mb[x]; !found {
-			diff = append(diff, x)
-		}
-	}
-	return diff
 }

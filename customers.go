@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/google/go-querystring/query"
+	"github.com/rizefinance/rize-go-sdk/internal"
 )
 
 // Handles all Customer related functionality
@@ -46,7 +47,7 @@ type CustomerDetails struct {
 	Suffix       string           `json:"suffix,omitempty"`
 	Phone        string           `json:"phone,omitempty"`
 	BusinessName string           `json:"business_name,omitempty"`
-	DOB          time.Time        `json:"dob,omitempty"`
+	DOB          internal.DOB     `json:"dob,omitempty"`
 	SSN          string           `json:"ssn,omitempty"`
 	SSNLastFour  string           `json:"ssn_last_four,omitempty"`
 	Address      *CustomerAddress `json:"address,omitempty"`
@@ -77,21 +78,22 @@ type CustomerProfileResponseItem struct {
 
 // CustomerListParams builds the query parameters used in querying Customers
 type CustomerListParams struct {
-	Status           string `url:"status,omitempty"`
-	IncludeInitiated bool   `url:"include_initiated,omitempty"`
-	KYCStatus        string `url:"kyc_status,omitempty"`
-	CustomerType     string `url:"customer_type,omitempty"`
-	FirstName        string `url:"first_name,omitempty"`
-	LastName         string `url:"last_name,omitempty"`
-	Email            string `url:"email,omitempty"`
-	Locked           bool   `url:"locked,omitempty"`
-	ProgramUID       string `url:"program_uid,omitempty"`
-	BusinessName     string `url:"business_name,omitempty"`
-	ExternalUID      string `url:"external_uid,omitempty"`
-	PoolUID          string `url:"pool_uid,omitempty"`
-	Limit            int    `url:"limit,omitempty"`
-	Offset           int    `url:"offset,omitempty"`
-	Sort             string `url:"sort,omitempty"`
+	UID              string `url:"uid,omitempty" json:"uid,omitempty"`
+	Status           string `url:"status,omitempty" json:"status,omitempty"`
+	IncludeInitiated bool   `url:"include_initiated,omitempty" json:"include_initiated"`
+	KYCStatus        string `url:"kyc_status,omitempty" json:"kyc_status,omitempty"`
+	CustomerType     string `url:"customer_type,omitempty" json:"customer_type,omitempty"`
+	FirstName        string `url:"first_name,omitempty" json:"first_name,omitempty"`
+	LastName         string `url:"last_name,omitempty" json:"last_name,omitempty"`
+	Email            string `url:"email,omitempty" json:"email,omitempty"`
+	Locked           bool   `url:"locked,omitempty" json:"locked"`
+	ProgramUID       string `url:"program_uid,omitempty" json:"program_uid,omitempty"`
+	BusinessName     string `url:"business_name,omitempty" json:"business_name,omitempty"`
+	ExternalUID      string `url:"external_uid,omitempty" json:"external_uid,omitempty"`
+	PoolUID          string `url:"pool_uid,omitempty" json:"pool_uid,omitempty"`
+	Limit            int    `url:"limit,omitempty" json:"limit"`
+	Offset           int    `url:"offset,omitempty" json:"offset"`
+	Sort             string `url:"sort,omitempty" json:"sort,omitempty"`
 }
 
 // CustomerCreateParams are the body params used when creating a new Customer
