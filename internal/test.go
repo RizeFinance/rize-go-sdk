@@ -142,8 +142,24 @@ func GetRequestKeys(method string, path string) ([]string, []string, error) {
 }
 
 // RecurseResponseKeys recursively traverse the response object for a given OpenAPI path and returns a list of all properties
-func RecurseResponseKeys(method string, path string, status int) []string {
-	schema := doc.Paths.Find(path).GetOperation(method).Responses.Get(status).Value.Content.Get("application/json").Schema.Value
+func RecurseResponseKeys(method string, path string, status int) ([]string, error) {
+	p := doc.Paths.Find(path)
+	if p == nil {
+		return nil, fmt.Errorf("Path %s not found", path)
+	}
+	op := p.GetOperation(method)
+	if op == nil {
+		return nil, fmt.Errorf("Method %s not found", method)
+	}
+	st := op.Responses.Get(status)
+	if st == nil {
+		return nil, fmt.Errorf("Status %d not found", status)
+	}
+	mime := st.Value.Content.Get("application/json")
+	if mime == nil {
+		return nil, fmt.Errorf("Mime application/json not found")
+	}
+	schema := mime.Schema.Value
 
 	// TODO: Add support for schema.OneOf and schema.AnyOf
 
@@ -159,7 +175,7 @@ func RecurseResponseKeys(method string, path string, status int) []string {
 	list := keys
 	keys = nil
 
-	return list
+	return list, nil
 }
 
 // Traverse openapi3.SchemaRefs

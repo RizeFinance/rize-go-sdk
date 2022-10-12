@@ -87,18 +87,26 @@ type TokenCache struct {
 
 // Error is the default API error format
 type Error struct {
-	Errors []struct {
-		Code       int       `json:"code"`
-		Title      string    `json:"title"`
-		Detail     string    `json:"detail"`
-		OccurredAt time.Time `json:"occurred_at"`
-	} `json:"errors"`
-	Status int `json:"status"`
+	Errors []*ErrorDetails `json:"errors"`
+	Status int             `json:"status"`
+}
+
+// ErrorDetails from the error response
+type ErrorDetails struct {
+	Code       int       `json:"code,omitempty"`
+	Title      string    `json:"title,omitempty"`
+	Detail     string    `json:"detail,omitempty"`
+	OccurredAt time.Time `json:"occurred_at,omitempty"`
 }
 
 // Format error output
 func (e *Error) Error() string {
-	return fmt.Sprintf("Error status %d and output:\n%+v\n", e.Status, e.Errors)
+	var sb strings.Builder
+	sb.WriteString(fmt.Sprintln("Rize API Error", e.Status))
+	for _, v := range e.Errors {
+		sb.WriteString(fmt.Sprintf("%+v", v))
+	}
+	return sb.String()
 }
 
 // NewClient initializes the Client and all services

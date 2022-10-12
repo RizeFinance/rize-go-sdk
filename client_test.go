@@ -10,7 +10,9 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"os"
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/google/go-querystring/query"
 	"github.com/rizefinance/rize-go-sdk/internal"
@@ -20,6 +22,13 @@ var (
 	rc  *Client
 	ts  *httptest.Server
 	err error
+
+	errDetails = &ErrorDetails{
+		Code:       http.StatusNotFound,
+		Title:      "Path/Method not found",
+		OccurredAt: time.Now(),
+	}
+	errors = append([]*ErrorDetails{}, errDetails)
 )
 
 // TestMain is the test runner init
@@ -47,38 +56,34 @@ func TestMain(m *testing.M) {
 
 // Mock HTTP request handler for all test cases
 func mockHandler(w http.ResponseWriter, r *http.Request) {
-	switch r.URL.Path {
-	case "/api/v1/auth":
-		bytesMessage, err := json.Marshal(&AuthTokenResponse{Token: "auth-header.payload.signature"})
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte(err.Error()))
-		}
-		w.Write(bytesMessage)
-	case "/api/v1/customers":
+	// Consolidate requests by schema path
+	path := strings.TrimPrefix(r.URL.Path+"/", "/"+internal.BasePath+"/")
+	path = path[:strings.Index(path, "/")]
+	switch path {
+	case "auth":
+		resp, _ := json.Marshal(&AuthTokenResponse{Token: "auth-header.payload.signature"})
+		w.Write(resp)
+	case "customers":
 		switch r.Method {
+		case http.MethodDelete:
+			w.WriteHeader(http.StatusNoContent)
 		case http.MethodGet:
-			customers := append([]*Customer{}, customer)
-			bytesMessage, err := json.Marshal(&CustomerResponse{Data: customers})
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(err.Error()))
+			if r.URL.Path == "/"+internal.BasePath+"/customers" {
+				customers := append([]*Customer{}, customer)
+				resp, _ := json.Marshal(&CustomerResponse{Data: customers})
+				w.Write(resp)
+				return
 			}
-			w.WriteHeader(http.StatusOK)
-			w.Write(bytesMessage)
-		case http.MethodPost:
-			bytesMessage, err := json.Marshal(customer)
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(err.Error()))
-			}
-			w.WriteHeader(http.StatusOK)
-			w.Write(bytesMessage)
+			fallthrough
 		default:
-			w.WriteHeader(http.StatusNotFound)
+			resp, _ := json.Marshal(customer)
+			w.Write(resp)
 		}
 	default:
+		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
+		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})
 		w.WriteHeader(http.StatusNotFound)
+		w.Write(resp)
 	}
 }
 
@@ -86,9 +91,11 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 // for any missing req/resp fields between the SDK and OpenAPI spec.
 func validateSchema(method string, path string, status int, queryParams interface{}, bodyParams interface{}, resp interface{}) error {
 	var (
-		v   url.Values
-		b   io.Reader
-		err error
+		v                   url.Values
+		b                   io.Reader
+		bytesResp           []byte
+		schemaResp, sdkResp []string
+		err                 error
 	)
 
 	// Handle query params
@@ -115,12 +122,14 @@ func validateSchema(method string, path string, status int, queryParams interfac
 	}
 
 	// Validate response schema
-	bytesResp, err := json.Marshal(&resp)
-	if err != nil {
-		return err
-	}
-	if err := internal.ValidateResponse(status, bytesResp, input); err != nil {
-		return err
+	if resp != nil {
+		bytesResp, err = json.Marshal(&resp)
+		if err != nil {
+			return err
+		}
+		if err := internal.ValidateResponse(status, bytesResp, input); err != nil {
+			return err
+		}
 	}
 
 	// Generate list of request keys (query string or body param) from OpenAPI schema request
@@ -129,8 +138,14 @@ func validateSchema(method string, path string, status int, queryParams interfac
 		return err
 	}
 
-	// Generate list of response keys from OpenAPI schema response
-	schemaResp := internal.RecurseResponseKeys(method, path, status)
+	// Skip response validation for requests that do not generate a response
+	if resp != nil {
+		// Generate list of response keys from OpenAPI schema response.
+		schemaResp, err = internal.RecurseResponseKeys(method, path, status)
+		if err != nil {
+			return err
+		}
+	}
 
 	// Generate list of keys from SDK request parameter json
 	var sdkReq = []string{}
@@ -148,12 +163,14 @@ func validateSchema(method string, path string, status int, queryParams interfac
 		sdkReq = internal.JSONKeys(p)
 	}
 
-	// Generate list of keys from SDK response json
-	k := make(map[string]interface{})
-	if err := json.Unmarshal(bytesResp, &k); err != nil {
-		return err
+	if resp != nil {
+		// Generate list of keys from SDK response json
+		k := make(map[string]interface{})
+		if err := json.Unmarshal(bytesResp, &k); err != nil {
+			return err
+		}
+		sdkResp = internal.JSONKeys(k)
 	}
-	sdkResp := internal.JSONKeys(k)
 
 	// Compare request keys from OpenAPI spec with keys from SDK struct
 	reqDiff := internal.Difference(schemaReq, sdkReq)

@@ -113,7 +113,7 @@ func main() {
 	cpp := []*rize.CustomerProfileResponseParams{
 		{
 			ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
-			ProfileResponse:       "",
+			ProfileResponse:       "string",
 		},
 	}
 	cpr, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", cpp)
