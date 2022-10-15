@@ -54,6 +54,7 @@ func ValidateRequest(method string, path string, params url.Values, body io.Read
 	req, _ := http.NewRequest(method, fmt.Sprintf("%s%s", server, path), body)
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "auth-header.payload.signature")
 	req.URL.RawQuery = params.Encode()
 
 	// Match request to an OpenAPI route

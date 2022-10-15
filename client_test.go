@@ -61,7 +61,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	path = path[:strings.Index(path, "/")]
 	switch path {
 	case "auth":
-		resp, _ := json.Marshal(&AuthTokenResponse{Token: "auth-header.payload.signature"})
+		resp, _ := json.Marshal(tokenResponse)
 		w.Write(resp)
 	case "customers":
 		switch r.Method {
