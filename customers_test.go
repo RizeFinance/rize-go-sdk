@@ -119,8 +119,22 @@ func TestUpdate(t *testing.T) {
 	cup := CustomerUpdateParams{
 		Email: "olive.oyl@rizemoney.com",
 		Details: CustomerDetails{
-			FirstName: "Olive",
-			LastName:  "Oyl",
+			FirstName:    "Olive",
+			MiddleName:   "Olivia",
+			LastName:     "Oyl",
+			Suffix:       "Jr.",
+			Phone:        "5555551212",
+			BusinessName: "Oliver's Olive Emporium",
+			DOB:          internal.DOB(time.Now()),
+			SSN:          "111-22-3333",
+			SSNLastFour:  "3333",
+			Address: &CustomerAddress{
+				Street1:    "123 Abc St.",
+				Street2:    "Apt 2",
+				City:       "Chicago",
+				State:      "IL",
+				PostalCode: "12345",
+			},
 		},
 	}
 	resp, err := rc.Customers.Update(context.Background(), "EhrQZJNjCd79LLYq", &cup)
@@ -134,12 +148,16 @@ func TestUpdate(t *testing.T) {
 }
 
 func TestDelete(t *testing.T) {
+	cd := CustomerDeleteParams{
+		ArchiveNote: "Archiving customer note",
+	}
+
 	// Delete customer
-	if _, err := rc.Customers.Delete(context.Background(), "EhrQZJNjCd79LLYq", "Archiving customer note"); err != nil {
+	if _, err := rc.Customers.Delete(context.Background(), "EhrQZJNjCd79LLYq", &cd); err != nil {
 		t.Fatal("Error archiving customer\n", err)
 	}
 
-	if err := validateSchema(http.MethodDelete, "/customers/{uid}", http.StatusNoContent, nil, nil, nil); err != nil {
+	if err := validateSchema(http.MethodDelete, "/customers/{uid}", http.StatusNoContent, nil, cd, nil); err != nil {
 		t.Fatalf(err.Error())
 	}
 }
@@ -157,25 +175,33 @@ func TestConfirmPIIData(t *testing.T) {
 }
 
 func TestLock(t *testing.T) {
+	cl := CustomerLockParams{
+		LockNote:   "Fraud detected",
+		LockReason: "Customer Reported Fraud",
+	}
 	// Lock customer
-	resp, err := rc.Customers.Lock(context.Background(), "EhrQZJNjCd79LLYq", "note", "reason")
+	resp, err := rc.Customers.Lock(context.Background(), "EhrQZJNjCd79LLYq", &cl)
 	if err != nil {
 		t.Fatal("Error locking customer\n", err)
 	}
 
-	if err := validateSchema(http.MethodPut, "/customers/{uid}/lock", http.StatusOK, nil, nil, resp); err != nil {
+	if err := validateSchema(http.MethodPut, "/customers/{uid}/lock", http.StatusOK, nil, cl, resp); err != nil {
 		t.Fatalf(err.Error())
 	}
 }
 
 func TestUnlock(t *testing.T) {
+	cl := CustomerLockParams{
+		LockNote:     "Fraud detected",
+		UnlockReason: "Customer Reported Fraud",
+	}
 	// Unlock Customer
-	resp, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", "note", "reason")
+	resp, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", &cl)
 	if err != nil {
 		t.Fatal("Error unlocking customer\n", err)
 	}
 
-	if err := validateSchema(http.MethodPut, "/customers/{uid}/unlock", http.StatusOK, nil, nil, resp); err != nil {
+	if err := validateSchema(http.MethodPut, "/customers/{uid}/unlock", http.StatusOK, nil, cl, resp); err != nil {
 		t.Fatalf(err.Error())
 	}
 }
@@ -219,11 +245,20 @@ func TestUpdateProfileResponses(t *testing.T) {
 func TestCreateSecondaryCustomer(t *testing.T) {
 	// Secondary Customers
 	scp := SecondaryCustomerParams{
+		ExternalUID:        "7002440b-9b98-4a8b-82b9-4503fe8c6bf0",
 		PrimaryCustomerUID: "kbF5TGrmwGizQuzZ",
+		Email:              "tomas@example.com",
 		Details: &CustomerDetails{
-			FirstName: "Olive",
-			LastName:  "Oyl",
+			FirstName:  "Olive",
+			MiddleName: "Olivia",
+			LastName:   "Oyl",
+			Suffix:     "Jr.",
+			DOB:        internal.DOB(time.Now()),
 			Address: &CustomerAddress{
+				Street1:    "123 Abc St.",
+				Street2:    "Apt 2",
+				City:       "Chicago",
+				State:      "IL",
 				PostalCode: "12345",
 			},
 		},
@@ -233,7 +268,7 @@ func TestCreateSecondaryCustomer(t *testing.T) {
 		t.Fatal("Error creating secondary customer\n", err)
 	}
 
-	if err := validateSchema(http.MethodPost, "/customers/create_secondary", http.StatusCreated, nil, nil, resp); err != nil {
+	if err := validateSchema(http.MethodPost, "/customers/create_secondary", http.StatusCreated, nil, scp, resp); err != nil {
 		t.Fatalf(err.Error())
 	}
 }

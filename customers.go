@@ -102,6 +102,18 @@ type CustomerUpdateParams struct {
 	Details CustomerDetails `json:"details,omitempty"`
 }
 
+// CustomerDeleteParams are the body params used when deleting/archiving a Customer
+type CustomerDeleteParams struct {
+	ArchiveNote string `json:"archive_note,omitempty"`
+}
+
+// CustomerLockParams are the body params used when locking/unlocking a Customer
+type CustomerLockParams struct {
+	LockNote     string `json:"lock_note,omitempty"`
+	LockReason   string `json:"lock_reason,omitempty"`
+	UnlockReason string `json:"unlock_reason,omitempty"`
+}
+
 // CustomerProfileResponseParams are the body params used when updating Customer Profile responses
 type CustomerProfileResponseParams struct {
 	ProfileRequirementUID string                                `json:"profile_requirement_uid"`
@@ -235,17 +247,12 @@ func (c *customerService) Update(ctx context.Context, uid string, cu *CustomerUp
 }
 
 // Delete will archive a Customer
-func (c *customerService) Delete(ctx context.Context, uid string, archiveNote string) (*http.Response, error) {
+func (c *customerService) Delete(ctx context.Context, uid string, cd *CustomerDeleteParams) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	var params = struct {
-		ArchiveNote string `json:"archive_note,omitempty"`
-	}{}
-	params.ArchiveNote = archiveNote
-
-	bytesMessage, err := json.Marshal(&params)
+	bytesMessage, err := json.Marshal(cd)
 	if err != nil {
 		return nil, err
 	}
@@ -285,19 +292,12 @@ func (c *customerService) ConfirmPIIData(ctx context.Context, uid string) (*Cust
 }
 
 // Lock will freeze all activities relating to the Customer
-func (c *customerService) Lock(ctx context.Context, uid string, lockNote string, lockReason string) (*Customer, error) {
-	if uid == "" || lockReason == "" {
-		return nil, fmt.Errorf("UID and lockReason are required")
+func (c *customerService) Lock(ctx context.Context, uid string, cl *CustomerLockParams) (*Customer, error) {
+	if uid == "" || cl.LockReason == "" {
+		return nil, fmt.Errorf("UID and LockReason are required")
 	}
 
-	var params = struct {
-		LockNote   string `json:"lock_note,omitempty"`
-		LockReason string `json:"lock_reason"`
-	}{}
-	params.LockNote = lockNote
-	params.LockReason = lockReason
-
-	bytesMessage, err := json.Marshal(&params)
+	bytesMessage, err := json.Marshal(cl)
 	if err != nil {
 		return nil, err
 	}
@@ -322,19 +322,12 @@ func (c *customerService) Lock(ctx context.Context, uid string, lockNote string,
 }
 
 // Unlock will remove the Customer lock, returning their state to normal
-func (c *customerService) Unlock(ctx context.Context, uid string, lockNote string, unlockReason string) (*Customer, error) {
+func (c *customerService) Unlock(ctx context.Context, uid string, cl *CustomerLockParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	var params = struct {
-		LockNote     string `json:"lock_note,omitempty"`
-		UnlockReason string `json:"unlock_reason,omitempty"`
-	}{}
-	params.LockNote = lockNote
-	params.UnlockReason = unlockReason
-
-	bytesMessage, err := json.Marshal(&params)
+	bytesMessage, err := json.Marshal(cl)
 	if err != nil {
 		return nil, err
 	}

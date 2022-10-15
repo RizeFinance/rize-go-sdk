@@ -2,7 +2,6 @@ package internal
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -110,32 +109,49 @@ func ValidateResponse(status int, body []byte, requestValidationInput *openapi3f
 }
 
 // GetRequestKeys returns any request keys (query string or body params) from the OpenAPI schema
-func GetRequestKeys(method string, path string) ([]string, []string, error) {
-	var paramKeys, bodyKeys []string
+func GetRequestKeys(method string, path string, status int) ([]string, error) {
+	var output []string
 
 	params := doc.Paths.Find(path).GetOperation(method).Parameters
 	for _, s := range params {
-		paramKeys = append(paramKeys, s.Value.Name)
+		output = append(output, s.Value.Name)
 	}
 
 	reqBody := doc.Paths.Find(path).GetOperation(method).RequestBody
 	if reqBody != nil {
-		body, err := doc.Paths.Find(path).GetOperation(method).RequestBody.Value.Content.Get("application/json").Schema.MarshalJSON()
-		if err != nil {
-			return nil, nil, err
-		}
-		data := make(map[string]interface{})
-		if err := json.Unmarshal(body, &data); err != nil {
-			return nil, nil, err
-		}
-		bodyKeys = JSONKeys(data)
-
+		output, err = RecurseRequestKeys(method, path, status)
 	}
-
-	return paramKeys, bodyKeys, nil
+	return output, nil
 }
 
-// RecurseResponseKeys recursively traverse the response object for a given OpenAPI path and returns a list of all properties
+// RecurseRequestKeys recursively traverses the Request object for a given OpenAPI path and returns a list of all properties
+func RecurseRequestKeys(method string, path string, status int) ([]string, error) {
+	p := doc.Paths.Find(path)
+	if p == nil {
+		return nil, fmt.Errorf("Path %s not found", path)
+	}
+	op := p.GetOperation(method)
+	if op == nil {
+		return nil, fmt.Errorf("Method %s not found", method)
+	}
+	rb := op.RequestBody
+	if rb == nil {
+		return nil, fmt.Errorf("RequestBody %d not found", status)
+	}
+	mime := rb.Value.Content.Get("application/json")
+	if mime == nil {
+		return nil, fmt.Errorf("Mime application/json not found")
+	}
+	traverseSchema(mime.Schema.Value)
+
+	// Clear slice between tests
+	list := keys
+	keys = nil
+
+	return list, nil
+}
+
+// RecurseResponseKeys recursively traverses the Response object for a given OpenAPI path and returns a list of all properties
 func RecurseResponseKeys(method string, path string, status int) ([]string, error) {
 	p := doc.Paths.Find(path)
 	if p == nil {
@@ -153,8 +169,17 @@ func RecurseResponseKeys(method string, path string, status int) ([]string, erro
 	if mime == nil {
 		return nil, fmt.Errorf("Mime application/json not found")
 	}
-	schema := mime.Schema.Value
+	traverseSchema(mime.Schema.Value)
 
+	// Clear slice between tests
+	list := keys
+	keys = nil
+
+	return list, nil
+}
+
+// Traverse openapi3.Schema
+func traverseSchema(schema *openapi3.Schema) {
 	if schema.AllOf != nil {
 		traverseRefs(schema.AllOf)
 	}
@@ -162,12 +187,6 @@ func RecurseResponseKeys(method string, path string, status int) ([]string, erro
 	if schema.Properties != nil {
 		traverseProps(schema.Properties)
 	}
-
-	// Clear slice between tests
-	list := keys
-	keys = nil
-
-	return list, nil
 }
 
 // Traverse openapi3.SchemaRefs

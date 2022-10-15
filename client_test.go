@@ -133,14 +133,14 @@ func validateSchema(method string, path string, status int, queryParams interfac
 	}
 
 	// Generate list of request keys (query string or body param) from OpenAPI schema request
-	schemaReq, _, err := internal.GetRequestKeys(method, path)
+	schemaReq, err := internal.GetRequestKeys(method, path, status)
 	if err != nil {
 		return err
 	}
 
 	// Skip response validation for requests that do not generate a response
 	if resp != nil {
-		// Generate list of response keys from OpenAPI schema response.
+		// Generate list of response keys from OpenAPI schema response
 		schemaResp, err = internal.RecurseResponseKeys(method, path, status)
 		if err != nil {
 			return err

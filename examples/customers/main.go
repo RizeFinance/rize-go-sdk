@@ -78,7 +78,10 @@ func main() {
 	log.Println("Update Customer:", string(output))
 
 	// Delete customer
-	cdl, err := rc.Customers.Delete(context.Background(), "EhrQZJNjCd79LLYq", "Archiving customer note")
+	cd := rize.CustomerDeleteParams{
+		ArchiveNote: "Archiving customer note",
+	}
+	cdl, err := rc.Customers.Delete(context.Background(), "EhrQZJNjCd79LLYq", &cd)
 	if err != nil {
 		log.Fatal("Error archiving customer\n", err)
 	}
@@ -94,7 +97,11 @@ func main() {
 	log.Println("Confirm customer identity:", string(output))
 
 	// Lock customer
-	clk, err := rc.Customers.Lock(context.Background(), "EhrQZJNjCd79LLYq", "note", "reason")
+	ck := rize.CustomerLockParams{
+		LockNote:   "Fraud detected",
+		LockReason: "Customer Reported Fraud",
+	}
+	clk, err := rc.Customers.Lock(context.Background(), "EhrQZJNjCd79LLYq", &ck)
 	if err != nil {
 		log.Fatal("Error locking customer\n", err)
 	}
@@ -102,7 +109,11 @@ func main() {
 	log.Println("Lock Customer:", string(output))
 
 	// Unlock Customer
-	cul, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", "note", "reason")
+	co := rize.CustomerLockParams{
+		LockNote:     "Fraud detected",
+		UnlockReason: "Customer Reported Fraud",
+	}
+	cul, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", &co)
 	if err != nil {
 		log.Fatal("Error unlocking customer\n", err)
 	}
