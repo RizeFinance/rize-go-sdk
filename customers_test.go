@@ -57,8 +57,8 @@ var customer = &Customer{
 	},
 }
 
-func TestList(t *testing.T) {
-	params := CustomerListParams{
+func TestCustomerList(t *testing.T) {
+	params := &CustomerListParams{
 		UID:              "uKxmLxUEiSj5h4M3",
 		Status:           "identity_verified",
 		IncludeInitiated: true,
@@ -77,7 +77,7 @@ func TestList(t *testing.T) {
 		Sort:             "first_name_asc",
 	}
 
-	resp, err := rc.Customers.List(context.Background(), &params)
+	resp, err := rc.Customers.List(context.Background(), params)
 	if err != nil {
 		t.Fatal("Error fetching customers\n", err)
 	}
@@ -87,14 +87,14 @@ func TestList(t *testing.T) {
 	}
 }
 
-func TestCreate(t *testing.T) {
-	params := CustomerCreateParams{
+func TestCustomerCreate(t *testing.T) {
+	params := &CustomerCreateParams{
 		ExternalUID:  "client-generated-id",
 		CustomerType: "primary",
 		Email:        "olive.oyl@popeyes.com",
 	}
 
-	resp, err := rc.Customers.Create(context.Background(), &params)
+	resp, err := rc.Customers.Create(context.Background(), params)
 	if err != nil {
 		t.Fatal("Error creating customer\n", err)
 	}
@@ -104,7 +104,7 @@ func TestCreate(t *testing.T) {
 	}
 }
 
-func TestGet(t *testing.T) {
+func TestCustomerGet(t *testing.T) {
 	resp, err := rc.Customers.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching customer\n", err)
@@ -115,8 +115,8 @@ func TestGet(t *testing.T) {
 	}
 }
 
-func TestUpdate(t *testing.T) {
-	cup := CustomerUpdateParams{
+func TestCustomerUpdate(t *testing.T) {
+	cup := &CustomerUpdateParams{
 		Email: "olive.oyl@rizemoney.com",
 		Details: CustomerDetails{
 			FirstName:    "Olive",
@@ -137,7 +137,7 @@ func TestUpdate(t *testing.T) {
 			},
 		},
 	}
-	resp, err := rc.Customers.Update(context.Background(), "EhrQZJNjCd79LLYq", &cup)
+	resp, err := rc.Customers.Update(context.Background(), "EhrQZJNjCd79LLYq", cup)
 	if err != nil {
 		t.Fatal("Error updating customer\n", err)
 	}
@@ -147,13 +147,13 @@ func TestUpdate(t *testing.T) {
 	}
 }
 
-func TestDelete(t *testing.T) {
-	cd := CustomerDeleteParams{
+func TestCustomerDelete(t *testing.T) {
+	cd := &CustomerDeleteParams{
 		ArchiveNote: "Archiving customer note",
 	}
 
 	// Delete customer
-	if _, err := rc.Customers.Delete(context.Background(), "EhrQZJNjCd79LLYq", &cd); err != nil {
+	if _, err := rc.Customers.Delete(context.Background(), "EhrQZJNjCd79LLYq", cd); err != nil {
 		t.Fatal("Error archiving customer\n", err)
 	}
 
@@ -162,7 +162,7 @@ func TestDelete(t *testing.T) {
 	}
 }
 
-func TestConfirmPIIData(t *testing.T) {
+func TestCustomerConfirmPIIData(t *testing.T) {
 	// Confirm Identity
 	resp, err := rc.Customers.ConfirmPIIData(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
@@ -174,13 +174,13 @@ func TestConfirmPIIData(t *testing.T) {
 	}
 }
 
-func TestLock(t *testing.T) {
-	cl := CustomerLockParams{
+func TestCustomerLock(t *testing.T) {
+	cl := &CustomerLockParams{
 		LockNote:   "Fraud detected",
 		LockReason: "Customer Reported Fraud",
 	}
 	// Lock customer
-	resp, err := rc.Customers.Lock(context.Background(), "EhrQZJNjCd79LLYq", &cl)
+	resp, err := rc.Customers.Lock(context.Background(), "EhrQZJNjCd79LLYq", cl)
 	if err != nil {
 		t.Fatal("Error locking customer\n", err)
 	}
@@ -190,13 +190,13 @@ func TestLock(t *testing.T) {
 	}
 }
 
-func TestUnlock(t *testing.T) {
-	cl := CustomerLockParams{
+func TestCustomerUnlock(t *testing.T) {
+	cl := &CustomerLockParams{
 		LockNote:     "Fraud detected",
 		UnlockReason: "Customer Reported Fraud",
 	}
 	// Unlock Customer
-	resp, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", &cl)
+	resp, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", cl)
 	if err != nil {
 		t.Fatal("Error unlocking customer\n", err)
 	}
@@ -206,7 +206,7 @@ func TestUnlock(t *testing.T) {
 	}
 }
 
-func TestUpdateProfileResponses(t *testing.T) {
+func TestCustomerUpdateProfileResponses(t *testing.T) {
 	// Update Profile Response with string response
 	cpp := &CustomerProfileResponseParams{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
@@ -245,7 +245,7 @@ func TestUpdateProfileResponses(t *testing.T) {
 
 func TestCreateSecondaryCustomer(t *testing.T) {
 	// Secondary Customers
-	scp := SecondaryCustomerParams{
+	scp := &SecondaryCustomerParams{
 		ExternalUID:        "7002440b-9b98-4a8b-82b9-4503fe8c6bf0",
 		PrimaryCustomerUID: "kbF5TGrmwGizQuzZ",
 		Email:              "tomas@example.com",
@@ -264,7 +264,7 @@ func TestCreateSecondaryCustomer(t *testing.T) {
 			},
 		},
 	}
-	resp, err := rc.Customers.CreateSecondaryCustomer(context.Background(), &scp)
+	resp, err := rc.Customers.CreateSecondaryCustomer(context.Background(), scp)
 	if err != nil {
 		t.Fatal("Error creating secondary customer\n", err)
 	}

@@ -18,9 +18,9 @@ type adjustmentService service
 // Adjustment data type
 type Adjustment struct {
 	UID                 string          `json:"uid,omitempty"`
-	CustomerUID         string          `json:"customer_uid,omitempty"`
 	ExternalUID         string          `json:"external_uid,omitempty"`
-	USDAdjustmentAmount float64         `json:"usd_adjustment_amount,omitempty"`
+	CustomerUID         string          `json:"customer_uid,omitempty"`
+	USDAdjustmentAmount string          `json:"usd_adjustment_amount,omitempty"`
 	AdjustmentType      *AdjustmentType `json:"adjustment_type,omitempty"`
 	CreatedAt           time.Time       `json:"created_at,omitempty"`
 	Status              string          `json:"status,omitempty"`
@@ -32,30 +32,36 @@ type AdjustmentType struct {
 	Name        string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 	Fee         bool   `json:"fee,omitempty"`
+	ProgramUID  string `json:"program_uid,omitempty"`
+	Deprecated  bool   `json:"deprecated,omitempty"`
 }
 
 // AdjustmentListParams builds the query parameters used in querying Adjustments
 type AdjustmentListParams struct {
-	CustomerUID            string `url:"customer_uid,omitempty"`
-	AdjustmentTypeUID      string `url:"adjustment_type_uid,omitempty"`
-	ExternalUID            string `url:"external_uid,omitempty"`
-	USDAdjustmentAmountMax int    `url:"usd_adjustment_amount_max,omitempty"`
-	USDAdjustmentAmountMin int    `url:"usd_adjustment_amount_min,omitempty"`
-	Sort                   string `url:"sort,omitempty"`
+	CustomerUID            string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	AdjustmentTypeUID      string `url:"adjustment_type_uid,omitempty" json:"adjustment_type_uid,omitempty"`
+	ExternalUID            string `url:"external_uid,omitempty" json:"external_uid,omitempty"`
+	USDAdjustmentAmountMax int    `url:"usd_adjustment_amount_max,omitempty" json:"usd_adjustment_amount_max,omitempty"`
+	USDAdjustmentAmountMin int    `url:"usd_adjustment_amount_min,omitempty" json:"usd_adjustment_amount_min,omitempty"`
+	Sort                   string `url:"sort,omitempty" json:"sort,omitempty"`
 }
 
 // AdjustmentCreateParams are the body params used when creating a new Adjustment
 type AdjustmentCreateParams struct {
-	ExternalUID         string  `json:"external_uid,omitempty"`
-	CustomerUID         string  `json:"customer_uid"`
-	USDAdjustmentAmount float64 `json:"usd_adjustment_amount"`
-	AdjustmentTypeUID   string  `json:"adjustment_type_uid"`
+	ExternalUID         string    `json:"external_uid,omitempty"`
+	CustomerUID         string    `json:"customer_uid"`
+	USDAdjustmentAmount string    `json:"usd_adjustment_amount"`
+	AdjustmentTypeUID   string    `json:"adjustment_type_uid"`
+	UID                 string    `json:"uid,omitempty"`
+	CreatedAt           time.Time `json:"created_at,omitempty"`
+	Status              string    `json:"status,omitempty"`
 }
 
 // AdjustmentTypeListParams builds the query parameters used in querying Adjustment Types
 type AdjustmentTypeListParams struct {
-	CustomerUID string `url:"customer_uid,omitempty"`
-	ProgramUID  string `url:"program_uid,omitempty"`
+	CustomerUID    string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	ProgramUID     string `url:"program_uid,omitempty" json:"program_uid,omitempty"`
+	ShowDeprecated bool   `url:"show_deprecated,omitempty" json:"show_deprecated,omitempty"`
 }
 
 // AdjustmentResponse is an API response containing a list of Adjustments
@@ -100,7 +106,7 @@ func (a *adjustmentService) List(ctx context.Context, alp *AdjustmentListParams)
 // Create a new Adjustment with the provided specification
 func (a *adjustmentService) Create(ctx context.Context, acp *AdjustmentCreateParams) (*Adjustment, error) {
 	if acp.CustomerUID == "" ||
-		acp.USDAdjustmentAmount == 0 ||
+		acp.USDAdjustmentAmount == "" ||
 		acp.AdjustmentTypeUID == "" {
 		return nil, fmt.Errorf("CustomerUID, USDAdjustmentAmount and AdjustmentTypeUID are required")
 	}

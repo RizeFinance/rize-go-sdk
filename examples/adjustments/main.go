@@ -51,7 +51,7 @@ func main() {
 	acp := rize.AdjustmentCreateParams{
 		ExternalUID:         "partner-generated-id",
 		CustomerUID:         "kaxHFJnWvJxRJZxq",
-		USDAdjustmentAmount: 2.43,
+		USDAdjustmentAmount: "2.43",
 		AdjustmentTypeUID:   "KM2eKbR98t4tdAyZ",
 	}
 	ac, err := rc.Adjustments.Create(context.Background(), &acp)

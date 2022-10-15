@@ -79,6 +79,29 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 			resp, _ := json.Marshal(customer)
 			w.Write(resp)
 		}
+	case "adjustments":
+		switch r.Method {
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/adjustments" {
+				adj := append([]*Adjustment{}, adjustment)
+				resp, _ := json.Marshal(&AdjustmentResponse{Data: adj})
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(adjustment)
+			w.Write(resp)
+		}
+	case "adjustment_types":
+		if r.URL.Path == "/"+internal.BasePath+"/adjustment_types" {
+			adjTypes := append([]*AdjustmentType{}, adjustmentType)
+			resp, _ := json.Marshal(&AdjustmentTypeResponse{Data: adjTypes})
+			w.Write(resp)
+			return
+		}
+		resp, _ := json.Marshal(adjustmentType)
+		w.Write(resp)
 	default:
 		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
 		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})
