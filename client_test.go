@@ -42,7 +42,7 @@ func TestMain(m *testing.M) {
 		HMACKey:     "hmac_key",
 		Environment: "sandbox",
 		BaseURL:     ts.URL,
-		Debug:       true,
+		Debug:       false,
 	}
 	rc, err = NewClient(&config)
 	if err != nil {
@@ -60,25 +60,6 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	path := strings.TrimPrefix(r.URL.Path+"/", "/"+internal.BasePath+"/")
 	path = path[:strings.Index(path, "/")]
 	switch path {
-	case "auth":
-		resp, _ := json.Marshal(tokenResponse)
-		w.Write(resp)
-	case "customers":
-		switch r.Method {
-		case http.MethodDelete:
-			w.WriteHeader(http.StatusNoContent)
-		case http.MethodGet:
-			if r.URL.Path == "/"+internal.BasePath+"/customers" {
-				customers := append([]*Customer{}, customer)
-				resp, _ := json.Marshal(&CustomerResponse{Data: customers})
-				w.Write(resp)
-				return
-			}
-			fallthrough
-		default:
-			resp, _ := json.Marshal(customer)
-			w.Write(resp)
-		}
 	case "adjustments":
 		switch r.Method {
 		case http.MethodGet:
@@ -102,6 +83,34 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		resp, _ := json.Marshal(adjustmentType)
 		w.Write(resp)
+	case "auth":
+		resp, _ := json.Marshal(tokenResponse)
+		w.Write(resp)
+	case "card_artworks":
+		if r.URL.Path == "/"+internal.BasePath+"/card_artworks" {
+			art := append([]*CardArtwork{}, artwork)
+			resp, _ := json.Marshal(&CardArtworkResponse{Data: art})
+			w.Write(resp)
+			return
+		}
+		resp, _ := json.Marshal(artwork)
+		w.Write(resp)
+	case "customers":
+		switch r.Method {
+		case http.MethodDelete:
+			w.WriteHeader(http.StatusNoContent)
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/customers" {
+				customers := append([]*Customer{}, customer)
+				resp, _ := json.Marshal(&CustomerResponse{Data: customers})
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(customer)
+			w.Write(resp)
+		}
 	default:
 		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
 		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})
