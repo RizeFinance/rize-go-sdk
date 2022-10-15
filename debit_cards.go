@@ -47,13 +47,13 @@ type DebitCardShippingAddress struct {
 
 // DebitCardListParams builds the query parameters used in querying Debit Cards
 type DebitCardListParams struct {
-	CustomerUID string `url:"customer_uid,omitempty"`
-	ExternalUID string `url:"external_uid,omitempty"`
-	Limit       int    `url:"limit,omitempty"`
-	Offset      int    `url:"offset,omitempty"`
-	PoolUID     string `url:"pool_uid,omitempty"`
-	Locked      bool   `url:"locked,omitempty"`
-	Status      string `url:"status,omitempty"`
+	CustomerUID string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	ExternalUID string `url:"external_uid,omitempty" json:"external_uid,omitempty"`
+	Limit       int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset      int    `url:"offset,omitempty" json:"offset,omitempty"`
+	PoolUID     string `url:"pool_uid,omitempty" json:"pool_uid,omitempty"`
+	Locked      bool   `url:"locked,omitempty" json:"locked,omitempty"`
+	Status      string `url:"status,omitempty" json:"status,omitempty"`
 }
 
 // DebitCardCreateParams are the body params used when creating a new Debit Card

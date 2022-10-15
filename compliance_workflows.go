@@ -78,16 +78,16 @@ type WorkflowDocument struct {
 
 // WorkflowListParams builds the query parameters used in querying Compliance Workflows
 type WorkflowListParams struct {
-	CustomerUID string `url:"customer_uid,omitempty"`
-	ProductUID  string `url:"product_uid,omitempty"`
-	InProgress  bool   `url:"in_progress,omitempty"`
-	Limit       int    `url:"limit,omitempty"`
-	Offset      int    `url:"offset,omitempty"`
+	CustomerUID string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	ProductUID  string `url:"product_uid,omitempty" json:"product_uid,omitempty"`
+	InProgress  bool   `url:"in_progress,omitempty" json:"in_progress,omitempty"`
+	Limit       int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset      int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // WorkflowLatestParams builds the query parameters used in querying the latest Compliance Workflow for a customer
 type WorkflowLatestParams struct {
-	ProductCompliancePlanUID string `url:"product_compliance_plan_uid,omitempty"`
+	ProductCompliancePlanUID string `url:"product_compliance_plan_uid,omitempty" json:"product_compliance_plan_uid,omitempty"`
 }
 
 // WorkflowCreateParams are the body params used when creating a new Compliance Workflow

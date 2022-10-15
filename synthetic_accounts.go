@@ -61,16 +61,16 @@ type SyntheticAccountType struct {
 
 // SyntheticAccountListParams builds the query parameters used in querying Synthetic Accounts
 type SyntheticAccountListParams struct {
-	CustomerUID              string `url:"customer_uid,omitempty"`
-	ExternalUID              string `url:"external_uid,omitempty"`
-	PoolUID                  string `url:"pool_uid,omitempty"`
-	Limit                    int    `url:"limit,omitempty"`
-	Offset                   int    `url:"offset,omitempty"`
-	SyntheticAccountTypeUID  string `url:"synthetic_account_type_uid,omitempty"`
-	SyntheticAccountCategory string `url:"synthetic_account_category,omitempty"`
-	Liability                bool   `url:"liability,omitempty"`
-	Status                   string `url:"status,omitempty"`
-	Sort                     string `url:"sort,omitempty"`
+	CustomerUID              string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	ExternalUID              string `url:"external_uid,omitempty" json:"external_uid,omitempty"`
+	PoolUID                  string `url:"pool_uid,omitempty" json:"pool_uid,omitempty"`
+	Limit                    int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset                   int    `url:"offset,omitempty" json:"offset,omitempty"`
+	SyntheticAccountTypeUID  string `url:"synthetic_account_type_uid,omitempty" json:"synthetic_account_type_uid,omitempty"`
+	SyntheticAccountCategory string `url:"synthetic_account_category,omitempty" json:"synthetic_account_category,omitempty"`
+	Liability                bool   `url:"liability,omitempty" json:"liability,omitempty"`
+	Status                   string `url:"status,omitempty" json:"status,omitempty"`
+	Sort                     string `url:"sort,omitempty" json:"sort,omitempty"`
 }
 
 // SyntheticAccountCreateParams are the body params used when creating a new Synthetic Account
@@ -92,9 +92,9 @@ type SyntheticAccountUpdateParams struct {
 
 // SyntheticAccountTypeListParams builds the query parameters used in querying Synthetic Account Types
 type SyntheticAccountTypeListParams struct {
-	ProgramUID string `url:"program_uid,omitempty"`
-	Limit      int    `url:"limit,omitempty"`
-	Offset     int    `url:"offset,omitempty"`
+	ProgramUID string `url:"program_uid,omitempty" json:"program_uid,omitempty"`
+	Limit      int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset     int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // SyntheticAccountResponse is an API response containing a list of Synthetic Accounts

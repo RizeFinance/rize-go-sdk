@@ -30,14 +30,14 @@ type Document struct {
 
 // DocumentListParams builds the query parameters used in querying Documents
 type DocumentListParams struct {
-	DocumentType        string `url:"document_type,omitempty"`
-	Month               int    `url:"month,omitempty"`
-	Year                int    `url:"year,omitempty"`
-	CustodialAccountUID string `url:"custodial_account_uid,omitempty"`
-	CustomerUID         string `url:"customer_uid,omitempty"`
-	SyntheticAccountUID string `url:"synthetic_account_uid,omitempty"`
-	Limit               int    `url:"limit,omitempty"`
-	Offset              int    `url:"offset,omitempty"`
+	DocumentType        string `url:"document_type,omitempty" json:"document_type,omitempty"`
+	Month               int    `url:"month,omitempty" json:"month,omitempty"`
+	Year                int    `url:"year,omitempty" json:"year,omitempty"`
+	CustodialAccountUID string `url:"custodial_account_uid,omitempty" json:"custodial_account_uid,omitempty"`
+	CustomerUID         string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	SyntheticAccountUID string `url:"synthetic_account_uid,omitempty" json:"synthetic_account_uid,omitempty"`
+	Limit               int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset              int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // DocumentResponse is an API response containing a list of Documents

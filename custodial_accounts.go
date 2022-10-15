@@ -54,12 +54,12 @@ type CustodialAccountAssetBalance struct {
 
 // CustodialAccountListParams builds the query parameters used in querying Custodial Accounts
 type CustodialAccountListParams struct {
-	CustomerUID string `url:"customer_uid,omitempty"`
-	ExternalUID string `url:"external_uid,omitempty"`
-	Limit       int    `url:"limit,omitempty"`
-	Offset      int    `url:"offset,omitempty"`
-	Liability   bool   `url:"liability,omitempty"`
-	Type        string `url:"type,omitempty"`
+	CustomerUID string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	ExternalUID string `url:"external_uid,omitempty" json:"external_uid,omitempty"`
+	Limit       int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset      int    `url:"offset,omitempty" json:"offset,omitempty"`
+	Liability   bool   `url:"liability,omitempty" json:"liability,omitempty"`
+	Type        string `url:"type,omitempty" json:"type,omitempty"`
 }
 
 // CustodialAccountResponse is an API response containing a list of Custodial Accounts

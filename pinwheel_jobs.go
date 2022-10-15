@@ -29,10 +29,10 @@ type PinwheelJob struct {
 
 // PinwheelJobListParams builds the query parameters used in querying Pinwheel Jobs
 type PinwheelJobListParams struct {
-	CustomerUID         string `url:"customer_uid,omitempty"`
-	SyntheticAccountUID string `url:"synthetic_account_uid,omitempty"`
-	Limit               int    `url:"limit,omitempty"`
-	Offset              int    `url:"offset,omitempty"`
+	CustomerUID         string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	SyntheticAccountUID string `url:"synthetic_account_uid,omitempty" json:"synthetic_account_uid,omitempty"`
+	Limit               int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset              int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // PinwheelJobCreateParams are the body params used when creating a new Pinwheel Job

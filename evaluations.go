@@ -43,8 +43,8 @@ type EvaluationPIIMatch struct {
 
 // EvaluationListParams builds the query parameters used in querying Evaluations
 type EvaluationListParams struct {
-	CustomerUID string `url:"customer_uid,omitempty"`
-	Latest      bool   `url:"latest,omitempty"`
+	CustomerUID string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	Latest      bool   `url:"latest,omitempty" json:"latest,omitempty"`
 }
 
 // EvaluationResponse is an API response containing a list of Evaluations

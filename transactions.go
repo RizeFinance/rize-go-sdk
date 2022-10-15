@@ -104,59 +104,59 @@ type CustodialLineItem struct {
 
 // TransactionListParams builds the query parameters used in querying Transactions
 type TransactionListParams struct {
-	CustomerUID                    string `url:"customer_uid,omitempty"`
-	PoolUID                        string `url:"pool_uid,omitempty"`
-	DebitCardUID                   string `url:"debit_card_uid,omitempty"`
-	SourceSyntheticAccountUID      string `url:"source_synthetic_account_uid,omitempty"`
-	DestinationSyntheticAccountUID string `url:"destination_synthetic_account_uid,omitempty"`
-	Type                           string `url:"type,omitempty"`
-	SyntheticAccountUID            string `url:"synthetic_account_uid,omitempty"`
-	ShowDeniedAuths                bool   `url:"show_denied_auths,omitempty"`
-	ShowExpired                    bool   `url:"show_expired,omitempty"`
-	Status                         string `url:"status,omitempty"`
-	SearchDescription              string `url:"search_description,omitempty"`
-	IncludeZero                    bool   `url:"include_zero,omitempty"`
-	Limit                          int    `url:"limit,omitempty"`
-	Offset                         int    `url:"offset,omitempty"`
-	Sort                           string `url:"sort,omitempty"`
+	CustomerUID                    string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	PoolUID                        string `url:"pool_uid,omitempty" json:"pool_uid,omitempty"`
+	DebitCardUID                   string `url:"debit_card_uid,omitempty" json:"debit_card_uid,omitempty"`
+	SourceSyntheticAccountUID      string `url:"source_synthetic_account_uid,omitempty" json:"source_synthetic_account_uid,omitempty"`
+	DestinationSyntheticAccountUID string `url:"destination_synthetic_account_uid,omitempty" json:"destination_synthetic_account_uid,omitempty"`
+	Type                           string `url:"type,omitempty" json:"type,omitempty"`
+	SyntheticAccountUID            string `url:"synthetic_account_uid,omitempty" json:"synthetic_account_uid,omitempty"`
+	ShowDeniedAuths                bool   `url:"show_denied_auths,omitempty" json:"show_denied_auths,omitempty"`
+	ShowExpired                    bool   `url:"show_expired,omitempty" json:"show_expired,omitempty"`
+	Status                         string `url:"status,omitempty" json:"status,omitempty"`
+	SearchDescription              string `url:"search_description,omitempty" json:"search_description,omitempty"`
+	IncludeZero                    bool   `url:"include_zero,omitempty" json:"include_zero,omitempty"`
+	Limit                          int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset                         int    `url:"offset,omitempty" json:"offset,omitempty"`
+	Sort                           string `url:"sort,omitempty" json:"sort,omitempty"`
 }
 
 // TransactionEventListParams builds the query parameters used in querying TransactionEvents
 type TransactionEventListParams struct {
-	SourceCustodialAccountUID      string `url:"source_custodial_account_uid,omitempty"`
-	DestinationCustodialAccountUID string `url:"destination_custodial_account_uid,omitempty"`
-	CustodialAccountUID            string `url:"custodial_account_uid,omitempty"`
-	Type                           string `url:"type,omitempty"`
-	TransactionUID                 string `url:"transaction_uid,omitempty"`
-	Limit                          int    `url:"limit,omitempty"`
-	Offset                         int    `url:"offset,omitempty"`
-	Sort                           string `url:"sort,omitempty"`
+	SourceCustodialAccountUID      string `url:"source_custodial_account_uid,omitempty" json:"source_custodial_account_uid,omitempty"`
+	DestinationCustodialAccountUID string `url:"destination_custodial_account_uid,omitempty" json:"destination_custodial_account_uid,omitempty"`
+	CustodialAccountUID            string `url:"custodial_account_uid,omitempty" json:"custodial_account_uid,omitempty"`
+	Type                           string `url:"type,omitempty" json:"type,omitempty"`
+	TransactionUID                 string `url:"transaction_uid,omitempty" json:"transaction_uid,omitempty"`
+	Limit                          int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset                         int    `url:"offset,omitempty" json:"offset,omitempty"`
+	Sort                           string `url:"sort,omitempty" json:"sort,omitempty"`
 }
 
 // SyntheticLineItemListParams builds the query parameters used in querying SyntheticLineItems
 type SyntheticLineItemListParams struct {
-	CustomerUID         string `url:"customer_uid,omitempty"`
-	PoolUID             string `url:"pool_uid,omitempty"`
-	SyntheticAccountUID string `url:"synthetic_account_uid,omitempty"`
-	Limit               int    `url:"limit,omitempty"`
-	Offset              int    `url:"offset,omitempty"`
-	TransactionUID      string `url:"transaction_uid,omitempty"`
-	Status              string `url:"status,omitempty"`
-	Sort                string `url:"sort,omitempty"`
+	CustomerUID         string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	PoolUID             string `url:"pool_uid,omitempty" json:"pool_uid,omitempty"`
+	SyntheticAccountUID string `url:"synthetic_account_uid,omitempty" json:"synthetic_account_uid,omitempty"`
+	Limit               int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset              int    `url:"offset,omitempty" json:"offset,omitempty"`
+	TransactionUID      string `url:"transaction_uid,omitempty" json:"transaction_uid,omitempty"`
+	Status              string `url:"status,omitempty" json:"status,omitempty"`
+	Sort                string `url:"sort,omitempty" json:"sort,omitempty"`
 }
 
 // CustodialLineItemListParams builds the query parameters used in querying CustodialLineItems
 type CustodialLineItemListParams struct {
-	CustomerUID         string `url:"customer_uid,omitempty"`
-	CustodialAccountUID string `url:"custodial_account_uid,omitempty"`
-	Status              string `url:"status,omitempty"`
-	USDollarAmountMax   int    `url:"us_dollar_amount_max,omitempty"`
-	USDollarAmountMin   int    `url:"us_dollar_amount_min,omitempty"`
-	TransactionEventUID string `url:"transaction_event_uid,omitempty"`
-	TransactionUID      string `url:"transaction_uid,omitempty"`
-	Limit               int    `url:"limit,omitempty"`
-	Offset              int    `url:"offset,omitempty"`
-	Sort                string `url:"sort,omitempty"`
+	CustomerUID         string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	CustodialAccountUID string `url:"custodial_account_uid,omitempty" json:"custodial_account_uid,omitempty"`
+	Status              string `url:"status,omitempty" json:"status,omitempty"`
+	USDollarAmountMax   int    `url:"us_dollar_amount_max,omitempty" json:"us_dollar_amount_max,omitempty"`
+	USDollarAmountMin   int    `url:"us_dollar_amount_min,omitempty" json:"us_dollar_amount_min,omitempty"`
+	TransactionEventUID string `url:"transaction_event_uid,omitempty" json:"transaction_event_uid,omitempty"`
+	TransactionUID      string `url:"transaction_uid,omitempty" json:"transaction_uid,omitempty"`
+	Limit               int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset              int    `url:"offset,omitempty" json:"offset,omitempty"`
+	Sort                string `url:"sort,omitempty" json:"sort,omitempty"`
 }
 
 // TransactionResponse is an API response containing a list of Transactions

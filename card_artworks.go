@@ -25,9 +25,9 @@ type CardArtwork struct {
 
 // CardArtworkListParams builds the query parameters used in querying Card Artwork
 type CardArtworkListParams struct {
-	ProgramUID string `url:"program_uid,omitempty"`
-	Limit      int    `url:"limit,omitempty"`
-	Offset     int    `url:"offset,omitempty"`
+	ProgramUID string `url:"program_uid,omitempty" json:"program_uid,omitempty"`
+	Limit      int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset     int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // CardArtworkResponse is an API response containing a list of Card Artwork

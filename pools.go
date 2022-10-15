@@ -23,10 +23,10 @@ type Pool struct {
 
 // PoolListParams builds the query parameters used in querying Pools
 type PoolListParams struct {
-	CustomerUID string `url:"customer_uid,omitempty"`
-	ExternalUID string `url:"external_uid,omitempty"`
-	Limit       int    `url:"limit,omitempty"`
-	Offset      int    `url:"offset,omitempty"`
+	CustomerUID string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	ExternalUID string `url:"external_uid,omitempty" json:"external_uid,omitempty"`
+	Limit       int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset      int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // PoolResponse is an API response containing a list of Pools

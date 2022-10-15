@@ -30,12 +30,12 @@ type Transfer struct {
 
 // TransferListParams builds the query parameters used in querying Transfers
 type TransferListParams struct {
-	CustomerUID         string `url:"customer_uid,omitempty"`
-	ExternalUID         string `url:"external_uid,omitempty"`
-	PoolUID             string `url:"pool_uid,omitempty"`
-	SyntheticAccountUID string `url:"synthetic_account_uid,omitempty"`
-	Limit               int    `url:"limit,omitempty"`
-	Offset              int    `url:"offset,omitempty"`
+	CustomerUID         string `url:"customer_uid,omitempty" json:"customer_uid,omitempty"`
+	ExternalUID         string `url:"external_uid,omitempty" json:"external_uid,omitempty"`
+	PoolUID             string `url:"pool_uid,omitempty" json:"pool_uid,omitempty"`
+	SyntheticAccountUID string `url:"synthetic_account_uid,omitempty" json:"synthetic_account_uid,omitempty"`
+	Limit               int    `url:"limit,omitempty" json:"limit,omitempty"`
+	Offset              int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // TransferCreateParams are the body params used when creating a new Transfer
