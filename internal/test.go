@@ -77,13 +77,6 @@ func ValidateRequest(method string, path string, params url.Values, body io.Read
 		return nil, err
 	}
 
-	// Validate request body
-	if body != nil {
-		if err = openapi3filter.ValidateRequestBody(ctx, requestValidationInput, route.Operation.RequestBody.Value); err != nil {
-			return nil, err
-		}
-	}
-
 	return requestValidationInput, nil
 }
 
@@ -161,8 +154,6 @@ func RecurseResponseKeys(method string, path string, status int) ([]string, erro
 	}
 	schema := mime.Schema.Value
 
-	// TODO: Add support for schema.OneOf and schema.AnyOf
-
 	if schema.AllOf != nil {
 		traverseRefs(schema.AllOf)
 	}
@@ -210,6 +201,11 @@ func traverseProps(props openapi3.Schemas) {
 		for k, v := range props {
 			// Note the key that was found
 			keys = append(keys, k)
+
+			// Check for oneOf
+			if v.Value.OneOf != nil {
+				traverseRefs(v.Value.OneOf)
+			}
 
 			// Check for nested items
 			if v.Value.Items != nil {

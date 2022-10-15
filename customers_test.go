@@ -26,7 +26,7 @@ var customer = &Customer{
 	PrimaryCustomerUID: "EhrQZJNjCd79LLYq",
 	ProfileResponses: []*CustomerProfileResponse{{
 		ProfileRequirement: "Please provide your approximate annual income in USD.",
-		ProfileResponse: &CustomerProfileResponseItem{
+		ProfileResponse: &internal.CustomerProfileResponseItem{
 			Num0: "string",
 			Num1: "string",
 			Num2: "string",
@@ -181,14 +181,14 @@ func TestUnlock(t *testing.T) {
 }
 
 func TestUpdateProfileResponses(t *testing.T) {
-	// Update Profile Response
-	cpp := []*CustomerProfileResponseParams{
-		{
-			ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
-			ProfileResponse:       "string",
+	// Update Profile Response with string response
+	cpp := &CustomerProfileResponseParams{
+		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
+		ProfileResponse: &internal.CustomerProfileResponseItem{
+			Response: "Response string",
 		},
 	}
-	resp, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", cpp)
+	resp, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", []*CustomerProfileResponseParams{cpp})
 	if err != nil {
 		t.Fatal("Error updating profile response\n", err)
 	}
@@ -196,24 +196,22 @@ func TestUpdateProfileResponses(t *testing.T) {
 	if err := validateSchema(http.MethodPut, "/customers/{uid}/update_profile_responses", http.StatusOK, nil, cpp, resp); err != nil {
 		t.Fatalf(err.Error())
 	}
-}
 
-func TestUpdateProfileResponsesOrderedList(t *testing.T) {
-	// Update Profile Response (ordered_list)
-	cro := []*CustomerProfileResponseOrderedListParams{{
+	// Update Profile Response with ordered list response
+	cro := &CustomerProfileResponseParams{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
-		ProfileResponse: &CustomerProfileResponseItem{
+		ProfileResponse: &internal.CustomerProfileResponseItem{
 			Num0: "string",
 			Num1: "string",
 			Num2: "string",
 		},
-	}}
-	resp, err := rc.Customers.UpdateProfileResponsesOrderedList(context.Background(), "EhrQZJNjCd79LLYq", cro)
+	}
+	res, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", []*CustomerProfileResponseParams{cro})
 	if err != nil {
 		t.Fatal("Error updating profile response (ordered_list)\n", err)
 	}
 
-	if err := validateSchema(http.MethodGet, "/customers/{uid}", http.StatusOK, nil, nil, resp); err != nil {
+	if err := validateSchema(http.MethodPut, "/customers/{uid}/update_profile_responses", http.StatusOK, nil, cro, res); err != nil {
 		t.Fatalf(err.Error())
 	}
 }

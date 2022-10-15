@@ -64,16 +64,9 @@ type CustomerAddress struct {
 
 // CustomerProfileResponse contains Profile Response info
 type CustomerProfileResponse struct {
-	ProfileRequirement    string                       `json:"profile_requirement,omitempty"`
-	ProfileRequirementUID string                       `json:"profile_requirement_uid,omitempty"`
-	ProfileResponse       *CustomerProfileResponseItem `json:"profile_response,omitempty"`
-}
-
-// CustomerProfileResponseItem contains the Customer's response to the Profile Requirement
-type CustomerProfileResponseItem struct {
-	Num0 string `json:"0,omitempty"`
-	Num1 string `json:"1,omitempty"`
-	Num2 string `json:"2,omitempty"`
+	ProfileRequirement    string                                `json:"profile_requirement,omitempty"`
+	ProfileRequirementUID string                                `json:"profile_requirement_uid,omitempty"`
+	ProfileResponse       *internal.CustomerProfileResponseItem `json:"profile_response,omitempty"`
 }
 
 // CustomerListParams builds the query parameters used in querying Customers
@@ -111,14 +104,8 @@ type CustomerUpdateParams struct {
 
 // CustomerProfileResponseParams are the body params used when updating Customer Profile responses
 type CustomerProfileResponseParams struct {
-	ProfileRequirementUID string `json:"profile_requirement_uid"`
-	ProfileResponse       string `json:"profile_response"`
-}
-
-// CustomerProfileResponseOrderedListParams are the body params used when updating Customer Profile responses with the `ordered_list` requirement type
-type CustomerProfileResponseOrderedListParams struct {
-	ProfileRequirementUID string                       `json:"profile_requirement_uid"`
-	ProfileResponse       *CustomerProfileResponseItem `json:"profile_response"`
+	ProfileRequirementUID string                                `json:"profile_requirement_uid"`
+	ProfileResponse       *internal.CustomerProfileResponseItem `json:"profile_response"`
 }
 
 // SecondaryCustomerParams are the body params used when creating a new Secondary Customer
@@ -371,14 +358,16 @@ func (c *customerService) Unlock(ctx context.Context, uid string, lockNote strin
 	return response, nil
 }
 
-// UpdateProfileResponses is used to submit a Customer's Profile Responses to Profile Requirements
+// UpdateProfileResponses is used to submit a Customer's Profile Responses to Profile Requirements.
+// For most cases, use CustomerProfileResponseItem.Response to submit a string response.
+// For ordered list type responses, use CustomerProfileResponseItem.Num0/1/2
 func (c *customerService) UpdateProfileResponses(ctx context.Context, uid string, cpp []*CustomerProfileResponseParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
 	for _, v := range cpp {
-		if v.ProfileRequirementUID == "" || v.ProfileResponse == "" {
+		if v.ProfileRequirementUID == "" || (v.ProfileResponse.Response == "" && v.ProfileResponse.Num0 == "") {
 			return nil, fmt.Errorf("ProfileRequirementUID and ProfileResponse are required")
 		}
 	}
@@ -386,48 +375,6 @@ func (c *customerService) UpdateProfileResponses(ctx context.Context, uid string
 	// Wrap profile response params in a `details` json object
 	var details = struct {
 		Details []*CustomerProfileResponseParams `json:"details"`
-	}{
-		Details: cpp,
-	}
-	bytesMessage, err := json.Marshal(&details)
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := c.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	response := &Customer{}
-	if err = json.Unmarshal(body, response); err != nil {
-		return nil, err
-	}
-
-	return response, nil
-}
-
-// UpdateProfileResponsesOrderedList is used to update Customer's Profile Responses with the `ordered_list` requirement type
-func (c *customerService) UpdateProfileResponsesOrderedList(ctx context.Context, uid string, cpp []*CustomerProfileResponseOrderedListParams) (*Customer, error) {
-	if uid == "" {
-		return nil, fmt.Errorf("UID is required")
-	}
-
-	for _, v := range cpp {
-		if v.ProfileRequirementUID == "" || v.ProfileResponse.Num0 == "" {
-			return nil, fmt.Errorf("ProfileRequirementUID and ProfileResponse are required")
-		}
-	}
-
-	// Wrap profile response params in a `details` json object
-	var details = struct {
-		Details []*CustomerProfileResponseOrderedListParams `json:"details"`
 	}{
 		Details: cpp,
 	}

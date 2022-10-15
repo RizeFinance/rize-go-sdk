@@ -113,7 +113,9 @@ func main() {
 	cpp := []*rize.CustomerProfileResponseParams{
 		{
 			ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
-			ProfileResponse:       "string",
+			ProfileResponse: &internal.CustomerProfileResponseItem{
+				Response: "string",
+			},
 		},
 	}
 	cpr, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", cpp)
@@ -122,20 +124,6 @@ func main() {
 	}
 	output, _ = json.MarshalIndent(cpr, "", "\t")
 	log.Println("Update Profile Response:", string(output))
-
-	// Update Profile Response (ordered_list)
-	cro := []*rize.CustomerProfileResponseOrderedListParams{{
-		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
-		ProfileResponse: &rize.CustomerProfileResponseItem{
-			Num0: "string",
-		},
-	}}
-	col, err := rc.Customers.UpdateProfileResponsesOrderedList(context.Background(), "EhrQZJNjCd79LLYq", cro)
-	if err != nil {
-		log.Fatal("Error updating profile response (ordered_list)\n", err)
-	}
-	output, _ = json.MarshalIndent(col, "", "\t")
-	log.Println("Update Profile Response (ordered_list):", string(output))
 
 	// Secondary Customers
 	scp := rize.SecondaryCustomerParams{
