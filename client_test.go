@@ -134,6 +134,15 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		resp, _ := json.Marshal(custodialAccount)
 		w.Write(resp)
+	case "custodial_partners":
+		if r.URL.Path == "/"+internal.BasePath+"/custodial_partners" {
+			acct := append([]*CustodialPartner{}, custodialPartner)
+			resp, _ := json.Marshal(&CustodialPartnerResponse{Data: acct})
+			w.Write(resp)
+			return
+		}
+		resp, _ := json.Marshal(custodialPartner)
+		w.Write(resp)
 	default:
 		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
 		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})
