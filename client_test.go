@@ -143,6 +143,20 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		resp, _ := json.Marshal(custodialPartner)
 		w.Write(resp)
+	case "customer_products":
+		switch r.Method {
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/customer_products" {
+				prod := append([]*CustomerProduct{}, customerProduct)
+				resp, _ := json.Marshal(&CustomerProductResponse{Data: prod})
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(customerProduct)
+			w.Write(resp)
+		}
 	default:
 		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
 		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})
