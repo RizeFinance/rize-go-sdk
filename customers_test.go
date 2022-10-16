@@ -57,7 +57,7 @@ var customer = &Customer{
 	},
 }
 
-func TestCustomerList(t *testing.T) {
+func TestListCustomers(t *testing.T) {
 	params := &CustomerListParams{
 		UID:              "uKxmLxUEiSj5h4M3",
 		Status:           "identity_verified",
@@ -87,7 +87,7 @@ func TestCustomerList(t *testing.T) {
 	}
 }
 
-func TestCustomerCreate(t *testing.T) {
+func TestCreateCustomer(t *testing.T) {
 	params := &CustomerCreateParams{
 		ExternalUID:  "client-generated-id",
 		CustomerType: "primary",
@@ -104,7 +104,7 @@ func TestCustomerCreate(t *testing.T) {
 	}
 }
 
-func TestCustomerGet(t *testing.T) {
+func TestGetCustomer(t *testing.T) {
 	resp, err := rc.Customers.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching customer\n", err)
@@ -115,7 +115,7 @@ func TestCustomerGet(t *testing.T) {
 	}
 }
 
-func TestCustomerUpdate(t *testing.T) {
+func TestUpdateCustomer(t *testing.T) {
 	cup := &CustomerUpdateParams{
 		Email: "olive.oyl@rizemoney.com",
 		Details: CustomerDetails{
@@ -147,7 +147,7 @@ func TestCustomerUpdate(t *testing.T) {
 	}
 }
 
-func TestCustomerDelete(t *testing.T) {
+func TestDeleteCustomer(t *testing.T) {
 	cd := &CustomerDeleteParams{
 		ArchiveNote: "Archiving customer note",
 	}
@@ -162,7 +162,7 @@ func TestCustomerDelete(t *testing.T) {
 	}
 }
 
-func TestCustomerConfirmPIIData(t *testing.T) {
+func TestConfirmPIIData(t *testing.T) {
 	// Confirm Identity
 	resp, err := rc.Customers.ConfirmPIIData(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
@@ -174,7 +174,7 @@ func TestCustomerConfirmPIIData(t *testing.T) {
 	}
 }
 
-func TestCustomerLock(t *testing.T) {
+func TestLockCustomer(t *testing.T) {
 	cl := &CustomerLockParams{
 		LockNote:   "Fraud detected",
 		LockReason: "Customer Reported Fraud",
@@ -190,7 +190,7 @@ func TestCustomerLock(t *testing.T) {
 	}
 }
 
-func TestCustomerUnlock(t *testing.T) {
+func TestUnlockCustomer(t *testing.T) {
 	cl := &CustomerLockParams{
 		LockNote:     "Fraud detected",
 		UnlockReason: "Customer Reported Fraud",
@@ -206,7 +206,7 @@ func TestCustomerUnlock(t *testing.T) {
 	}
 }
 
-func TestCustomerUpdateProfileResponses(t *testing.T) {
+func TestUpdateProfileResponses(t *testing.T) {
 	// Update Profile Response with string response
 	cpp := &CustomerProfileResponseParams{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",

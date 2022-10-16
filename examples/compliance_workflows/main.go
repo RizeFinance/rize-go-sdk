@@ -85,7 +85,7 @@ func main() {
 	log.Println("Acknowledge Document", string(output))
 
 	// Acknowledge multiple documents
-	wdp := rize.WorkflowDocumentsParams{
+	wdp := rize.WorkflowBatchDocumentsParams{
 		CustomerUID: "h9MzupcjtA3LPW2e",
 		Documents: []*rize.WorkflowDocumentParams{{
 			Accept:      "yes",
@@ -97,7 +97,7 @@ func main() {
 			DocumentUID: "BgT64WeR0IxkgH6D",
 		}},
 	}
-	ads, err := rc.ComplianceWorkflows.AcknowledgeDocuments(context.Background(), "dolordo", &wdp)
+	ads, err := rc.ComplianceWorkflows.BatchAcknowledgeDocuments(context.Background(), "dolordo", &wdp)
 	if err != nil {
 		log.Fatal("Error acknowledging compliance documents\n", err)
 	}

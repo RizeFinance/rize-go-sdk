@@ -17,7 +17,7 @@ func TestGetToken(t *testing.T) {
 		t.Fatal("Error fetching Auth token\n", err)
 	}
 
-	if err := validateSchema(http.MethodPost, "/auth", http.StatusCreated, nil, map[string]string{"Authorization": "auth-header.payload.signature"}, resp); err != nil {
+	if err := validateSchema(http.MethodPost, "/auth", http.StatusCreated, nil, nil, resp); err != nil {
 		t.Fatalf(err.Error())
 	}
 }

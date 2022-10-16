@@ -102,12 +102,12 @@ type WorkflowDocumentParams struct {
 	DocumentUID string `json:"document_uid"`
 	IPAddress   string `json:"ip_address,omitempty"`
 	UserName    string `json:"user_name,omitempty"`
-	// Required for AcknowledgeDocument but omitted for AcknowledgeDocuments
+	// Required for AcknowledgeDocument but omitted for BatchAcknowledgeDocuments
 	CustomerUID string `json:"customer_uid,omitempty"`
 }
 
-// WorkflowDocumentsParams are the body params used when acknowledging multiple compliance documents
-type WorkflowDocumentsParams struct {
+// WorkflowBatchDocumentsParams are the body params used when acknowledging multiple compliance documents
+type WorkflowBatchDocumentsParams struct {
 	CustomerUID string                    `json:"customer_uid"`
 	Documents   []*WorkflowDocumentParams `json:"documents"`
 }
@@ -236,8 +236,8 @@ func (c *complianceWorkflowService) AcknowledgeDocument(ctx context.Context, uid
 	return response, nil
 }
 
-// AcknowledgeDocuments is used to indicate acceptance or rejection of multiple Compliance Documents within a given Compliance Workflow
-func (c *complianceWorkflowService) AcknowledgeDocuments(ctx context.Context, uid string, wdp *WorkflowDocumentsParams) (*Workflow, error) {
+// BatchAcknowledgeDocuments is used to indicate acceptance or rejection of multiple Compliance Documents within a given Compliance Workflow
+func (c *complianceWorkflowService) BatchAcknowledgeDocuments(ctx context.Context, uid string, wdp *WorkflowBatchDocumentsParams) (*Workflow, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -245,9 +245,6 @@ func (c *complianceWorkflowService) AcknowledgeDocuments(ctx context.Context, ui
 	for _, d := range wdp.Documents {
 		if d.Accept == "" || d.DocumentUID == "" {
 			return nil, fmt.Errorf("Accept and DocumentUID values are required")
-		}
-		if d.CustomerUID != "" {
-			d.CustomerUID = "" // Clear unsupported property
 		}
 	}
 

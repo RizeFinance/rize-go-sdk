@@ -114,6 +114,10 @@ func GetRequestKeys(method string, path string, status int) ([]string, error) {
 
 	params := doc.Paths.Find(path).GetOperation(method).Parameters
 	for _, s := range params {
+		// Only check query parameters
+		if s.Value.In == "path" || s.Value.In == "header" {
+			continue
+		}
 		output = append(output, s.Value.Name)
 	}
 
@@ -128,19 +132,19 @@ func GetRequestKeys(method string, path string, status int) ([]string, error) {
 func RecurseRequestKeys(method string, path string, status int) ([]string, error) {
 	p := doc.Paths.Find(path)
 	if p == nil {
-		return nil, fmt.Errorf("Path %s not found", path)
+		return nil, fmt.Errorf("Path %s not found in request", path)
 	}
 	op := p.GetOperation(method)
 	if op == nil {
-		return nil, fmt.Errorf("Method %s not found", method)
+		return nil, fmt.Errorf("Method %s not found in request", method)
 	}
 	rb := op.RequestBody
 	if rb == nil {
-		return nil, fmt.Errorf("RequestBody %d not found", status)
+		return nil, fmt.Errorf("RequestBody %d not found in request", status)
 	}
 	mime := rb.Value.Content.Get("application/json")
 	if mime == nil {
-		return nil, fmt.Errorf("Mime application/json not found")
+		return nil, fmt.Errorf("Mime application/json not found in request")
 	}
 	traverseSchema(mime.Schema.Value)
 
@@ -155,19 +159,19 @@ func RecurseRequestKeys(method string, path string, status int) ([]string, error
 func RecurseResponseKeys(method string, path string, status int) ([]string, error) {
 	p := doc.Paths.Find(path)
 	if p == nil {
-		return nil, fmt.Errorf("Path %s not found", path)
+		return nil, fmt.Errorf("Path %s not found in response", path)
 	}
 	op := p.GetOperation(method)
 	if op == nil {
-		return nil, fmt.Errorf("Method %s not found", method)
+		return nil, fmt.Errorf("Method %s not found in response", method)
 	}
 	st := op.Responses.Get(status)
 	if st == nil {
-		return nil, fmt.Errorf("Status %d not found", status)
+		return nil, fmt.Errorf("Status %d not found in response", status)
 	}
 	mime := st.Value.Content.Get("application/json")
 	if mime == nil {
-		return nil, fmt.Errorf("Mime application/json not found")
+		return nil, fmt.Errorf("Mime application/json not found in response")
 	}
 	traverseSchema(mime.Schema.Value)
 

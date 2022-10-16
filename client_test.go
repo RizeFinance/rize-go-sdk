@@ -95,6 +95,20 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		resp, _ := json.Marshal(artwork)
 		w.Write(resp)
+	case "compliance_workflows":
+		switch r.Method {
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/compliance_workflows" {
+				work := append([]*Workflow{}, workflow)
+				resp, _ := json.Marshal(&WorkflowResponse{Data: work})
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(workflow)
+			w.Write(resp)
+		}
 	case "customers":
 		switch r.Method {
 		case http.MethodDelete:

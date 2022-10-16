@@ -54,7 +54,7 @@ func TestListAdjustments(t *testing.T) {
 	}
 }
 
-func TestCreateAdjustments(t *testing.T) {
+func TestCreateAdjustment(t *testing.T) {
 	params := &AdjustmentCreateParams{
 		ExternalUID:         "partner-generated-id",
 		CustomerUID:         "kaxHFJnWvJxRJZxq",
@@ -75,7 +75,7 @@ func TestCreateAdjustments(t *testing.T) {
 	}
 }
 
-func TestGetAdjustments(t *testing.T) {
+func TestGetAdjustment(t *testing.T) {
 	resp, err := rc.Adjustments.Get(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		t.Fatal("Error fetching Adjustment\n", err)
