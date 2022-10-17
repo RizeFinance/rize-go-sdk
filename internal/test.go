@@ -65,9 +65,10 @@ func ValidateRequest(method string, path string, params url.Values, body io.Read
 
 	// Validate request
 	requestValidationInput := &openapi3filter.RequestValidationInput{
-		Request:    req,
-		PathParams: pathParams,
-		Route:      route,
+		Request:     req,
+		PathParams:  pathParams,
+		QueryParams: params,
+		Route:       route,
 		Options: &openapi3filter.Options{
 			AuthenticationFunc: func(c context.Context, input *openapi3filter.AuthenticationInput) error {
 				return nil

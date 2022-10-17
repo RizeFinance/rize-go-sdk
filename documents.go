@@ -23,9 +23,9 @@ type Document struct {
 	PeriodStartedAt      time.Time `json:"period_started_at,omitempty"`
 	PeriodEndedAt        time.Time `json:"period_ended_at,omitempty"`
 	CreatedAt            time.Time `json:"created_at,omitempty"`
-	CustomerUids         []string  `json:"customer_uids,omitempty"`
-	CustodialAccountUids []string  `json:"custodial_account_uids,omitempty"`
-	SyntheticAccountUids []string  `json:"synthetic_account_uids,omitempty"`
+	CustomerUIDs         []string  `json:"customer_uids,omitempty"`
+	CustodialAccountUIDs []string  `json:"custodial_account_uids,omitempty"`
+	SyntheticAccountUIDs []string  `json:"synthetic_account_uids,omitempty"`
 }
 
 // DocumentListParams builds the query parameters used in querying Documents
