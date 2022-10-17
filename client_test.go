@@ -280,6 +280,36 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "sandbox":
 		resp, _ := json.Marshal(&SandboxResponse{Success: "true"})
 		w.Write(resp)
+	case "synthetic_accounts":
+		switch r.Method {
+		case http.MethodDelete:
+			w.WriteHeader(http.StatusNoContent)
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/synthetic_accounts" {
+				synth := append([]*SyntheticAccount{}, syntheticAccount)
+				resp, _ := json.Marshal(&SyntheticAccountResponse{Data: synth})
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(syntheticAccount)
+			w.Write(resp)
+		}
+	case "synthetic_account_types":
+		switch r.Method {
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/synthetic_account_types" {
+				synth := append([]*SyntheticAccountType{}, syntheticAccountType)
+				resp, _ := json.Marshal(&SyntheticAccountTypeResponse{Data: synth})
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(syntheticAccountType)
+			w.Write(resp)
+		}
 	default:
 		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
 		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})

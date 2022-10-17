@@ -41,7 +41,7 @@ func main() {
 		SyntheticAccountTypeUID:  "q4mdMxMtjXfdbrjn",
 		SyntheticAccountCategory: "general",
 		Liability:                true,
-		Status:                   "Active",
+		Status:                   "active",
 		Sort:                     "name_asc",
 	}
 	sl, err := rc.SyntheticAccounts.List(context.Background(), &lp)

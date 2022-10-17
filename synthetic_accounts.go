@@ -35,7 +35,7 @@ type SyntheticAccount struct {
 	AccountNumberLastFour       string                          `json:"account_number_last_four,omitempty"`
 	RoutingNumber               string                          `json:"routing_number,omitempty"`
 	OpenedAt                    time.Time                       `json:"opened_at,omitempty"`
-	ClosedAt                    string                          `json:"closed_at,omitempty"`
+	ClosedAt                    time.Time                       `json:"closed_at,omitempty"`
 	ClosedToSyntheticAccountUID string                          `json:"closed_to_synthetic_account_uid,omitempty"`
 }
 
@@ -81,6 +81,7 @@ type SyntheticAccountCreateParams struct {
 	SyntheticAccountTypeUID string `json:"synthetic_account_type_uid"`
 	AccountNumber           string `json:"account_number,omitempty"`
 	RoutingNumber           string `json:"routing_number,omitempty"`
+	PlaidProcessorToken     string `json:"plaid_processor_token,omitempty"` // Deprecated
 	ExternalProcessorToken  string `json:"external_processor_token,omitempty"`
 }
 
