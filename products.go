@@ -6,7 +6,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
+
+	"github.com/google/go-querystring/query"
 )
 
 // Handles all Product operations
@@ -19,6 +20,7 @@ type Product struct {
 	Description              string                `json:"description,omitempty"`
 	ProductCompliancePlanUID string                `json:"product_compliance_plan_uid,omitempty"`
 	CompliancePlanName       string                `json:"compliance_plan_name,omitempty"`
+	CustomerTypes            []string              `json:"customer_types,omitempty"`
 	PrerequisiteProductUIDs  []string              `json:"prerequisite_product_uids,omitempty"`
 	ProgramUID               string                `json:"program_uid,omitempty"`
 	ProfileRequirements      []*ProfileRequirement `json:"profile_requirements,omitempty"`
@@ -34,6 +36,11 @@ type ProfileRequirement struct {
 	ResponseValues        []string `json:"response_values,omitempty"`
 }
 
+// ProductListParams builds the query parameters used in querying Products
+type ProductListParams struct {
+	ProgramUID string `url:"program_uid,omitempty" json:"program_uid,omitempty"`
+}
+
 // ProductResponse is an API response containing a list of Products
 type ProductResponse struct {
 	BaseResponse
@@ -41,9 +48,11 @@ type ProductResponse struct {
 }
 
 // List retrieves a list of Products filtered by the given parameters
-func (p *productService) List(ctx context.Context, programUID string) (*ProductResponse, error) {
-	v := url.Values{}
-	v.Set("program_uid", programUID)
+func (p *productService) List(ctx context.Context, params *ProductListParams) (*ProductResponse, error) {
+	v, err := query.Values(params)
+	if err != nil {
+		return nil, err
+	}
 
 	res, err := p.client.doRequest(ctx, http.MethodGet, "products", v, nil)
 	if err != nil {

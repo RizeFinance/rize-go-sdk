@@ -32,7 +32,10 @@ func main() {
 	}
 
 	// List Products
-	pl, err := rc.Products.List(context.Background(), "pQtTCSXz57fuefzp")
+	plp := rize.ProductListParams{
+		ProgramUID: "pQtTCSXz57fuefzp",
+	}
+	pl, err := rc.Products.List(context.Background(), &plp)
 	if err != nil {
 		log.Fatal("Error fetching products\n", err)
 	}
