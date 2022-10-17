@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// Complete CustodialPartner{} response data
 var custodialPartner = &CustodialPartner{
 	UID:  "EhrQZJNjCd79LLYq",
 	Name: "Big Apple Bank",

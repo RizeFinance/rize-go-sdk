@@ -83,6 +83,10 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		resp, _ := json.Marshal(adjustmentType)
 		w.Write(resp)
+	case "assets":
+		// virtual_card_image
+		resp, _ := json.Marshal([]byte{})
+		w.Write(resp)
 	case "auth":
 		resp, _ := json.Marshal(tokenResponse)
 		w.Write(resp)
@@ -155,6 +159,28 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 			fallthrough
 		default:
 			resp, _ := json.Marshal(customerProduct)
+			w.Write(resp)
+		}
+	case "debit_cards":
+		switch r.Method {
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/debit_cards" {
+				cards := append([]*DebitCard{}, debitCard)
+				resp, _ := json.Marshal(&DebitCardResponse{Data: cards})
+				w.Write(resp)
+				return
+			} else if r.URL.Path == "/"+internal.BasePath+"/debit_cards/{uid}/pin_change_token" {
+				resp, _ := json.Marshal(PINToken)
+				w.Write(resp)
+				return
+			} else if r.URL.Path == "/"+internal.BasePath+"/debit_cards/{uid}/access_token" {
+				resp, _ := json.Marshal(accessToken)
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(debitCard)
 			w.Write(resp)
 		}
 	default:

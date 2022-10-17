@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
-	"strings"
 	"time"
 
 	"github.com/google/go-querystring/query"
@@ -25,6 +23,7 @@ type DebitCard struct {
 	PoolUID               string                    `json:"pool_uid,omitempty"`
 	SyntheticAccountUID   string                    `json:"synthetic_account_uid,omitempty"`
 	CustodialAccountUID   string                    `json:"custodial_account_uid,omitempty"`
+	CardArtworkUID        string                    `json:"card_artwork_uid,omitempty"`
 	CardLastFourDigits    string                    `json:"card_last_four_digits,omitempty"`
 	Status                string                    `json:"status,omitempty"`
 	Type                  string                    `json:"type,omitempty"`
@@ -33,6 +32,7 @@ type DebitCard struct {
 	IssuedOn              string                    `json:"issued_on,omitempty"`
 	LockedAt              time.Time                 `json:"locked_at,omitempty"`
 	ClosedAt              time.Time                 `json:"closed_at,omitempty"`
+	ShippingAddress       *DebitCardShippingAddress `json:"shipping_address,omitempty"`
 	LatestShippingAddress *DebitCardShippingAddress `json:"latest_shipping_address,omitempty"`
 }
 
@@ -43,6 +43,14 @@ type DebitCardShippingAddress struct {
 	City       string `json:"city,omitempty"`
 	State      string `json:"state,omitempty"`
 	PostalCode string `json:"postal_code,omitempty"`
+}
+
+// DebitCardAccessToken contains the token necessary to retrieve a virtual Debit Card image.
+// Used as the response type for GetAccessToken.
+// Used as query params for GetVirtualDebitCardImage.
+type DebitCardAccessToken struct {
+	Token    string `url:"token" json:"token"`
+	ConfigID string `url:"config_id" json:"config_id"`
 }
 
 // DebitCardListParams builds the query parameters used in querying Debit Cards
@@ -72,11 +80,21 @@ type DebitCardActivateParams struct {
 	ExpiryDate         string `json:"expiry_date"`
 }
 
+// DebitCardLockParams are the body params used when locking a Debit Card
+type DebitCardLockParams struct {
+	LockReason string `json:"lock_reason"`
+}
+
 // DebitCardReissueParams are the body params used when reissuing a Debit Card
 type DebitCardReissueParams struct {
 	CardArtworkUID  string                    `json:"card_artwork_uid,omitempty"`
 	ReissueReason   string                    `json:"reissue_reason"`
 	ShippingAddress *DebitCardShippingAddress `json:"shipping_address,omitempty"`
+}
+
+// DebitCardGetPINTokenParams are the query params used fetching a Debit Card PIN reset token
+type DebitCardGetPINTokenParams struct {
+	ForceReset bool `url:"force_reset" json:"force_reset"`
 }
 
 // VirtualDebitCardMigrateParams are the body params used when migrating a Virtual Debit Card
@@ -95,12 +113,6 @@ type DebitCardResponse struct {
 // DebitCardPINTokenResponse is an API response containing a token necessary to change a Debit Card's PIN
 type DebitCardPINTokenResponse struct {
 	PinChangeToken string `json:"pin_change_token"`
-}
-
-// DebitCardAccessTokenResponse is an API response containing a token necessary to retrieve a virtual Debit Card image
-type DebitCardAccessTokenResponse struct {
-	Token    string `json:"token"`
-	ConfigID int    `json:"config_id"`
 }
 
 // List retrieves a list of Debit Cards filtered by the given parameters
@@ -220,14 +232,17 @@ func (d *debitCardService) Activate(ctx context.Context, uid string, dap *DebitC
 }
 
 // Lock will temporarily lock the Debit Card
-func (d *debitCardService) Lock(ctx context.Context, uid string, lockReason string) (*DebitCard, error) {
-	if uid == "" || lockReason == "" {
-		return nil, fmt.Errorf("UID and lockReason are required")
+func (d *debitCardService) Lock(ctx context.Context, uid string, lp *DebitCardLockParams) (*DebitCard, error) {
+	if uid == "" || lp.LockReason == "" {
+		return nil, fmt.Errorf("UID and LockReason are required")
 	}
 
-	payload := strings.NewReader(fmt.Sprintf("{\"lock_reason\":\"%s\"}", lockReason))
+	bytesMessage, err := json.Marshal(lp)
+	if err != nil {
+		return nil, err
+	}
 
-	res, err := d.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("debit_cards/%s/lock", uid), nil, payload)
+	res, err := d.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("debit_cards/%s/lock", uid), nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
@@ -302,13 +317,15 @@ func (d *debitCardService) Reissue(ctx context.Context, uid string, dr *DebitCar
 }
 
 // GetPINToken is used to retrieve a token necessary to change a Debit Card's PIN
-func (d *debitCardService) GetPINToken(ctx context.Context, uid string, forceReset bool) (*DebitCardPINTokenResponse, error) {
+func (d *debitCardService) GetPINToken(ctx context.Context, uid string, params *DebitCardGetPINTokenParams) (*DebitCardPINTokenResponse, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	v := url.Values{}
-	v.Set("force_reset", fmt.Sprintf("%t", forceReset))
+	v, err := query.Values(params)
+	if err != nil {
+		return nil, err
+	}
 
 	res, err := d.client.doRequest(ctx, http.MethodGet, fmt.Sprintf("debit_cards/%s/pin_change_token", uid), v, nil)
 	if err != nil {
@@ -330,7 +347,7 @@ func (d *debitCardService) GetPINToken(ctx context.Context, uid string, forceRes
 }
 
 // GetAccessToken  is used to retrieve the configuration ID and token necessary to retrieve a virtual Debit Card image
-func (d *debitCardService) GetAccessToken(ctx context.Context, uid string) (*DebitCardAccessTokenResponse, error) {
+func (d *debitCardService) GetAccessToken(ctx context.Context, uid string) (*DebitCardAccessToken, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -346,7 +363,7 @@ func (d *debitCardService) GetAccessToken(ctx context.Context, uid string) (*Deb
 		return nil, err
 	}
 
-	response := &DebitCardAccessTokenResponse{}
+	response := &DebitCardAccessToken{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}
@@ -385,13 +402,18 @@ func (d *debitCardService) MigrateVirtualDebitCard(ctx context.Context, uid stri
 }
 
 // GetVirtualDebitCardImage is used to retrieve a virtual Debit Card image
-func (d *debitCardService) GetVirtualDebitCardImage(ctx context.Context, config string, token string) (*http.Response, error) {
-	if config == "" || token == "" {
-		return nil, fmt.Errorf("config and token params are required")
+func (d *debitCardService) GetVirtualDebitCardImage(ctx context.Context, dt *DebitCardAccessToken) (*http.Response, error) {
+	if dt.ConfigID == "" || dt.Token == "" {
+		return nil, fmt.Errorf("Config and Token params are required")
+	}
+
+	v, err := query.Values(dt)
+	if err != nil {
+		return nil, err
 	}
 
 	// TODO: Does this require a different Accept header type (image/jpeg)?
-	res, err := d.client.doRequest(ctx, http.MethodGet, "assets/virtual_card_image", nil, nil)
+	res, err := d.client.doRequest(ctx, http.MethodGet, "assets/virtual_card_image", v, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -118,7 +118,7 @@ func TestAcknowledgeDocument(t *testing.T) {
 	}
 }
 
-func TestAcknowledgeDocuments(t *testing.T) {
+func TestBatchAcknowledgeDocuments(t *testing.T) {
 	params := &WorkflowBatchDocumentsParams{
 		CustomerUID: "h9MzupcjtA3LPW2e",
 		Documents: []*WorkflowDocumentParams{{

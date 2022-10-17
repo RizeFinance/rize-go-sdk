@@ -6,6 +6,7 @@ import (
 	"testing"
 )
 
+// Complete CustomerProduct{} response data
 var customerProduct = &CustomerProduct{
 	UID:           "Tegvs2E4TQgVYYMj",
 	Status:        "active",

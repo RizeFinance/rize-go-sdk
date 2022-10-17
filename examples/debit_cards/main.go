@@ -91,7 +91,10 @@ func main() {
 	log.Println("Activate Debit Card:", string(output))
 
 	// Lock Debit Card
-	dlk, err := rc.DebitCards.Lock(context.Background(), "Lt6qjTNnYLjFfEWL", "lost")
+	dkp := rize.DebitCardLockParams{
+		LockReason: "Fraud detected",
+	}
+	dlk, err := rc.DebitCards.Lock(context.Background(), "Lt6qjTNnYLjFfEWL", &dkp)
 	if err != nil {
 		log.Fatal("Error locking Debit Card\n", err)
 	}
@@ -126,7 +129,10 @@ func main() {
 	log.Println("Reissue Debit Card:", string(output))
 
 	// Get Debit Card PIN Token
-	dpt, err := rc.DebitCards.GetPINToken(context.Background(), "Lt6qjTNnYLjFfEWL", true)
+	dpp := rize.DebitCardGetPINTokenParams{
+		ForceReset: true,
+	}
+	dpt, err := rc.DebitCards.GetPINToken(context.Background(), "Lt6qjTNnYLjFfEWL", &dpp)
 	if err != nil {
 		log.Fatal("Error fetching Debit Card PIN Token\n", err)
 	}
@@ -161,7 +167,11 @@ func main() {
 	log.Println("Migrating Virtual Debit Card:", string(output))
 
 	// Get Virtual Debit Card Image
-	vi, err := rc.DebitCards.GetVirtualDebitCardImage(context.Background(), "Lt6qjTNnYLjFfEWL", "h9MzupcjtA3LPW2e")
+	dt := rize.DebitCardAccessToken{
+		Token:    "VmU27goFku4DyxfsdyoH5G1mlztvwskBywKrskVN9jQOh50Yy7",
+		ConfigID: "1",
+	}
+	vi, err := rc.DebitCards.GetVirtualDebitCardImage(context.Background(), &dt)
 	if err != nil {
 		log.Fatal("Error fetching Virtual Debit Card Image\n", err)
 	}
