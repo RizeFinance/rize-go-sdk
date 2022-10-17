@@ -17,14 +17,19 @@ type pinwheelJobService service
 
 // PinwheelJob data type
 type PinwheelJob struct {
-	UID                 string    `json:"uid,omitempty"`
-	SyntheticAccountUID string    `json:"synthetic_account_uid,omitempty"`
-	Status              string    `json:"status,omitempty"`
-	CreatedAt           time.Time `json:"created_at,omitempty"`
-	StatusUpdatedAt     time.Time `json:"status_updated_at,omitempty"`
-	CustomerUID         string    `json:"customer_uid,omitempty"`
-	LinkToken           string    `json:"link_token,omitempty"`
-	ExpiresAt           time.Time `json:"expires_at,omitempty"`
+	UID                  string    `json:"uid,omitempty"`
+	SyntheticAccountUID  string    `json:"synthetic_account_uid,omitempty"`
+	Status               string    `json:"status,omitempty"`
+	CreatedAt            time.Time `json:"created_at,omitempty"`
+	StatusUpdatedAt      time.Time `json:"status_updated_at,omitempty"`
+	CustomerUID          string    `json:"customer_uid,omitempty"`
+	LinkToken            string    `json:"link_token,omitempty"`
+	ExpiresAt            time.Time `json:"expires_at,omitempty"`
+	JobNames             []string  `json:"job_names,omitempty"`
+	Amount               int       `json:"amount,omitempty"`
+	DisablePartialSwitch bool      `json:"disable_partial_switch,omitempty"`
+	OrganizationName     string    `json:"organization_name,omitempty"`
+	SkipWelcomeScreen    bool      `json:"skip_welcome_screen,omitempty"`
 }
 
 // PinwheelJobListParams builds the query parameters used in querying Pinwheel Jobs

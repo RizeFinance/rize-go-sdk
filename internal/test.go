@@ -232,6 +232,11 @@ func traverseProps(props openapi3.Schemas) {
 				continue
 			}
 
+			// Ignore keys on the Response object marked as write-only
+			if !isRequest && v.Value.WriteOnly {
+				continue
+			}
+
 			// Note the key that was found
 			keys = append(keys, k)
 

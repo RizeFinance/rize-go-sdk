@@ -32,7 +32,6 @@ type DebitCard struct {
 	IssuedOn              string                    `json:"issued_on,omitempty"`
 	LockedAt              time.Time                 `json:"locked_at,omitempty"`
 	ClosedAt              time.Time                 `json:"closed_at,omitempty"`
-	ShippingAddress       *DebitCardShippingAddress `json:"shipping_address,omitempty"`
 	LatestShippingAddress *DebitCardShippingAddress `json:"latest_shipping_address,omitempty"`
 }
 

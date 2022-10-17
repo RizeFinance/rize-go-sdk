@@ -45,7 +45,7 @@ var customer = &Customer{
 		Phone:        "5555551212",
 		BusinessName: "Oliver's Olive Emporium",
 		DOB:          internal.DOB(time.Now()),
-		SSN:          "111-11-1111",
+		SSNLastFour:  "3333",
 		Address: &CustomerAddress{
 			Street1:    "123 Abc St.",
 			Street2:    "Apt 2",
@@ -53,7 +53,6 @@ var customer = &Customer{
 			State:      "IL",
 			PostalCode: "12345",
 		},
-		SSNLastFour: "3333",
 	},
 }
 

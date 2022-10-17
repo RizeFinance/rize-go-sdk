@@ -235,6 +235,20 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 			resp, _ := json.Marshal(kycDocument)
 			w.Write(resp)
 		}
+	case "pinwheel_jobs":
+		switch r.Method {
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/pinwheel_jobs" {
+				job := append([]*PinwheelJob{}, pinwheelJob)
+				resp, _ := json.Marshal(&PinwheelJobResponse{Data: job})
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(pinwheelJob)
+			w.Write(resp)
+		}
 	default:
 		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
 		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})

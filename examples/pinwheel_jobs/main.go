@@ -47,7 +47,7 @@ func main() {
 
 	// Create Pinwheel Job
 	pcp := rize.PinwheelJobCreateParams{
-		JobNames:             []string{"job one", "job two"},
+		JobNames:             []string{"direct_deposit_switch"},
 		SyntheticAccountUID:  "4XkJnsfHsuqrxmeX",
 		Amount:               1000,
 		DisablePartialSwitch: false,

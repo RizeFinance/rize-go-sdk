@@ -24,13 +24,6 @@ var debitCard = &DebitCard{
 	LockReason:          "lock reason",
 	LockedAt:            time.Now(),
 	ClosedAt:            time.Now(),
-	ShippingAddress: &DebitCardShippingAddress{
-		Street1:    "123 Abc St.",
-		Street2:    "Apt 2",
-		City:       "Chicago",
-		State:      "IL",
-		PostalCode: "12345",
-	},
 	LatestShippingAddress: &DebitCardShippingAddress{
 		Street1:    "123 Abc St.",
 		Street2:    "Apt 2",
