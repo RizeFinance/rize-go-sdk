@@ -34,7 +34,10 @@ func main() {
 	}
 
 	// List documents
-	kl, err := rc.KYCDocuments.List(context.Background(), "QSskNJkryskRXeYt")
+	lp := rize.KYCDocumentListParams{
+		EvaluationUID: "QSskNJkryskRXeYt",
+	}
+	kl, err := rc.KYCDocuments.List(context.Background(), &lp)
 	if err != nil {
 		log.Fatal("Error fetching documents\n", err)
 	}

@@ -7,8 +7,9 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 	"time"
+
+	"github.com/google/go-querystring/query"
 )
 
 // Handles all KYC Document operations
@@ -24,6 +25,11 @@ type KYCDocument struct {
 	CreatedAt time.Time `json:"created_at,omitempty"`
 }
 
+// KYCDocumentListParams builds the query parameters used in querying KYCDocuments
+type KYCDocumentListParams struct {
+	EvaluationUID string `url:"evaluation_uid,omitempty" json:"evaluation_uid,omitempty"`
+}
+
 // KYCDocumentUploadParams are the body params used when uploading a new KYC Document
 type KYCDocumentUploadParams struct {
 	EvaluationUID string `json:"evaluation_uid"`
@@ -33,16 +39,6 @@ type KYCDocumentUploadParams struct {
 	Type          string `json:"type"`
 }
 
-// KYCDocumentUploadResponse is the response received when uploading a new KYC Document
-type KYCDocumentUploadResponse struct {
-	UID       string    `json:"uid,omitempty"`
-	Type      string    `json:"type,omitempty"`
-	Filename  string    `json:"filename,omitempty"`
-	Note      string    `json:"note,omitempty"`
-	Extension string    `json:"extension,omitempty"`
-	CreatedAt time.Time `json:"created_at,omitempty"`
-}
-
 // KYCDocumentResponse is an API response containing a list of KYC Documents
 type KYCDocumentResponse struct {
 	BaseResponse
@@ -50,13 +46,15 @@ type KYCDocumentResponse struct {
 }
 
 // List retrieves a list of KYC Documents for a given evaluation
-func (k *kycDocumentService) List(ctx context.Context, evaluationUID string) (*KYCDocumentResponse, error) {
-	if evaluationUID == "" {
-		return nil, fmt.Errorf("evaluationUID is required")
+func (k *kycDocumentService) List(ctx context.Context, lp *KYCDocumentListParams) (*KYCDocumentResponse, error) {
+	if lp.EvaluationUID == "" {
+		return nil, fmt.Errorf("EvaluationUID is required")
 	}
 
-	v := url.Values{}
-	v.Set("evaluation_uid", evaluationUID)
+	v, err := query.Values(lp)
+	if err != nil {
+		return nil, err
+	}
 
 	res, err := k.client.doRequest(ctx, http.MethodGet, "kyc_documents", v, nil)
 	if err != nil {
@@ -78,7 +76,7 @@ func (k *kycDocumentService) List(ctx context.Context, evaluationUID string) (*K
 }
 
 // Upload a KYC Document for review
-func (k *kycDocumentService) Upload(ctx context.Context, p *KYCDocumentUploadParams) (*KYCDocumentUploadResponse, error) {
+func (k *kycDocumentService) Upload(ctx context.Context, p *KYCDocumentUploadParams) (*KYCDocument, error) {
 	if p.EvaluationUID == "" ||
 		p.Filename == "" ||
 		p.FileContent == "" ||
@@ -103,7 +101,7 @@ func (k *kycDocumentService) Upload(ctx context.Context, p *KYCDocumentUploadPar
 		return nil, err
 	}
 
-	response := &KYCDocumentUploadResponse{}
+	response := &KYCDocument{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

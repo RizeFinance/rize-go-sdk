@@ -216,6 +216,25 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 			resp, _ := json.Marshal(evaluation)
 			w.Write(resp)
 		}
+	case "kyc_documents":
+		switch r.Method {
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/kyc_documents" {
+				doc := append([]*KYCDocument{}, kycDocument)
+				resp, _ := json.Marshal(&KYCDocumentResponse{Data: doc})
+				w.Write(resp)
+				return
+			} else if r.URL.Path == "/"+internal.BasePath+"/kyc_documents/{uid/view}" {
+				// Document file
+				resp, _ := json.Marshal([]byte{})
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(kycDocument)
+			w.Write(resp)
+		}
 	default:
 		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
 		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})
