@@ -202,6 +202,20 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 			resp, _ := json.Marshal(document)
 			w.Write(resp)
 		}
+	case "evaluations":
+		switch r.Method {
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/evaluations" {
+				eval := append([]*Evaluation{}, evaluation)
+				resp, _ := json.Marshal(&EvaluationResponse{Data: eval})
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(evaluation)
+			w.Write(resp)
+		}
 	default:
 		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
 		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})
