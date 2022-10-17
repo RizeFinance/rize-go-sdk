@@ -310,6 +310,21 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 			resp, _ := json.Marshal(syntheticAccountType)
 			w.Write(resp)
 		}
+	case "transactions":
+	case "transfers":
+		switch r.Method {
+		case http.MethodGet:
+			if r.URL.Path == "/"+internal.BasePath+"/transfers" {
+				t := append([]*Transfer{}, transfer)
+				resp, _ := json.Marshal(&TransferResponse{Data: t})
+				w.Write(resp)
+				return
+			}
+			fallthrough
+		default:
+			resp, _ := json.Marshal(transfer)
+			w.Write(resp)
+		}
 	default:
 		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
 		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})
