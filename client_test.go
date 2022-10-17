@@ -277,6 +277,9 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 			resp, _ := json.Marshal(product)
 			w.Write(resp)
 		}
+	case "sandbox":
+		resp, _ := json.Marshal(&SandboxResponse{Success: "true"})
+		w.Write(resp)
 	default:
 		errDetails.Detail = fmt.Sprintf("Error in path %s, method %s", path, r.Method)
 		resp, _ := json.Marshal(&Error{Errors: errors, Status: http.StatusNotFound})

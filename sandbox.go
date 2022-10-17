@@ -37,7 +37,7 @@ func (s *sandboxService) Create(ctx context.Context, scp *SandboxCreateParams) (
 		scp.CustomerUID == "" ||
 		scp.DebitCardUID == "" ||
 		scp.USDollarAmount == 0 {
-		return nil, fmt.Errorf("Email is required")
+		return nil, fmt.Errorf("TransactionType, CustomerUID, DebitCardUID and USDollarAmount are required")
 	}
 
 	bytesMessage, err := json.Marshal(scp)
