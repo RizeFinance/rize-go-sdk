@@ -14,12 +14,13 @@ import (
 )
 
 var (
-	doc    *openapi3.T
-	router routers.Router
-	err    error
-	keys   []string
-	server = "https://sandbox.rizefs.com/api/v1/"
-	ctx    = context.Background()
+	doc       *openapi3.T
+	router    routers.Router
+	err       error
+	keys      []string
+	server    = "https://sandbox.rizefs.com/api/v1/"
+	ctx       = context.Background()
+	isRequest = false
 )
 
 // ValidateRequest is used to validate the given input according to the loaded OpenAPIv3 spec
@@ -130,6 +131,7 @@ func GetRequestKeys(method string, path string, status int) ([]string, error) {
 
 // RecurseRequestKeys recursively traverses the Request object for a given OpenAPI path and returns a list of all properties
 func RecurseRequestKeys(method string, path string, status int) ([]string, error) {
+	isRequest = true
 	p := doc.Paths.Find(path)
 	if p == nil {
 		return nil, fmt.Errorf("Path %s not found in request", path)
@@ -151,6 +153,7 @@ func RecurseRequestKeys(method string, path string, status int) ([]string, error
 	// Clear slice between tests
 	list := keys
 	keys = nil
+	isRequest = false
 
 	return list, nil
 }
@@ -223,6 +226,11 @@ func traverseProps(props openapi3.Schemas) {
 		traverseRef(details)
 	} else {
 		for k, v := range props {
+			// Ignore keys on the Request object marked as read-only
+			if isRequest && v.Value.ReadOnly {
+				continue
+			}
+
 			// Note the key that was found
 			keys = append(keys, k)
 

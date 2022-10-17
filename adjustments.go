@@ -52,10 +52,6 @@ type AdjustmentCreateParams struct {
 	CustomerUID         string `json:"customer_uid"`
 	USDAdjustmentAmount string `json:"usd_adjustment_amount"`
 	AdjustmentTypeUID   string `json:"adjustment_type_uid"`
-	// TODO: For validation tests only. These need to be removed from the OpenAPI spec
-	UID       string    `json:"uid,omitempty"`
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	Status    string    `json:"status,omitempty"`
 }
 
 // AdjustmentTypeListParams builds the query parameters used in querying Adjustment Types

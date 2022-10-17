@@ -60,9 +60,6 @@ func TestCreateAdjustment(t *testing.T) {
 		CustomerUID:         "kaxHFJnWvJxRJZxq",
 		USDAdjustmentAmount: "2.43",
 		AdjustmentTypeUID:   "KM2eKbR98t4tdAyZ",
-		UID:                 "EhrQZJNjCd79LLYq",
-		CreatedAt:           time.Now(),
-		Status:              "initiated",
 	}
 
 	resp, err := rc.Adjustments.Create(context.Background(), params)
