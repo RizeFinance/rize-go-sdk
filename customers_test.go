@@ -191,8 +191,9 @@ func TestLockCustomer(t *testing.T) {
 
 func TestUnlockCustomer(t *testing.T) {
 	cl := &CustomerLockParams{
-		LockNote:     "Fraud detected",
-		UnlockReason: "Customer Reported Fraud",
+		LockNote:           "Fraud detected",
+		UnlockReason:       "Customer Reported Fraud",
+		UnlockAllSecondary: true,
 	}
 	// Unlock Customer
 	resp, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", cl)

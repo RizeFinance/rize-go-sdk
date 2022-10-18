@@ -109,9 +109,10 @@ type CustomerDeleteParams struct {
 
 // CustomerLockParams are the body params used when locking/unlocking a Customer
 type CustomerLockParams struct {
-	LockNote     string `json:"lock_note,omitempty"`
-	LockReason   string `json:"lock_reason,omitempty"`
-	UnlockReason string `json:"unlock_reason,omitempty"`
+	LockNote           string `json:"lock_note,omitempty"`
+	LockReason         string `json:"lock_reason,omitempty"`
+	UnlockReason       string `json:"unlock_reason,omitempty"`
+	UnlockAllSecondary bool   `json:"unlock_all_secondary,omitempty"`
 }
 
 // CustomerProfileResponseParams are the body params used when updating Customer Profile responses
@@ -395,7 +396,7 @@ func (c *customerService) UpdateProfileResponses(ctx context.Context, uid string
 	return response, nil
 }
 
-// CreateSecondaryCustomer is used to create a new Secondary Customer
+// CreateSecondaryCustomer (DEPRECATED) is used to create a new Secondary Customer
 func (c *customerService) CreateSecondaryCustomer(ctx context.Context, scp *SecondaryCustomerParams) (*Customer, error) {
 	if scp.PrimaryCustomerUID == "" {
 		return nil, fmt.Errorf("PrimaryCustomerUID is required")
