@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// Complete Transfer{} response data
 var transfer = &Transfer{
 	UID:                            "EhrQZJNjCd79LLYq",
 	ExternalUID:                    "partner-generated-id",

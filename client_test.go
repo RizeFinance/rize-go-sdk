@@ -138,6 +138,15 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		resp, _ := json.Marshal(custodialAccount)
 		w.Write(resp)
+	case "custodial_line_items":
+		if r.URL.Path == "/"+internal.BasePath+"/custodial_line_items" {
+			item := append([]*CustodialLineItem{}, custodialLineItem)
+			resp, _ := json.Marshal(&CustodialLineItemResponse{Data: item})
+			w.Write(resp)
+			return
+		}
+		resp, _ := json.Marshal(custodialLineItem)
+		w.Write(resp)
 	case "custodial_partners":
 		if r.URL.Path == "/"+internal.BasePath+"/custodial_partners" {
 			acct := append([]*CustodialPartner{}, custodialPartner)
@@ -203,19 +212,14 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 			w.Write(resp)
 		}
 	case "evaluations":
-		switch r.Method {
-		case http.MethodGet:
-			if r.URL.Path == "/"+internal.BasePath+"/evaluations" {
-				eval := append([]*Evaluation{}, evaluation)
-				resp, _ := json.Marshal(&EvaluationResponse{Data: eval})
-				w.Write(resp)
-				return
-			}
-			fallthrough
-		default:
-			resp, _ := json.Marshal(evaluation)
+		if r.URL.Path == "/"+internal.BasePath+"/evaluations" {
+			eval := append([]*Evaluation{}, evaluation)
+			resp, _ := json.Marshal(&EvaluationResponse{Data: eval})
 			w.Write(resp)
+			return
 		}
+		resp, _ := json.Marshal(evaluation)
+		w.Write(resp)
 	case "kyc_documents":
 		switch r.Method {
 		case http.MethodGet:
@@ -250,33 +254,23 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 			w.Write(resp)
 		}
 	case "pools":
-		switch r.Method {
-		case http.MethodGet:
-			if r.URL.Path == "/"+internal.BasePath+"/pools" {
-				p := append([]*Pool{}, pool)
-				resp, _ := json.Marshal(&PoolResponse{Data: p})
-				w.Write(resp)
-				return
-			}
-			fallthrough
-		default:
-			resp, _ := json.Marshal(pool)
+		if r.URL.Path == "/"+internal.BasePath+"/pools" {
+			p := append([]*Pool{}, pool)
+			resp, _ := json.Marshal(&PoolResponse{Data: p})
 			w.Write(resp)
+			return
 		}
+		resp, _ := json.Marshal(pool)
+		w.Write(resp)
 	case "products":
-		switch r.Method {
-		case http.MethodGet:
-			if r.URL.Path == "/"+internal.BasePath+"/products" {
-				p := append([]*Product{}, product)
-				resp, _ := json.Marshal(&ProductResponse{Data: p})
-				w.Write(resp)
-				return
-			}
-			fallthrough
-		default:
-			resp, _ := json.Marshal(product)
+		if r.URL.Path == "/"+internal.BasePath+"/products" {
+			p := append([]*Product{}, product)
+			resp, _ := json.Marshal(&ProductResponse{Data: p})
 			w.Write(resp)
+			return
 		}
+		resp, _ := json.Marshal(product)
+		w.Write(resp)
 	case "sandbox":
 		resp, _ := json.Marshal(&SandboxResponse{Success: "true"})
 		w.Write(resp)
@@ -310,7 +304,33 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 			resp, _ := json.Marshal(syntheticAccountType)
 			w.Write(resp)
 		}
+	case "synthetic_line_items":
+		if r.URL.Path == "/"+internal.BasePath+"/synthetic_line_items" {
+			synth := append([]*SyntheticLineItem{}, syntheticLineItem)
+			resp, _ := json.Marshal(&SyntheticLineItemResponse{Data: synth})
+			w.Write(resp)
+			return
+		}
+		resp, _ := json.Marshal(syntheticLineItem)
+		w.Write(resp)
 	case "transactions":
+		if r.URL.Path == "/"+internal.BasePath+"/transactions" {
+			t := append([]*Transaction{}, transaction)
+			resp, _ := json.Marshal(&TransactionResponse{Data: t})
+			w.Write(resp)
+			return
+		}
+		resp, _ := json.Marshal(transaction)
+		w.Write(resp)
+	case "transaction_events":
+		if r.URL.Path == "/"+internal.BasePath+"/transaction_events" {
+			t := append([]*TransactionEvent{}, transactionEvent)
+			resp, _ := json.Marshal(&TransactionEventResponse{Data: t})
+			w.Write(resp)
+			return
+		}
+		resp, _ := json.Marshal(transactionEvent)
+		w.Write(resp)
 	case "transfers":
 		switch r.Method {
 		case http.MethodGet:

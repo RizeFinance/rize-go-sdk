@@ -26,7 +26,7 @@ type Transaction struct {
 	DestinationSyntheticAccountUID string    `json:"destination_synthetic_account_uid,omitempty"`
 	ID                             int       `json:"id,omitempty"`
 	InitialActionAt                time.Time `json:"initial_action_at,omitempty"`
-	Mcc                            string    `json:"mcc,omitempty"`
+	MCC                            string    `json:"mcc,omitempty"`
 	MerchantLocation               string    `json:"merchant_location,omitempty"`
 	MerchantName                   string    `json:"merchant_name,omitempty"`
 	MerchantNumber                 string    `json:"merchant_number,omitempty"`
@@ -262,8 +262,8 @@ func (t *transactionService) ListTransactionEvents(ctx context.Context, tlp *Tra
 	return response, nil
 }
 
-// GetTransactionEvents returns a single Transaction Event
-func (t *transactionService) GetTransactionEvents(ctx context.Context, uid string) (*TransactionEvent, error) {
+// GetTransactionEvent returns a single Transaction Event
+func (t *transactionService) GetTransactionEvent(ctx context.Context, uid string) (*TransactionEvent, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -314,8 +314,8 @@ func (t *transactionService) ListSyntheticLineItems(ctx context.Context, tlp *Sy
 	return response, nil
 }
 
-// GetSyntheticLineItems returns a single Synthetic Line Item
-func (t *transactionService) GetSyntheticLineItems(ctx context.Context, uid string) (*SyntheticLineItem, error) {
+// GetSyntheticLineItem returns a single Synthetic Line Item
+func (t *transactionService) GetSyntheticLineItem(ctx context.Context, uid string) (*SyntheticLineItem, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
@@ -366,8 +366,8 @@ func (t *transactionService) ListCustodialLineItems(ctx context.Context, tlp *Cu
 	return response, nil
 }
 
-// GetCustodialLineItems returns a single Custodial Line Item
-func (t *transactionService) GetCustodialLineItems(ctx context.Context, uid string) (*CustodialLineItem, error) {
+// GetCustodialLineItem returns a single Custodial Line Item
+func (t *transactionService) GetCustodialLineItem(ctx context.Context, uid string) (*CustodialLineItem, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}

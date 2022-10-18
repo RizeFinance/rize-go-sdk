@@ -83,7 +83,7 @@ func main() {
 	log.Println("List Transaction Events:", string(output))
 
 	// Get Transaction Event
-	teg, err := rc.Transactions.GetTransactionEvents(context.Background(), "MB2yqBrm3c4bUbou")
+	teg, err := rc.Transactions.GetTransactionEvent(context.Background(), "MB2yqBrm3c4bUbou")
 	if err != nil {
 		log.Fatal("Error fetching Transaction Event\n", err)
 	}
@@ -109,7 +109,7 @@ func main() {
 	log.Println("List Synthetic Line Items:", string(output))
 
 	// Get Synthetic Line Item
-	sg, err := rc.Transactions.GetSyntheticLineItems(context.Background(), "j56aHgLBqkNu1KwK")
+	sg, err := rc.Transactions.GetSyntheticLineItem(context.Background(), "j56aHgLBqkNu1KwK")
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Line Item\n", err)
 	}
@@ -137,7 +137,7 @@ func main() {
 	log.Println("List Custodial Line Items:", string(output))
 
 	// Get Custodial Line Item
-	cg, err := rc.Transactions.GetCustodialLineItems(context.Background(), "j56aHgLBqkNu1KwK")
+	cg, err := rc.Transactions.GetCustodialLineItem(context.Background(), "j56aHgLBqkNu1KwK")
 	if err != nil {
 		log.Fatal("Error fetching Custodial Line Item\n", err)
 	}
