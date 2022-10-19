@@ -1,14 +1,16 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete Document{} response data
-var document = &Document{
+var document = &rize.Document{
 	UID:                  "EhrQZJNjCd79LLYq",
 	DocumentType:         "monthly_statement",
 	ScopeType:            "customer",
@@ -22,7 +24,7 @@ var document = &Document{
 }
 
 func TestListDocuments(t *testing.T) {
-	params := &DocumentListParams{
+	params := &rize.DocumentListParams{
 		DocumentType:        "monthly_statement",
 		Month:               1,
 		Year:                2020,

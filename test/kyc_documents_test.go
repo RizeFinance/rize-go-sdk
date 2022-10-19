@@ -1,4 +1,4 @@
-package rize
+package rize_test
 
 import (
 	"context"
@@ -6,10 +6,12 @@ import (
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete KYCDocument{} response data
-var kycDocument = &KYCDocument{
+var kycDocument = &rize.KYCDocument{
 	UID:       "u8EHFJnWvJxRJZxa",
 	Type:      "contract",
 	Filename:  "john_smith_passport",
@@ -19,7 +21,7 @@ var kycDocument = &KYCDocument{
 }
 
 func TestListKYCDocuments(t *testing.T) {
-	params := &KYCDocumentListParams{
+	params := &rize.KYCDocumentListParams{
 		EvaluationUID: "QSskNJkryskRXeYt",
 	}
 	resp, err := rc.KYCDocuments.List(context.Background(), params)
@@ -34,7 +36,7 @@ func TestListKYCDocuments(t *testing.T) {
 
 func TestUploadKYCDocument(t *testing.T) {
 	base64Encoding := base64.StdEncoding.EncodeToString([]byte("File info"))
-	params := &KYCDocumentUploadParams{
+	params := &rize.KYCDocumentUploadParams{
 		EvaluationUID: "sdfHFJnWvJxRJZxq",
 		Filename:      "fred_smith_license.png",
 		FileContent:   base64Encoding,

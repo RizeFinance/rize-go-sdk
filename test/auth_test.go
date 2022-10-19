@@ -1,13 +1,15 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete AuthTokenResponse{} data
-var tokenResponse = &AuthTokenResponse{
+var tokenResponse = &rize.AuthTokenResponse{
 	Token: "auth-header.payload.signature",
 }
 

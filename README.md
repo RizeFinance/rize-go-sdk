@@ -173,7 +173,7 @@ $ cp .env-example .env
 ## Unit Tests
 
 ```go
-$ go test -v -cover
+$  go test ./test -v -coverpkg=./... -cover
 ```
 
 ## Documentation

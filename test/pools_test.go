@@ -1,13 +1,15 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete Pool{} response data
-var pool = &Pool{
+var pool = &rize.Pool{
 	UID:              "wTSMX1GubP21ev2h",
 	Name:             "multi-byte success",
 	OwnerCustomerUID: "uKxmLxUEiSj5h4M3",
@@ -15,7 +17,7 @@ var pool = &Pool{
 }
 
 func TestListPools(t *testing.T) {
-	params := &PoolListParams{
+	params := &rize.PoolListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		ExternalUID: "client-generated-id",
 		Limit:       100,

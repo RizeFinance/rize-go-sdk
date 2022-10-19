@@ -1,13 +1,15 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete CustomerProduct{} response data
-var customerProduct = &CustomerProduct{
+var customerProduct = &rize.CustomerProduct{
 	UID:           "Tegvs2E4TQgVYYMj",
 	Status:        "active",
 	CustomerUID:   "DuSzg6Ywr3cY9mw4",
@@ -18,7 +20,7 @@ var customerProduct = &CustomerProduct{
 }
 
 func TestListCustomerProducts(t *testing.T) {
-	params := &CustomerProductListParams{
+	params := &rize.CustomerProductListParams{
 		ProgramUID:  "pQtTCSXz57fuefzp",
 		ProductUID:  "zbJbEa72eKMgbbBv",
 		CustomerUID: "uKxmLxUEiSj5h4M3",
@@ -34,7 +36,7 @@ func TestListCustomerProducts(t *testing.T) {
 }
 
 func TestCreateCustomerProduct(t *testing.T) {
-	params := &CustomerProductCreateParams{
+	params := &rize.CustomerProductCreateParams{
 		CustomerUID: "S62MaHx6WwsqG9vQ",
 		ProductUID:  "pQtTCSXz57fuefzp",
 	}

@@ -1,14 +1,16 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete Transaction{} response data
-var transaction = &Transaction{
+var transaction = &rize.Transaction{
 	AdjustmentUID:                  "KM2eKbR98t4tdAyZ",
 	CustomerUID:                    "Trzqy9t6j6tFGoG3",
 	CreatedAt:                      time.Now(),
@@ -36,7 +38,7 @@ var transaction = &Transaction{
 }
 
 // Complete TransactionEvent{} response data
-var transactionEvent = &TransactionEvent{
+var transactionEvent = &rize.TransactionEvent{
 	UID:                            "MB2yqBrm3c4bUbou",
 	SettledIndex:                   1,
 	TransactionUIDs:                []string{"SMwKC1osz77DTEiu", "Wfp6uBnhKDxUtCeu"},
@@ -54,7 +56,7 @@ var transactionEvent = &TransactionEvent{
 }
 
 // Complete SyntheticLineItem{} response data
-var syntheticLineItem = &SyntheticLineItem{
+var syntheticLineItem = &rize.SyntheticLineItem{
 	UID:                    "j56aHgLBqkNu1KwK",
 	SettledIndex:           10,
 	TransactionUID:         "YBHNH3BgykqrjLgz",
@@ -74,7 +76,7 @@ var syntheticLineItem = &SyntheticLineItem{
 }
 
 // Complete CustodialLineItem{} response data
-var custodialLineItem = &CustodialLineItem{
+var custodialLineItem = &rize.CustodialLineItem{
 	UID:                    "y4r8oTATb23MdGDF",
 	SettledIndex:           1,
 	TransactionUID:         "SMwKC1osz77DTEiu",
@@ -96,7 +98,7 @@ var custodialLineItem = &CustodialLineItem{
 }
 
 func TestListTransactions(t *testing.T) {
-	params := &TransactionListParams{
+	params := &rize.TransactionListParams{
 		CustomerUID:                    "uKxmLxUEiSj5h4M3",
 		PoolUID:                        "wTSMX1GubP21ev2h",
 		DebitCardUID:                   "MYNGv45UK6HWBHHf",
@@ -135,7 +137,7 @@ func TestGetTransaction(t *testing.T) {
 }
 
 func TestListTransactionEvents(t *testing.T) {
-	params := &TransactionEventListParams{
+	params := &rize.TransactionEventListParams{
 		SourceCustodialAccountUID:      "dmRtw1xkS9ghrntB",
 		DestinationCustodialAccountUID: "W55zKgvAk3zkpGM3",
 		CustodialAccountUID:            "dmRtw1xkS9ghrntB",
@@ -167,7 +169,7 @@ func TestGetTransactionEvent(t *testing.T) {
 }
 
 func TestListSyntheticLineItems(t *testing.T) {
-	params := &SyntheticLineItemListParams{
+	params := &rize.SyntheticLineItemListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		PoolUID:             "wTSMX1GubP21ev2h",
 		SyntheticAccountUID: "4XkJnsfHsuqrxmeX",
@@ -199,7 +201,7 @@ func TestGetSyntheticLineItem(t *testing.T) {
 }
 
 func TestListCustodialLineItems(t *testing.T) {
-	params := &CustodialLineItemListParams{
+	params := &rize.CustodialLineItemListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		CustodialAccountUID: "wTSMX1GubP21ev2h",
 		Status:              "voided",

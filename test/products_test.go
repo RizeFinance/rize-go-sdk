@@ -1,13 +1,15 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete Product{} response data
-var product = &Product{
+var product = &rize.Product{
 	UID:                      "f9VncZny4ejhcPF4",
 	Name:                     "checking",
 	Description:              "Supports checking accounts",
@@ -16,7 +18,7 @@ var product = &Product{
 	CustomerTypes:            []string{"primary", "sole_proprietor"},
 	PrerequisiteProductUIDs:  []string{"DaB7Mjj73Nz2JpHF", "x2z691J9HPCWAugv"},
 	ProgramUID:               "W74Jrkxk8bVtvNNj",
-	ProfileRequirements: []*ProfileRequirement{{
+	ProfileRequirements: []*rize.ProfileRequirement{{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
 		ProfileRequirement:    "Please provide your approximate annual income in USD.",
 		Category:              "default",
@@ -27,7 +29,7 @@ var product = &Product{
 }
 
 func TestListProducts(t *testing.T) {
-	params := &ProductListParams{
+	params := &rize.ProductListParams{
 		ProgramUID: "pQtTCSXz57fuefzp",
 	}
 	resp, err := rc.Products.List(context.Background(), params)

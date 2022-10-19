@@ -65,7 +65,7 @@ func main() {
 	// Update customer
 	cup := rize.CustomerUpdateParams{
 		Email: "olive.oyl@rizemoney.com",
-		Details: rize.CustomerDetails{
+		Details: &rize.CustomerDetails{
 			FirstName: "Olive",
 			LastName:  "Oyl",
 		},

@@ -1,14 +1,16 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete PinwheelJob{} response data
-var pinwheelJob = &PinwheelJob{
+var pinwheelJob = &rize.PinwheelJob{
 	UID:                  "EhrQZJNjCd79LLYq",
 	SyntheticAccountUID:  "Jy8degj6iv2QngLo",
 	Status:               "initiated",
@@ -25,7 +27,7 @@ var pinwheelJob = &PinwheelJob{
 }
 
 func TestListPinwheelJobs(t *testing.T) {
-	params := &PinwheelJobListParams{
+	params := &rize.PinwheelJobListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		SyntheticAccountUID: "4XkJnsfHsuqrxmeX",
 		Limit:               100,
@@ -42,7 +44,7 @@ func TestListPinwheelJobs(t *testing.T) {
 }
 
 func TestCreatePinwheelJob(t *testing.T) {
-	params := &PinwheelJobCreateParams{
+	params := &rize.PinwheelJobCreateParams{
 		JobNames:             []string{"direct_deposit_switch"},
 		SyntheticAccountUID:  "4XkJnsfHsuqrxmeX",
 		Amount:               1000,

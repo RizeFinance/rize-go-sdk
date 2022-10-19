@@ -1,14 +1,16 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete SyntheticAccount{} response data
-var syntheticAccount = &SyntheticAccount{
+var syntheticAccount = &rize.SyntheticAccount{
 	UID:                      "exMDShw6yM3NHLYV",
 	ExternalUID:              "60689018-94e9-4870-970a-cc22f52c9c65",
 	Name:                     "Spinach Fund",
@@ -21,7 +23,7 @@ var syntheticAccount = &SyntheticAccount{
 	NetUSDBalance:            "769.65",
 	NetUSDPendingBalance:     "343.16",
 	NetUSDAvailableBalance:   "701.46",
-	AssetBalances: []*SyntheticAccountAssetBalance{{
+	AssetBalances: []*rize.SyntheticAccountAssetBalance{{
 		AssetQuantity:        "769.65",
 		AssetType:            "USD",
 		CurrentUSDValue:      "769.65",
@@ -39,7 +41,7 @@ var syntheticAccount = &SyntheticAccount{
 }
 
 // Complete SyntheticAccountType{} response data
-var syntheticAccountType = &SyntheticAccountType{
+var syntheticAccountType = &rize.SyntheticAccountType{
 	UID:                      "EhrQZJNjCd79LLYq",
 	Name:                     "New Resource Name",
 	Description:              "This synthetic_account_type will be used to open synthetic_accounts for our customers that will only contain a USD asset type.",
@@ -49,7 +51,7 @@ var syntheticAccountType = &SyntheticAccountType{
 }
 
 func TestListSyntheticAccounts(t *testing.T) {
-	params := &SyntheticAccountListParams{
+	params := &rize.SyntheticAccountListParams{
 		CustomerUID:              "uKxmLxUEiSj5h4M3",
 		ExternalUID:              "client-generated-id",
 		PoolUID:                  "wTSMX1GubP21ev2h",
@@ -72,7 +74,7 @@ func TestListSyntheticAccounts(t *testing.T) {
 }
 
 func TestCreateSyntheticAccount(t *testing.T) {
-	params := &SyntheticAccountCreateParams{
+	params := &rize.SyntheticAccountCreateParams{
 		ExternalUID:             "partner-generated-id",
 		Name:                    "New Resource Name",
 		PoolUID:                 "kaxHFJnWvJxRJZxq",
@@ -103,7 +105,7 @@ func TestGetSyntheticAccount(t *testing.T) {
 }
 
 func TestUpdateSyntheticAccount(t *testing.T) {
-	params := &SyntheticAccountUpdateParams{
+	params := &rize.SyntheticAccountUpdateParams{
 		Name: "New Resource Name",
 		Note: "note",
 	}
@@ -129,7 +131,7 @@ func TestDeleteSyntheticAccount(t *testing.T) {
 }
 
 func TestListAccountTypes(t *testing.T) {
-	params := &SyntheticAccountTypeListParams{
+	params := &rize.SyntheticAccountTypeListParams{
 		ProgramUID: "EhrQZJNjCd79LLYq",
 		Limit:      100,
 		Offset:     10,

@@ -1,13 +1,15 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete CustodialPartner{} response data
-var custodialPartner = &CustodialPartner{
+var custodialPartner = &rize.CustodialPartner{
 	UID:  "EhrQZJNjCd79LLYq",
 	Name: "Big Apple Bank",
 	Type: "Mutual savings bank",

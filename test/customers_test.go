@@ -1,4 +1,4 @@
-package rize
+package rize_test
 
 import (
 	"context"
@@ -6,11 +6,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/rizefinance/rize-go-sdk"
 	"github.com/rizefinance/rize-go-sdk/internal"
 )
 
 // Complete Customer{} response data
-var customer = &Customer{
+var customer = &rize.Customer{
 	UID:                "y9reyPMNEWuuYSC1",
 	ExternalUID:        "partner-generated-id",
 	ActivatedAt:        time.Now(),
@@ -24,7 +25,7 @@ var customer = &Customer{
 	PIIConfirmedAt:     time.Now(),
 	PoolUIDs:           []string{"HiuQZJNjCd79LLYq", "NoPJB9g9ZQTh5qMv"},
 	PrimaryCustomerUID: "EhrQZJNjCd79LLYq",
-	ProfileResponses: []*CustomerProfileResponse{{
+	ProfileResponses: []*rize.CustomerProfileResponse{{
 		ProfileRequirement: "Please provide your approximate annual income in USD.",
 		ProfileResponse: &internal.CustomerProfileResponseItem{
 			Num0: "string",
@@ -37,7 +38,7 @@ var customer = &Customer{
 	SecondaryCustomerUIDs: []string{"464QyebpxbBNrGkX"},
 	Status:                "initiated",
 	TotalBalance:          "12345.67",
-	Details: &CustomerDetails{
+	Details: &rize.CustomerDetails{
 		FirstName:    "Olive",
 		MiddleName:   "Olivia",
 		LastName:     "Oyl",
@@ -46,7 +47,7 @@ var customer = &Customer{
 		BusinessName: "Oliver's Olive Emporium",
 		DOB:          internal.DOB(time.Now()),
 		SSNLastFour:  "3333",
-		Address: &CustomerAddress{
+		Address: &rize.CustomerAddress{
 			Street1:    "123 Abc St.",
 			Street2:    "Apt 2",
 			City:       "Chicago",
@@ -57,7 +58,7 @@ var customer = &Customer{
 }
 
 func TestListCustomers(t *testing.T) {
-	params := &CustomerListParams{
+	params := &rize.CustomerListParams{
 		UID:              "uKxmLxUEiSj5h4M3",
 		Status:           "identity_verified",
 		IncludeInitiated: true,
@@ -87,7 +88,7 @@ func TestListCustomers(t *testing.T) {
 }
 
 func TestCreateCustomer(t *testing.T) {
-	params := &CustomerCreateParams{
+	params := &rize.CustomerCreateParams{
 		ExternalUID:  "client-generated-id",
 		CustomerType: "primary",
 		Email:        "olive.oyl@popeyes.com",
@@ -115,9 +116,9 @@ func TestGetCustomer(t *testing.T) {
 }
 
 func TestUpdateCustomer(t *testing.T) {
-	cup := &CustomerUpdateParams{
+	cup := &rize.CustomerUpdateParams{
 		Email: "olive.oyl@rizemoney.com",
-		Details: CustomerDetails{
+		Details: &rize.CustomerDetails{
 			FirstName:    "Olive",
 			MiddleName:   "Olivia",
 			LastName:     "Oyl",
@@ -127,7 +128,7 @@ func TestUpdateCustomer(t *testing.T) {
 			DOB:          internal.DOB(time.Now()),
 			SSN:          "111-22-3333",
 			SSNLastFour:  "3333",
-			Address: &CustomerAddress{
+			Address: &rize.CustomerAddress{
 				Street1:    "123 Abc St.",
 				Street2:    "Apt 2",
 				City:       "Chicago",
@@ -147,7 +148,7 @@ func TestUpdateCustomer(t *testing.T) {
 }
 
 func TestDeleteCustomer(t *testing.T) {
-	cd := &CustomerDeleteParams{
+	cd := &rize.CustomerDeleteParams{
 		ArchiveNote: "Archiving customer note",
 	}
 
@@ -174,7 +175,7 @@ func TestConfirmPIIData(t *testing.T) {
 }
 
 func TestLockCustomer(t *testing.T) {
-	cl := &CustomerLockParams{
+	cl := &rize.CustomerLockParams{
 		LockNote:   "Fraud detected",
 		LockReason: "Customer Reported Fraud",
 	}
@@ -190,7 +191,7 @@ func TestLockCustomer(t *testing.T) {
 }
 
 func TestUnlockCustomer(t *testing.T) {
-	cl := &CustomerLockParams{
+	cl := &rize.CustomerLockParams{
 		LockNote:           "Fraud detected",
 		UnlockReason:       "Customer Reported Fraud",
 		UnlockAllSecondary: true,
@@ -208,13 +209,13 @@ func TestUnlockCustomer(t *testing.T) {
 
 func TestUpdateProfileResponses(t *testing.T) {
 	// Update Profile Response with string response
-	cpp := &CustomerProfileResponseParams{
+	cpp := &rize.CustomerProfileResponseParams{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
 		ProfileResponse: &internal.CustomerProfileResponseItem{
 			Response: "Response string",
 		},
 	}
-	_, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", []*CustomerProfileResponseParams{cpp})
+	_, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", []*rize.CustomerProfileResponseParams{cpp})
 	if err != nil {
 		t.Fatal("Error updating profile response\n", err)
 	}
@@ -225,7 +226,7 @@ func TestUpdateProfileResponses(t *testing.T) {
 	// }
 
 	// Update Profile Response with ordered list response
-	cro := &CustomerProfileResponseParams{
+	cro := &rize.CustomerProfileResponseParams{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
 		ProfileResponse: &internal.CustomerProfileResponseItem{
 			Num0: "string",
@@ -233,7 +234,7 @@ func TestUpdateProfileResponses(t *testing.T) {
 			Num2: "string",
 		},
 	}
-	res, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", []*CustomerProfileResponseParams{cro})
+	res, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", []*rize.CustomerProfileResponseParams{cro})
 	if err != nil {
 		t.Fatal("Error updating profile response (ordered_list)\n", err)
 	}
@@ -245,17 +246,17 @@ func TestUpdateProfileResponses(t *testing.T) {
 
 func TestCreateSecondaryCustomer(t *testing.T) {
 	// Secondary Customers
-	scp := &SecondaryCustomerParams{
+	scp := &rize.SecondaryCustomerParams{
 		ExternalUID:        "7002440b-9b98-4a8b-82b9-4503fe8c6bf0",
 		PrimaryCustomerUID: "kbF5TGrmwGizQuzZ",
 		Email:              "tomas@example.com",
-		Details: &CustomerDetails{
+		Details: &rize.CustomerDetails{
 			FirstName:  "Olive",
 			MiddleName: "Olivia",
 			LastName:   "Oyl",
 			Suffix:     "Jr.",
 			DOB:        internal.DOB(time.Now()),
-			Address: &CustomerAddress{
+			Address: &rize.CustomerAddress{
 				Street1:    "123 Abc St.",
 				Street2:    "Apt 2",
 				City:       "Chicago",

@@ -1,24 +1,26 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete Evaluation{} response data
-var evaluation = &Evaluation{
+var evaluation = &rize.Evaluation{
 	UID:       "EhrQZJNjCd79LLYq",
 	Outcome:   "approved",
 	CreatedAt: time.Now(),
-	Flags: &EvaluationFlag{
+	Flags: &rize.EvaluationFlag{
 		DocumentQualityCheck: true,
 		FraudCheck:           true,
 		FinancialCheck:       true,
 		WatchListCheck:       true,
 	},
-	PIIMatch: &EvaluationPIIMatch{
+	PIIMatch: &rize.EvaluationPIIMatch{
 		DOBMatch:     true,
 		SSNMatch:     true,
 		NameMatch:    true,
@@ -29,7 +31,7 @@ var evaluation = &Evaluation{
 }
 
 func TestListEvaluations(t *testing.T) {
-	params := &EvaluationListParams{
+	params := &rize.EvaluationListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		Latest:      true,
 	}

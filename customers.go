@@ -98,8 +98,8 @@ type CustomerCreateParams struct {
 
 // CustomerUpdateParams are the body params used when updating a Customer
 type CustomerUpdateParams struct {
-	Email   string          `json:"email,omitempty"`
-	Details CustomerDetails `json:"details,omitempty"`
+	Email   string           `json:"email,omitempty"`
+	Details *CustomerDetails `json:"details,omitempty"`
 }
 
 // CustomerDeleteParams are the body params used when deleting/archiving a Customer

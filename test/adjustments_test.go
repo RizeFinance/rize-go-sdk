@@ -1,21 +1,23 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete Adjustment{} response data
-var adjustment = &Adjustment{
+var adjustment = &rize.Adjustment{
 	UID:                 "EhrQZJNjCd79LLYq",
 	ExternalUID:         "PT3sH7oxxQPwchrf",
 	CustomerUID:         "uKxmLxUEiSj5h4M3",
 	USDAdjustmentAmount: "2.43",
 	CreatedAt:           time.Now(),
 	Status:              "initiated",
-	AdjustmentType: &AdjustmentType{
+	AdjustmentType: &rize.AdjustmentType{
 		UID:         "KM2eKbR98t4tdAyZ",
 		Name:        "weekly_membership",
 		Description: "Weekly membership fee",
@@ -25,7 +27,7 @@ var adjustment = &Adjustment{
 }
 
 // Complete AdjustmentType{} response data
-var adjustmentType = &AdjustmentType{
+var adjustmentType = &rize.AdjustmentType{
 	UID:         "EhrQZJNjCd79LLYq",
 	Name:        "monthly_membership",
 	Description: "Monthly membership fee",
@@ -35,7 +37,7 @@ var adjustmentType = &AdjustmentType{
 }
 
 func TestListAdjustments(t *testing.T) {
-	params := &AdjustmentListParams{
+	params := &rize.AdjustmentListParams{
 		CustomerUID:            "uKxmLxUEiSj5h4M3",
 		AdjustmentTypeUID:      "2Ej2tsFbQT3S1HYd",
 		ExternalUID:            "PT3sH7oxxQPwchrf",
@@ -55,7 +57,7 @@ func TestListAdjustments(t *testing.T) {
 }
 
 func TestCreateAdjustment(t *testing.T) {
-	params := &AdjustmentCreateParams{
+	params := &rize.AdjustmentCreateParams{
 		ExternalUID:         "partner-generated-id",
 		CustomerUID:         "kaxHFJnWvJxRJZxq",
 		USDAdjustmentAmount: "2.43",
@@ -84,7 +86,7 @@ func TestGetAdjustment(t *testing.T) {
 }
 
 func TestListAdjustmentTypes(t *testing.T) {
-	params := &AdjustmentTypeListParams{
+	params := &rize.AdjustmentTypeListParams{
 		CustomerUID:    "uKxmLxUEiSj5h4M3",
 		ProgramUID:     "DbxJUHVuqt3C7hGK",
 		ShowDeprecated: true,

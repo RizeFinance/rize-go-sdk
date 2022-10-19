@@ -1,13 +1,15 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete CardArtwork{} response data
-var artwork = &CardArtwork{
+var artwork = &rize.CardArtwork{
 	UID:        "EhrQZJNjCd79LLYq",
 	IsDefault:  true,
 	Name:       "Rize Default",
@@ -17,7 +19,7 @@ var artwork = &CardArtwork{
 }
 
 func TestListCardArtwork(t *testing.T) {
-	params := &CardArtworkListParams{
+	params := &rize.CardArtworkListParams{
 		ProgramUID: "DbxJUHVuqt3C7hGK",
 		Limit:      100,
 		Offset:     10,

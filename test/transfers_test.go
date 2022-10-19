@@ -1,14 +1,16 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete Transfer{} response data
-var transfer = &Transfer{
+var transfer = &rize.Transfer{
 	UID:                            "EhrQZJNjCd79LLYq",
 	ExternalUID:                    "partner-generated-id",
 	SourceSyntheticAccountUID:      "4XkJnsfHsuqrxmeX",
@@ -21,7 +23,7 @@ var transfer = &Transfer{
 }
 
 func TestListTransfers(t *testing.T) {
-	params := &TransferListParams{
+	params := &rize.TransferListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		ExternalUID:         "client-generated-id",
 		PoolUID:             "wTSMX1GubP21ev2h",
@@ -40,7 +42,7 @@ func TestListTransfers(t *testing.T) {
 }
 
 func TestCreateTransfer(t *testing.T) {
-	params := &TransferCreateParams{
+	params := &rize.TransferCreateParams{
 		ExternalUID:                    "partner-generated-id",
 		SourceSyntheticAccountUID:      "4XkJnsfHsuqrxmeX",
 		DestinationSyntheticAccountUID: "exMDShw6yM3NHLYV",

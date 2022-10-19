@@ -1,30 +1,32 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete Workflow{} response data
-var workflow = &Workflow{
+var workflow = &rize.Workflow{
 	UID: "SPbiwv93C6M5pSWu",
-	Summary: &WorkflowSummary{
+	Summary: &rize.WorkflowSummary{
 		AcceptedQuantity: 1,
 		BegunAt:          time.Now(),
 		CompletedStep:    1,
 		CurrentStep:      1,
 		Status:           "in_progress",
 	},
-	Customer: &WorkflowCustomer{
+	Customer: &rize.WorkflowCustomer{
 		Email:       "tomas@example.com",
 		ExternalUID: "client-generated-42",
 		UID:         "h9MzupcjtA3LPW2e",
 	},
 	ProductUID:               "ncGN746ya7JLzKu3",
 	ProductCompliancePlanUID: "mheiDmW1K2LSMZQU",
-	AcceptedDocuments: []*WorkflowAcceptedDocument{{
+	AcceptedDocuments: []*rize.WorkflowAcceptedDocument{{
 		ElectronicSignatureRequired: "no",
 		ExternalStorageName:         "usa_ptrt_0",
 		ComplianceDocumentURL:       "https://document-bucket-example.s3.amazonaws.com/RW2HF123FyVMUxNw/8ABcG12MYgAsomZm",
@@ -34,7 +36,7 @@ var workflow = &Workflow{
 		UID:                         "vU7f8jrLCww7ev2H",
 		AcceptedAt:                  time.Now(),
 	}},
-	CurrentStepDocumentsPending: []*WorkflowPendingDocument{{
+	CurrentStepDocumentsPending: []*rize.WorkflowPendingDocument{{
 		ElectronicSignatureRequired: "no",
 		ExternalStorageName:         "eft_auth_0",
 		ComplianceDocumentURL:       "https://document-bucket-example.s3.amazonaws.com/RW2HF123FyVMUxNw/123cG1OMggAso4B2",
@@ -43,7 +45,7 @@ var workflow = &Workflow{
 		Version:                     1,
 		UID:                         "dc6PApa2nn9K3jwL",
 	}},
-	AllDocuments: []*WorkflowDocument{{
+	AllDocuments: []*rize.WorkflowDocument{{
 		ElectronicSignatureRequired: "no",
 		ExternalStorageName:         "eft_auth_0",
 		ComplianceDocumentURL:       "https://document-bucket-example.s3.amazonaws.com/RW2HF123FyVMUxNw/123cG1OMggAso4B2",
@@ -54,7 +56,7 @@ var workflow = &Workflow{
 }
 
 func TestListWorkflows(t *testing.T) {
-	params := &WorkflowListParams{
+	params := &rize.WorkflowListParams{
 		CustomerUID: "S62MaHx6WwsqG9vQ",
 		ProductUID:  "pQtTCSXz57fuefzp",
 		InProgress:  true,
@@ -72,7 +74,7 @@ func TestListWorkflows(t *testing.T) {
 }
 
 func TestCreateWorkflow(t *testing.T) {
-	params := &WorkflowCreateParams{
+	params := &rize.WorkflowCreateParams{
 		CustomerUID:              "h9MzupcjtA3LPW2e",
 		ProductCompliancePlanUID: "25NQX3GGXpAtpUmP",
 	}
@@ -87,7 +89,7 @@ func TestCreateWorkflow(t *testing.T) {
 }
 
 func TestViewLatestWorkflow(t *testing.T) {
-	params := &WorkflowLatestParams{
+	params := &rize.WorkflowLatestParams{
 		ProductCompliancePlanUID: "pQtTCSXz57fuefzp",
 	}
 	resp, err := rc.ComplianceWorkflows.ViewLatest(context.Background(), "h9MzupcjtA3LPW2e", params)
@@ -101,7 +103,7 @@ func TestViewLatestWorkflow(t *testing.T) {
 }
 
 func TestAcknowledgeDocument(t *testing.T) {
-	params := &WorkflowDocumentParams{
+	params := &rize.WorkflowDocumentParams{
 		Accept:      "yes",
 		CustomerUID: "h9MzupcjtA3LPW2e",
 		DocumentUID: "Yqyjk5b2xgQ9FrxS",
@@ -119,9 +121,9 @@ func TestAcknowledgeDocument(t *testing.T) {
 }
 
 func TestBatchAcknowledgeDocuments(t *testing.T) {
-	params := &WorkflowBatchDocumentsParams{
+	params := &rize.WorkflowBatchDocumentsParams{
 		CustomerUID: "h9MzupcjtA3LPW2e",
-		Documents: []*WorkflowDocumentParams{{
+		Documents: []*rize.WorkflowDocumentParams{{
 			Accept:      "yes",
 			DocumentUID: "Yqyjk5b2xgQ9FrxS",
 			IPAddress:   "107.56.230.156",

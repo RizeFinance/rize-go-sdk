@@ -1,13 +1,15 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 func TestCreateSandbox(t *testing.T) {
-	params := &SandboxCreateParams{
+	params := &rize.SandboxCreateParams{
 		TransactionType:  "atm_withdrawal",
 		CustomerUID:      "uKxmLxUEiSj5h4M3",
 		DebitCardUID:     "h9MzupcjtA3LPW2e",

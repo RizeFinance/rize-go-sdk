@@ -1,14 +1,16 @@
-package rize
+package rize_test
 
 import (
 	"context"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/rizefinance/rize-go-sdk"
 )
 
 // Complete DebitCard{} response data
-var debitCard = &DebitCard{
+var debitCard = &rize.DebitCard{
 	UID:                 "h9MzupcjtA3LPW2e",
 	ExternalUID:         "9b463440-deff-4ff2-bfc9-1b71077a3b92",
 	CustomerUID:         "uKxmLxUEiSj5h4M3",
@@ -24,7 +26,7 @@ var debitCard = &DebitCard{
 	LockReason:          "lock reason",
 	LockedAt:            time.Now(),
 	ClosedAt:            time.Now(),
-	LatestShippingAddress: &DebitCardShippingAddress{
+	LatestShippingAddress: &rize.DebitCardShippingAddress{
 		Street1:    "123 Abc St.",
 		Street2:    "Apt 2",
 		City:       "Chicago",
@@ -33,17 +35,17 @@ var debitCard = &DebitCard{
 	},
 }
 
-var PINToken = &DebitCardPINTokenResponse{
+var PINToken = &rize.DebitCardPINTokenResponse{
 	PinChangeToken: "header.payload.signature",
 }
 
-var accessToken = &DebitCardAccessToken{
+var accessToken = &rize.DebitCardAccessToken{
 	Token:    "VmU27goFku4DyxfsdyoH5G1mlztvwskBywKrskVN9jQOh50Yy7",
 	ConfigID: "1",
 }
 
 func TestListDebitCards(t *testing.T) {
-	params := &DebitCardListParams{
+	params := &rize.DebitCardListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		ExternalUID: "client-generated-id",
 		Limit:       100,
@@ -64,12 +66,12 @@ func TestListDebitCards(t *testing.T) {
 }
 
 func TestCreateDebitCard(t *testing.T) {
-	params := &DebitCardCreateParams{
+	params := &rize.DebitCardCreateParams{
 		ExternalUID:    "partner-generated-id",
 		CardArtworkUID: "EhrQZJNjCd79LLYq",
 		CustomerUID:    "uKxmLxUEiSj5h4M3",
 		PoolUID:        "wTSMX1GubP21ev2h",
-		ShippingAddress: &DebitCardShippingAddress{
+		ShippingAddress: &rize.DebitCardShippingAddress{
 			Street1:    "123 Abc St",
 			Street2:    "Apt 2",
 			City:       "Chicago",
@@ -99,7 +101,7 @@ func TestGetDebitCard(t *testing.T) {
 }
 
 func TestActivateDebitCard(t *testing.T) {
-	params := &DebitCardActivateParams{
+	params := &rize.DebitCardActivateParams{
 		CardLastFourDigits: "1234",
 		CVV:                "012",
 		ExpiryDate:         "2023-08",
@@ -115,7 +117,7 @@ func TestActivateDebitCard(t *testing.T) {
 }
 
 func TestLockDebitCard(t *testing.T) {
-	params := &DebitCardLockParams{
+	params := &rize.DebitCardLockParams{
 		LockReason: "Fraud detected",
 	}
 	resp, err := rc.DebitCards.Lock(context.Background(), "Lt6qjTNnYLjFfEWL", params)
@@ -140,10 +142,10 @@ func TestUnlockDebitCard(t *testing.T) {
 }
 
 func TestReissueDebitCard(t *testing.T) {
-	params := &DebitCardReissueParams{
+	params := &rize.DebitCardReissueParams{
 		CardArtworkUID: "EhrQZJNjCd79LLYq",
 		ReissueReason:  "damaged",
-		ShippingAddress: &DebitCardShippingAddress{
+		ShippingAddress: &rize.DebitCardShippingAddress{
 			Street1:    "123 Abc St",
 			Street2:    "Apt 2",
 			City:       "Chicago",
@@ -162,7 +164,7 @@ func TestReissueDebitCard(t *testing.T) {
 }
 
 func TestGetPINToken(t *testing.T) {
-	params := &DebitCardGetPINTokenParams{
+	params := &rize.DebitCardGetPINTokenParams{
 		ForceReset: true,
 	}
 	resp, err := rc.DebitCards.GetPINToken(context.Background(), "Lt6qjTNnYLjFfEWL", params)
@@ -187,10 +189,10 @@ func TestGetAccessToken(t *testing.T) {
 }
 
 func TestMigrateVirtualDebitCard(t *testing.T) {
-	params := &VirtualDebitCardMigrateParams{
+	params := &rize.VirtualDebitCardMigrateParams{
 		ExternalUID:    "partner-generated-id",
 		CardArtworkUID: "EhrQZJNjCd79LLYq",
-		ShippingAddress: &DebitCardShippingAddress{
+		ShippingAddress: &rize.DebitCardShippingAddress{
 			Street1:    "123 Abc St",
 			Street2:    "Apt 2",
 			City:       "Chicago",
@@ -208,7 +210,7 @@ func TestMigrateVirtualDebitCard(t *testing.T) {
 }
 
 func TestGetVirtualDebitCardImage(t *testing.T) {
-	params := &DebitCardAccessToken{
+	params := &rize.DebitCardAccessToken{
 		Token:    "VmU27goFku4DyxfsdyoH5G1mlztvwskBywKrskVN9jQOh50Yy7",
 		ConfigID: "1",
 	}
