@@ -45,8 +45,8 @@ type CustomerProductResponse struct {
 }
 
 // List Customers and the Products they have onboarded onto, filtered by the given parameters
-func (cp *customerProductService) List(ctx context.Context, cpp *CustomerProductListParams) (*CustomerProductResponse, error) {
-	v, err := query.Values(cpp)
+func (cp *customerProductService) List(ctx context.Context, params *CustomerProductListParams) (*CustomerProductResponse, error) {
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -71,12 +71,12 @@ func (cp *customerProductService) List(ctx context.Context, cpp *CustomerProduct
 }
 
 // Create will submit a request to onboard a Customer onto a new product
-func (cp *customerProductService) Create(ctx context.Context, ccp *CustomerProductCreateParams) (*CustomerProduct, error) {
-	if ccp.CustomerUID == "" || ccp.ProductUID == "" {
+func (cp *customerProductService) Create(ctx context.Context, params *CustomerProductCreateParams) (*CustomerProduct, error) {
+	if params.CustomerUID == "" || params.ProductUID == "" {
 		return nil, fmt.Errorf("CustomerUID and ProductUID are required")
 	}
 
-	bytesMessage, err := json.Marshal(ccp)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}

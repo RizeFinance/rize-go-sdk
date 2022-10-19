@@ -54,9 +54,9 @@ type EvaluationResponse struct {
 }
 
 // List retrieves a list of Evaluations filtered by the given parameters
-func (p *evaluationService) List(ctx context.Context, plp *EvaluationListParams) (*EvaluationResponse, error) {
+func (p *evaluationService) List(ctx context.Context, params *EvaluationListParams) (*EvaluationResponse, error) {
 	// Build EvaluationListParams into query string params
-	v, err := query.Values(plp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}

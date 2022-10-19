@@ -22,7 +22,7 @@ var transfer = &rize.Transfer{
 	USDRequestedAmount:             "12.34",
 }
 
-func TestListTransfers(t *testing.T) {
+func TestTransferService_List(t *testing.T) {
 	params := &rize.TransferListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		ExternalUID:         "client-generated-id",
@@ -41,7 +41,7 @@ func TestListTransfers(t *testing.T) {
 	}
 }
 
-func TestCreateTransfer(t *testing.T) {
+func TestTransferService_Create(t *testing.T) {
 	params := &rize.TransferCreateParams{
 		ExternalUID:                    "partner-generated-id",
 		SourceSyntheticAccountUID:      "4XkJnsfHsuqrxmeX",
@@ -59,7 +59,7 @@ func TestCreateTransfer(t *testing.T) {
 	}
 }
 
-func TestGetTransfer(t *testing.T) {
+func TestTransferService_Get(t *testing.T) {
 	resp, err := rc.Transfers.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Transfer\n", err)

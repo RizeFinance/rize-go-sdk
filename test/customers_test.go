@@ -57,7 +57,7 @@ var customer = &rize.Customer{
 	},
 }
 
-func TestListCustomers(t *testing.T) {
+func TestCustomerService_List(t *testing.T) {
 	params := &rize.CustomerListParams{
 		UID:              "uKxmLxUEiSj5h4M3",
 		Status:           "identity_verified",
@@ -87,7 +87,7 @@ func TestListCustomers(t *testing.T) {
 	}
 }
 
-func TestCreateCustomer(t *testing.T) {
+func TestCustomerService_Create(t *testing.T) {
 	params := &rize.CustomerCreateParams{
 		ExternalUID:  "client-generated-id",
 		CustomerType: "primary",
@@ -104,7 +104,7 @@ func TestCreateCustomer(t *testing.T) {
 	}
 }
 
-func TestGetCustomer(t *testing.T) {
+func TestCustomerService_Get(t *testing.T) {
 	resp, err := rc.Customers.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching customer\n", err)
@@ -115,8 +115,8 @@ func TestGetCustomer(t *testing.T) {
 	}
 }
 
-func TestUpdateCustomer(t *testing.T) {
-	cup := &rize.CustomerUpdateParams{
+func TestCustomerService_Update(t *testing.T) {
+	params := &rize.CustomerUpdateParams{
 		Email: "olive.oyl@rizemoney.com",
 		Details: &rize.CustomerDetails{
 			FirstName:    "Olive",
@@ -137,32 +137,32 @@ func TestUpdateCustomer(t *testing.T) {
 			},
 		},
 	}
-	resp, err := rc.Customers.Update(context.Background(), "EhrQZJNjCd79LLYq", cup)
+	resp, err := rc.Customers.Update(context.Background(), "EhrQZJNjCd79LLYq", params)
 	if err != nil {
 		t.Fatal("Error updating customer\n", err)
 	}
 
-	if err := validateSchema(http.MethodPut, "/customers/{uid}", http.StatusOK, nil, cup, resp); err != nil {
+	if err := validateSchema(http.MethodPut, "/customers/{uid}", http.StatusOK, nil, params, resp); err != nil {
 		t.Fatalf(err.Error())
 	}
 }
 
-func TestDeleteCustomer(t *testing.T) {
-	cd := &rize.CustomerDeleteParams{
+func TestCustomerService_Delete(t *testing.T) {
+	params := &rize.CustomerDeleteParams{
 		ArchiveNote: "Archiving customer note",
 	}
 
 	// Delete customer
-	if _, err := rc.Customers.Delete(context.Background(), "EhrQZJNjCd79LLYq", cd); err != nil {
+	if _, err := rc.Customers.Delete(context.Background(), "EhrQZJNjCd79LLYq", params); err != nil {
 		t.Fatal("Error archiving customer\n", err)
 	}
 
-	if err := validateSchema(http.MethodDelete, "/customers/{uid}", http.StatusNoContent, nil, cd, nil); err != nil {
+	if err := validateSchema(http.MethodDelete, "/customers/{uid}", http.StatusNoContent, nil, params, nil); err != nil {
 		t.Fatalf(err.Error())
 	}
 }
 
-func TestConfirmPIIData(t *testing.T) {
+func TestCustomerService_ConfirmPIIData(t *testing.T) {
 	// Confirm Identity
 	resp, err := rc.Customers.ConfirmPIIData(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
@@ -174,48 +174,48 @@ func TestConfirmPIIData(t *testing.T) {
 	}
 }
 
-func TestLockCustomer(t *testing.T) {
-	cl := &rize.CustomerLockParams{
+func TestCustomerService_Lock(t *testing.T) {
+	params := &rize.CustomerLockParams{
 		LockNote:   "Fraud detected",
 		LockReason: "Customer Reported Fraud",
 	}
 	// Lock customer
-	resp, err := rc.Customers.Lock(context.Background(), "EhrQZJNjCd79LLYq", cl)
+	resp, err := rc.Customers.Lock(context.Background(), "EhrQZJNjCd79LLYq", params)
 	if err != nil {
 		t.Fatal("Error locking customer\n", err)
 	}
 
-	if err := validateSchema(http.MethodPut, "/customers/{uid}/lock", http.StatusOK, nil, cl, resp); err != nil {
+	if err := validateSchema(http.MethodPut, "/customers/{uid}/lock", http.StatusOK, nil, params, resp); err != nil {
 		t.Fatalf(err.Error())
 	}
 }
 
-func TestUnlockCustomer(t *testing.T) {
-	cl := &rize.CustomerLockParams{
+func TestCustomerService_Unlock(t *testing.T) {
+	params := &rize.CustomerLockParams{
 		LockNote:           "Fraud detected",
 		UnlockReason:       "Customer Reported Fraud",
 		UnlockAllSecondary: true,
 	}
 	// Unlock Customer
-	resp, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", cl)
+	resp, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", params)
 	if err != nil {
 		t.Fatal("Error unlocking customer\n", err)
 	}
 
-	if err := validateSchema(http.MethodPut, "/customers/{uid}/unlock", http.StatusOK, nil, cl, resp); err != nil {
+	if err := validateSchema(http.MethodPut, "/customers/{uid}/unlock", http.StatusOK, nil, params, resp); err != nil {
 		t.Fatalf(err.Error())
 	}
 }
 
-func TestUpdateProfileResponses(t *testing.T) {
+func TestCustomerService_UpdateProfileResponses(t *testing.T) {
 	// Update Profile Response with string response
-	cpp := &rize.CustomerProfileResponseParams{
+	params := &rize.CustomerProfileResponseParams{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
 		ProfileResponse: &internal.CustomerProfileResponseItem{
 			Response: "Response string",
 		},
 	}
-	_, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", []*rize.CustomerProfileResponseParams{cpp})
+	_, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", []*rize.CustomerProfileResponseParams{params})
 	if err != nil {
 		t.Fatal("Error updating profile response\n", err)
 	}
@@ -226,7 +226,7 @@ func TestUpdateProfileResponses(t *testing.T) {
 	// }
 
 	// Update Profile Response with ordered list response
-	cro := &rize.CustomerProfileResponseParams{
+	paramList := &rize.CustomerProfileResponseParams{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
 		ProfileResponse: &internal.CustomerProfileResponseItem{
 			Num0: "string",
@@ -234,19 +234,18 @@ func TestUpdateProfileResponses(t *testing.T) {
 			Num2: "string",
 		},
 	}
-	res, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", []*rize.CustomerProfileResponseParams{cro})
+	res, err := rc.Customers.UpdateProfileResponses(context.Background(), "EhrQZJNjCd79LLYq", []*rize.CustomerProfileResponseParams{paramList})
 	if err != nil {
 		t.Fatal("Error updating profile response (ordered_list)\n", err)
 	}
 
-	if err := validateSchema(http.MethodPut, "/customers/{uid}/update_profile_responses", http.StatusOK, nil, cro, res); err != nil {
+	if err := validateSchema(http.MethodPut, "/customers/{uid}/update_profile_responses", http.StatusOK, nil, paramList, res); err != nil {
 		t.Fatalf(err.Error())
 	}
 }
 
-func TestCreateSecondaryCustomer(t *testing.T) {
-	// Secondary Customers
-	scp := &rize.SecondaryCustomerParams{
+func TestCustomerService_CreateSecondaryCustomer(t *testing.T) {
+	params := &rize.SecondaryCustomerParams{
 		ExternalUID:        "7002440b-9b98-4a8b-82b9-4503fe8c6bf0",
 		PrimaryCustomerUID: "kbF5TGrmwGizQuzZ",
 		Email:              "tomas@example.com",
@@ -265,12 +264,12 @@ func TestCreateSecondaryCustomer(t *testing.T) {
 			},
 		},
 	}
-	resp, err := rc.Customers.CreateSecondaryCustomer(context.Background(), scp)
+	resp, err := rc.Customers.CreateSecondaryCustomer(context.Background(), params)
 	if err != nil {
 		t.Fatal("Error creating secondary customer\n", err)
 	}
 
-	if err := validateSchema(http.MethodPost, "/customers/create_secondary", http.StatusCreated, nil, scp, resp); err != nil {
+	if err := validateSchema(http.MethodPost, "/customers/create_secondary", http.StatusCreated, nil, params, resp); err != nil {
 		t.Fatalf(err.Error())
 	}
 }

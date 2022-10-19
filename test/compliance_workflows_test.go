@@ -55,7 +55,7 @@ var workflow = &rize.Workflow{
 	}},
 }
 
-func TestListWorkflows(t *testing.T) {
+func TestComplianceWorkflowService_List(t *testing.T) {
 	params := &rize.WorkflowListParams{
 		CustomerUID: "S62MaHx6WwsqG9vQ",
 		ProductUID:  "pQtTCSXz57fuefzp",
@@ -73,7 +73,7 @@ func TestListWorkflows(t *testing.T) {
 	}
 }
 
-func TestCreateWorkflow(t *testing.T) {
+func TestComplianceWorkflowService_Create(t *testing.T) {
 	params := &rize.WorkflowCreateParams{
 		CustomerUID:              "h9MzupcjtA3LPW2e",
 		ProductCompliancePlanUID: "25NQX3GGXpAtpUmP",
@@ -88,7 +88,7 @@ func TestCreateWorkflow(t *testing.T) {
 	}
 }
 
-func TestViewLatestWorkflow(t *testing.T) {
+func TestComplianceWorkflowService_ViewLatest(t *testing.T) {
 	params := &rize.WorkflowLatestParams{
 		ProductCompliancePlanUID: "pQtTCSXz57fuefzp",
 	}
@@ -102,7 +102,7 @@ func TestViewLatestWorkflow(t *testing.T) {
 	}
 }
 
-func TestAcknowledgeDocument(t *testing.T) {
+func TestComplianceWorkflowService_AcknowledgeDocument(t *testing.T) {
 	params := &rize.WorkflowDocumentParams{
 		Accept:      "yes",
 		CustomerUID: "h9MzupcjtA3LPW2e",
@@ -120,7 +120,7 @@ func TestAcknowledgeDocument(t *testing.T) {
 	}
 }
 
-func TestBatchAcknowledgeDocuments(t *testing.T) {
+func TestComplianceWorkflowService_BatchAcknowledgeDocuments(t *testing.T) {
 	params := &rize.WorkflowBatchDocumentsParams{
 		CustomerUID: "h9MzupcjtA3LPW2e",
 		Documents: []*rize.WorkflowDocumentParams{{

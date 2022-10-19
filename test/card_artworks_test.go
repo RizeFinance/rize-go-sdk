@@ -18,7 +18,7 @@ var artwork = &rize.CardArtwork{
 	StyleID:    "000",
 }
 
-func TestListCardArtwork(t *testing.T) {
+func TestCardArtworkService_List(t *testing.T) {
 	params := &rize.CardArtworkListParams{
 		ProgramUID: "DbxJUHVuqt3C7hGK",
 		Limit:      100,
@@ -35,7 +35,7 @@ func TestListCardArtwork(t *testing.T) {
 	}
 }
 
-func TestGetCardArtwork(t *testing.T) {
+func TestCardArtworkService_Get(t *testing.T) {
 	resp, err := rc.CardArtworks.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Card Artwork\n", err)

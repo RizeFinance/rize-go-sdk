@@ -115,9 +115,9 @@ type DebitCardPINTokenResponse struct {
 }
 
 // List retrieves a list of Debit Cards filtered by the given parameters
-func (d *debitCardService) List(ctx context.Context, plp *DebitCardListParams) (*DebitCardResponse, error) {
+func (d *debitCardService) List(ctx context.Context, params *DebitCardListParams) (*DebitCardResponse, error) {
 	// Build DebitCardListParams into query string params
-	v, err := query.Values(plp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -142,12 +142,12 @@ func (d *debitCardService) List(ctx context.Context, plp *DebitCardListParams) (
 }
 
 // Create is used to a new Debit Card and attach it to the supplied Customer and Pool
-func (d *debitCardService) Create(ctx context.Context, dcp *DebitCardCreateParams) (*DebitCard, error) {
-	if dcp.CustomerUID == "" || dcp.PoolUID == "" {
+func (d *debitCardService) Create(ctx context.Context, params *DebitCardCreateParams) (*DebitCard, error) {
+	if params.CustomerUID == "" || params.PoolUID == "" {
 		return nil, fmt.Errorf("CustomerUID and PoolUID are required")
 	}
 
-	bytesMessage, err := json.Marshal(dcp)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -197,16 +197,16 @@ func (d *debitCardService) Get(ctx context.Context, uid string) (*DebitCard, err
 }
 
 // Activate a Debit Card
-func (d *debitCardService) Activate(ctx context.Context, uid string, dap *DebitCardActivateParams) (*DebitCard, error) {
+func (d *debitCardService) Activate(ctx context.Context, uid string, params *DebitCardActivateParams) (*DebitCard, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	if dap.CardLastFourDigits == "" || dap.CVV == "" || dap.ExpiryDate == "" {
+	if params.CardLastFourDigits == "" || params.CVV == "" || params.ExpiryDate == "" {
 		return nil, fmt.Errorf("CardLastFourDigits, CVV and ExpiryDate are required")
 	}
 
-	bytesMessage, err := json.Marshal(dap)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -231,12 +231,12 @@ func (d *debitCardService) Activate(ctx context.Context, uid string, dap *DebitC
 }
 
 // Lock will temporarily lock the Debit Card
-func (d *debitCardService) Lock(ctx context.Context, uid string, lp *DebitCardLockParams) (*DebitCard, error) {
-	if uid == "" || lp.LockReason == "" {
+func (d *debitCardService) Lock(ctx context.Context, uid string, params *DebitCardLockParams) (*DebitCard, error) {
+	if uid == "" || params.LockReason == "" {
 		return nil, fmt.Errorf("UID and LockReason are required")
 	}
 
-	bytesMessage, err := json.Marshal(lp)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -286,12 +286,12 @@ func (d *debitCardService) Unlock(ctx context.Context, uid string) (*DebitCard, 
 }
 
 // Reissue a Debit Card that is lost or stolen, or when it has suffered damage
-func (d *debitCardService) Reissue(ctx context.Context, uid string, dr *DebitCardReissueParams) (*DebitCard, error) {
-	if uid == "" || dr.ReissueReason == "" {
+func (d *debitCardService) Reissue(ctx context.Context, uid string, params *DebitCardReissueParams) (*DebitCard, error) {
+	if uid == "" || params.ReissueReason == "" {
 		return nil, fmt.Errorf("UID and ReissueReason are required")
 	}
 
-	bytesMessage, err := json.Marshal(dr)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -371,12 +371,12 @@ func (d *debitCardService) GetAccessToken(ctx context.Context, uid string) (*Deb
 }
 
 // MigrateVirtualDebitCard will result in a physical version of the virtual debit card being issued to a Customer
-func (d *debitCardService) MigrateVirtualDebitCard(ctx context.Context, uid string, vd *VirtualDebitCardMigrateParams) (*DebitCard, error) {
+func (d *debitCardService) MigrateVirtualDebitCard(ctx context.Context, uid string, params *VirtualDebitCardMigrateParams) (*DebitCard, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	bytesMessage, err := json.Marshal(vd)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -401,12 +401,12 @@ func (d *debitCardService) MigrateVirtualDebitCard(ctx context.Context, uid stri
 }
 
 // GetVirtualDebitCardImage is used to retrieve a virtual Debit Card image
-func (d *debitCardService) GetVirtualDebitCardImage(ctx context.Context, dt *DebitCardAccessToken) (*http.Response, error) {
-	if dt.ConfigID == "" || dt.Token == "" {
+func (d *debitCardService) GetVirtualDebitCardImage(ctx context.Context, params *DebitCardAccessToken) (*http.Response, error) {
+	if params.ConfigID == "" || params.Token == "" {
 		return nil, fmt.Errorf("Config and Token params are required")
 	}
 
-	v, err := query.Values(dt)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}

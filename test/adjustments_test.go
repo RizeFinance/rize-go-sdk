@@ -36,7 +36,7 @@ var adjustmentType = &rize.AdjustmentType{
 	Deprecated:  true,
 }
 
-func TestListAdjustments(t *testing.T) {
+func TestAdjustmentService_List(t *testing.T) {
 	params := &rize.AdjustmentListParams{
 		CustomerUID:            "uKxmLxUEiSj5h4M3",
 		AdjustmentTypeUID:      "2Ej2tsFbQT3S1HYd",
@@ -56,7 +56,7 @@ func TestListAdjustments(t *testing.T) {
 	}
 }
 
-func TestCreateAdjustment(t *testing.T) {
+func TestAdjustmentService_Create(t *testing.T) {
 	params := &rize.AdjustmentCreateParams{
 		ExternalUID:         "partner-generated-id",
 		CustomerUID:         "kaxHFJnWvJxRJZxq",
@@ -74,7 +74,7 @@ func TestCreateAdjustment(t *testing.T) {
 	}
 }
 
-func TestGetAdjustment(t *testing.T) {
+func TestAdjustmentService_Get(t *testing.T) {
 	resp, err := rc.Adjustments.Get(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		t.Fatal("Error fetching Adjustment\n", err)
@@ -85,7 +85,7 @@ func TestGetAdjustment(t *testing.T) {
 	}
 }
 
-func TestListAdjustmentTypes(t *testing.T) {
+func TestAdjustmentService_ListAdjustmentTypes(t *testing.T) {
 	params := &rize.AdjustmentTypeListParams{
 		CustomerUID:    "uKxmLxUEiSj5h4M3",
 		ProgramUID:     "DbxJUHVuqt3C7hGK",
@@ -102,7 +102,7 @@ func TestListAdjustmentTypes(t *testing.T) {
 	}
 }
 
-func TestGetAdjustmentType(t *testing.T) {
+func TestAdjustmentService_GetAdjustmentType(t *testing.T) {
 	resp, err := rc.Adjustments.GetAdjustmentType(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		t.Fatal("Error fetching Adjustment Type\n", err)

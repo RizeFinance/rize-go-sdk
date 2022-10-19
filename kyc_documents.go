@@ -46,12 +46,12 @@ type KYCDocumentResponse struct {
 }
 
 // List retrieves a list of KYC Documents for a given evaluation
-func (k *kycDocumentService) List(ctx context.Context, lp *KYCDocumentListParams) (*KYCDocumentResponse, error) {
-	if lp.EvaluationUID == "" {
+func (k *kycDocumentService) List(ctx context.Context, params *KYCDocumentListParams) (*KYCDocumentResponse, error) {
+	if params.EvaluationUID == "" {
 		return nil, fmt.Errorf("EvaluationUID is required")
 	}
 
-	v, err := query.Values(lp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -76,16 +76,16 @@ func (k *kycDocumentService) List(ctx context.Context, lp *KYCDocumentListParams
 }
 
 // Upload a KYC Document for review
-func (k *kycDocumentService) Upload(ctx context.Context, p *KYCDocumentUploadParams) (*KYCDocument, error) {
-	if p.EvaluationUID == "" ||
-		p.Filename == "" ||
-		p.FileContent == "" ||
-		p.Note == "" ||
-		p.Type == "" {
-		return nil, fmt.Errorf("All KYCDocumentUploadParams are required")
+func (k *kycDocumentService) Upload(ctx context.Context, params *KYCDocumentUploadParams) (*KYCDocument, error) {
+	if params.EvaluationUID == "" ||
+		params.Filename == "" ||
+		params.FileContent == "" ||
+		params.Note == "" ||
+		params.Type == "" {
+		return nil, fmt.Errorf("all KYCDocumentUploadParams are required")
 	}
 
-	bytesMessage, err := json.Marshal(p)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}

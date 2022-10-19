@@ -111,9 +111,9 @@ type SyntheticAccountTypeResponse struct {
 }
 
 // List retrieves a list of Synthetic Account filtered by the given parameters
-func (sa *syntheticAccountService) List(ctx context.Context, plp *SyntheticAccountListParams) (*SyntheticAccountResponse, error) {
+func (sa *syntheticAccountService) List(ctx context.Context, params *SyntheticAccountListParams) (*SyntheticAccountResponse, error) {
 	// Build SyntheticAccountListParams into query string params
-	v, err := query.Values(plp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -138,12 +138,12 @@ func (sa *syntheticAccountService) List(ctx context.Context, plp *SyntheticAccou
 }
 
 // Create a new Synthetic Account in the Pool with the provided specification
-func (sa *syntheticAccountService) Create(ctx context.Context, sac *SyntheticAccountCreateParams) (*SyntheticAccount, error) {
-	if sac.Name == "" || sac.PoolUID == "" || sac.SyntheticAccountTypeUID == "" {
-		return nil, fmt.Errorf("Name, PoolUID and SyntheticAccountTypeUID are required")
+func (sa *syntheticAccountService) Create(ctx context.Context, params *SyntheticAccountCreateParams) (*SyntheticAccount, error) {
+	if params.Name == "" || params.PoolUID == "" || params.SyntheticAccountTypeUID == "" {
+		return nil, fmt.Errorf("properties Name, PoolUID and SyntheticAccountTypeUID are required")
 	}
 
-	bytesMessage, err := json.Marshal(sac)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -193,12 +193,12 @@ func (sa *syntheticAccountService) Get(ctx context.Context, uid string) (*Synthe
 }
 
 // Update the Synthetic Account metadata
-func (sa *syntheticAccountService) Update(ctx context.Context, uid string, su *SyntheticAccountUpdateParams) (*SyntheticAccount, error) {
+func (sa *syntheticAccountService) Update(ctx context.Context, uid string, params *SyntheticAccountUpdateParams) (*SyntheticAccount, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	bytesMessage, err := json.Marshal(su)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -238,9 +238,9 @@ func (sa *syntheticAccountService) Delete(ctx context.Context, uid string) (*htt
 }
 
 // ListAccountTypes retrieves a list of Synthetic Account Types filtered by the given parameters
-func (sa *syntheticAccountService) ListAccountTypes(ctx context.Context, plp *SyntheticAccountTypeListParams) (*SyntheticAccountTypeResponse, error) {
+func (sa *syntheticAccountService) ListAccountTypes(ctx context.Context, params *SyntheticAccountTypeListParams) (*SyntheticAccountTypeResponse, error) {
 	// Build SyntheticAccountTypeListParams into query string params
-	v, err := query.Values(plp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}

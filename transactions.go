@@ -184,9 +184,9 @@ type CustodialLineItemResponse struct {
 }
 
 // List retrieves a list of Transactions filtered by the given parameters
-func (t *transactionService) List(ctx context.Context, tlp *TransactionListParams) (*TransactionResponse, error) {
+func (t *transactionService) List(ctx context.Context, params *TransactionListParams) (*TransactionResponse, error) {
 	// Build TransactionListParams into query string params
-	v, err := query.Values(tlp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -236,9 +236,9 @@ func (t *transactionService) Get(ctx context.Context, uid string) (*Transaction,
 }
 
 // ListTransactionEvents retrieves a list of Transaction Events filtered by the given parameters
-func (t *transactionService) ListTransactionEvents(ctx context.Context, tlp *TransactionEventListParams) (*TransactionEventResponse, error) {
+func (t *transactionService) ListTransactionEvents(ctx context.Context, params *TransactionEventListParams) (*TransactionEventResponse, error) {
 	// Build TransactionEventListParams into query string params
-	v, err := query.Values(tlp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -288,9 +288,9 @@ func (t *transactionService) GetTransactionEvent(ctx context.Context, uid string
 }
 
 // ListSyntheticLineItems retrieves a list of Synthetic Line Items filtered by the given parameters
-func (t *transactionService) ListSyntheticLineItems(ctx context.Context, tlp *SyntheticLineItemListParams) (*SyntheticLineItemResponse, error) {
+func (t *transactionService) ListSyntheticLineItems(ctx context.Context, params *SyntheticLineItemListParams) (*SyntheticLineItemResponse, error) {
 	// Build SyntheticLineItemListParams into query string params
-	v, err := query.Values(tlp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -340,9 +340,9 @@ func (t *transactionService) GetSyntheticLineItem(ctx context.Context, uid strin
 }
 
 // ListCustodialLineItems retrieves a list of Custodial Line Items filtered by the given parameters
-func (t *transactionService) ListCustodialLineItems(ctx context.Context, tlp *CustodialLineItemListParams) (*CustodialLineItemResponse, error) {
+func (t *transactionService) ListCustodialLineItems(ctx context.Context, params *CustodialLineItemListParams) (*CustodialLineItemResponse, error) {
 	// Build CustodialLineItemListParams into query string params
-	v, err := query.Values(tlp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}

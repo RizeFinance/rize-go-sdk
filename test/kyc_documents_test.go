@@ -20,7 +20,7 @@ var kycDocument = &rize.KYCDocument{
 	CreatedAt: time.Now(),
 }
 
-func TestListKYCDocuments(t *testing.T) {
+func TestKYCDocumentService_List(t *testing.T) {
 	params := &rize.KYCDocumentListParams{
 		EvaluationUID: "QSskNJkryskRXeYt",
 	}
@@ -34,7 +34,7 @@ func TestListKYCDocuments(t *testing.T) {
 	}
 }
 
-func TestUploadKYCDocument(t *testing.T) {
+func TestKYCDocumentService_Upload(t *testing.T) {
 	base64Encoding := base64.StdEncoding.EncodeToString([]byte("File info"))
 	params := &rize.KYCDocumentUploadParams{
 		EvaluationUID: "sdfHFJnWvJxRJZxq",
@@ -53,7 +53,7 @@ func TestUploadKYCDocument(t *testing.T) {
 	}
 }
 
-func TestGetKYCDocument(t *testing.T) {
+func TestKYCDocumentService_Get(t *testing.T) {
 	resp, err := rc.KYCDocuments.Get(context.Background(), "u8EHFJnWvJxRJZxa")
 	if err != nil {
 		t.Fatal("Error fetching document\n", err)
@@ -64,7 +64,7 @@ func TestGetKYCDocument(t *testing.T) {
 	}
 }
 
-func TestViewKYCDocument(t *testing.T) {
+func TestKYCDocumentService_View(t *testing.T) {
 	_, err := rc.KYCDocuments.View(context.Background(), "u8EHFJnWvJxRJZxa")
 	if err != nil {
 		t.Fatal("Error viewing document\n", err)

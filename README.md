@@ -87,7 +87,7 @@ func main() {
 
 You have the option to supply your own `http.Client`. By default, the SDK uses `DefaultClient` with a 30s timeout.
 
-To set a proxy for all requests, configure the Transport for the HTTPClient:
+To set a proxy for all requests, configure the Transport for the http.Client:
 
 ```go
 config := rize.Config{
@@ -103,7 +103,7 @@ config := rize.Config{
 }
 ```
 
-Similarly, to configure the timeout, set it on the HTTPClient:
+Similarly, to configure the timeout, set it on the http.Client:
 
 ```go
 config := rize.Config{
@@ -161,16 +161,28 @@ func main() {
 
 ## Examples
 
-The [examples](examples/) directory provides basic implementation examples for each API endpoint. They require configuration credentials to be set as environment variables. 
+The [examples](examples/) directory provides basic implementation examples for each API endpoint that can be executed via the command line. Running the examples will require configuration credentials to be set as environment variables.
 
-Use the provided `dotenv` file to set those credentials for local testing. 
+Use the provided `dotenv` file to set environment variables for local testing.
 
 ```sh
 # Generate a local configuration file
 $ cp .env-example .env
 ```
 
+```sh
+# Run an example Platform API method <SERVICE_NAME> <METHOD_NAME>
+$ go run cmd/platform/main.go CustomerService List
+```
+
+```sh
+# Connect to the Rize Message Queue and subscribe to the Customer topic
+$ go run cmd/mq/main.go
+```
+
 ## Unit Tests
+
+Test files for the platform SDK can be found in the [test](test/) directory.
 
 ```go
 $  go test ./test -v -coverpkg=./... -cover

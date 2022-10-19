@@ -32,15 +32,15 @@ type SandboxResponse struct {
 }
 
 // Create a Transaction by simulating the attributes that would be expected from reading an actual transaction received from a third party system
-func (s *sandboxService) Create(ctx context.Context, scp *SandboxCreateParams) (*SandboxResponse, error) {
-	if scp.TransactionType == "" ||
-		scp.CustomerUID == "" ||
-		scp.DebitCardUID == "" ||
-		scp.USDollarAmount == 0 {
+func (s *sandboxService) Create(ctx context.Context, params *SandboxCreateParams) (*SandboxResponse, error) {
+	if params.TransactionType == "" ||
+		params.CustomerUID == "" ||
+		params.DebitCardUID == "" ||
+		params.USDollarAmount == 0 {
 		return nil, fmt.Errorf("TransactionType, CustomerUID, DebitCardUID and USDollarAmount are required")
 	}
 
-	bytesMessage, err := json.Marshal(scp)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}

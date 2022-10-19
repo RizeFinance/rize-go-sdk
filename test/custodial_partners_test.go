@@ -15,7 +15,7 @@ var custodialPartner = &rize.CustodialPartner{
 	Type: "Mutual savings bank",
 }
 
-func TestListCustodialPartners(t *testing.T) {
+func TestCustodialPartnerService_List(t *testing.T) {
 	resp, err := rc.CustodialPartners.List(context.Background())
 	if err != nil {
 		t.Fatal("Error fetching Custodial Partners\n", err)
@@ -26,7 +26,7 @@ func TestListCustodialPartners(t *testing.T) {
 	}
 }
 
-func TestGetCustodialPartner(t *testing.T) {
+func TestCustodialPartnerService_Get(t *testing.T) {
 	resp, err := rc.CustodialPartners.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Custodial Partner\n", err)

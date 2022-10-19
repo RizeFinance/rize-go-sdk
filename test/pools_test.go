@@ -16,7 +16,7 @@ var pool = &rize.Pool{
 	CustomerUIDs:     []string{"uKxmLxUEiSj5h4M3", "ivxTYrJtwrMC4f6w"},
 }
 
-func TestListPools(t *testing.T) {
+func TestPoolService_List(t *testing.T) {
 	params := &rize.PoolListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		ExternalUID: "client-generated-id",
@@ -33,7 +33,7 @@ func TestListPools(t *testing.T) {
 	}
 }
 
-func TestGetPool(t *testing.T) {
+func TestPoolService_Get(t *testing.T) {
 	resp, err := rc.Pools.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching pool\n", err)

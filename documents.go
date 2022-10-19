@@ -47,9 +47,9 @@ type DocumentResponse struct {
 }
 
 // List retrieves a list of Documents filtered by the given parameters
-func (d *documentService) List(ctx context.Context, dlp *DocumentListParams) (*DocumentResponse, error) {
+func (d *documentService) List(ctx context.Context, params *DocumentListParams) (*DocumentResponse, error) {
 	// Build DocumentListParams into query string params
-	v, err := query.Values(dlp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}

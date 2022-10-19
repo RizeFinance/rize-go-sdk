@@ -28,7 +28,7 @@ var product = &rize.Product{
 	}},
 }
 
-func TestListProducts(t *testing.T) {
+func TestProductService_List(t *testing.T) {
 	params := &rize.ProductListParams{
 		ProgramUID: "pQtTCSXz57fuefzp",
 	}
@@ -42,7 +42,7 @@ func TestListProducts(t *testing.T) {
 	}
 }
 
-func TestGetProduct(t *testing.T) {
+func TestProductService_Get(t *testing.T) {
 	resp, err := rc.Products.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Product\n", err)

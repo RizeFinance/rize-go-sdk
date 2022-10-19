@@ -168,7 +168,7 @@ func (rc *Client) doRequest(ctx context.Context, method string, path string, que
 
 	url := fmt.Sprintf("%s/%s/%s", rc.cfg.BaseURL, internal.BasePath, path)
 
-	log.Println(fmt.Sprintf("Sending %s request to %s", method, url))
+	log.Printf("Sending %s request to %s\n", method, url)
 
 	req, err := http.NewRequestWithContext(ctx, method, url, data)
 	if err != nil {
@@ -215,7 +215,7 @@ func (cfg *Config) validateConfig() error {
 	}
 
 	if ok := slices.Contains(internal.Environments, strings.ToLower(cfg.Environment)); !ok {
-		log.Println(fmt.Sprintf("Environment %s not recognized. Defaulting to sandbox...", cfg.Environment))
+		log.Printf("Environment %s not recognized. Defaulting to sandbox...\n", cfg.Environment)
 		cfg.Environment = "sandbox"
 	}
 

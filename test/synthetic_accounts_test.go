@@ -50,7 +50,7 @@ var syntheticAccountType = &rize.SyntheticAccountType{
 	TargetAnnualYieldPercent: 2.25,
 }
 
-func TestListSyntheticAccounts(t *testing.T) {
+func TestSyntheticAccountService_List(t *testing.T) {
 	params := &rize.SyntheticAccountListParams{
 		CustomerUID:              "uKxmLxUEiSj5h4M3",
 		ExternalUID:              "client-generated-id",
@@ -73,7 +73,7 @@ func TestListSyntheticAccounts(t *testing.T) {
 	}
 }
 
-func TestCreateSyntheticAccount(t *testing.T) {
+func TestSyntheticAccountService_Create(t *testing.T) {
 	params := &rize.SyntheticAccountCreateParams{
 		ExternalUID:             "partner-generated-id",
 		Name:                    "New Resource Name",
@@ -93,7 +93,7 @@ func TestCreateSyntheticAccount(t *testing.T) {
 		t.Fatalf(err.Error())
 	}
 }
-func TestGetSyntheticAccount(t *testing.T) {
+func TestSyntheticAccountService_Get(t *testing.T) {
 	resp, err := rc.SyntheticAccounts.Get(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		t.Fatal("Error fetching Synthetic Account\n", err)
@@ -104,7 +104,7 @@ func TestGetSyntheticAccount(t *testing.T) {
 	}
 }
 
-func TestUpdateSyntheticAccount(t *testing.T) {
+func TestSyntheticAccountService_Update(t *testing.T) {
 	params := &rize.SyntheticAccountUpdateParams{
 		Name: "New Resource Name",
 		Note: "note",
@@ -119,7 +119,7 @@ func TestUpdateSyntheticAccount(t *testing.T) {
 	}
 }
 
-func TestDeleteSyntheticAccount(t *testing.T) {
+func TestSyntheticAccountService_Delete(t *testing.T) {
 	_, err := rc.SyntheticAccounts.Delete(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		t.Fatal("Error deleting Synthetic Account\n", err)
@@ -130,7 +130,7 @@ func TestDeleteSyntheticAccount(t *testing.T) {
 	}
 }
 
-func TestListAccountTypes(t *testing.T) {
+func TestSyntheticAccountService_ListAccountTypes(t *testing.T) {
 	params := &rize.SyntheticAccountTypeListParams{
 		ProgramUID: "EhrQZJNjCd79LLYq",
 		Limit:      100,
@@ -146,7 +146,7 @@ func TestListAccountTypes(t *testing.T) {
 	}
 }
 
-func TestGetAccountType(t *testing.T) {
+func TestSyntheticAccountService_GetAccountType(t *testing.T) {
 	resp, err := rc.SyntheticAccounts.GetAccountType(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Synthetic Account Type\n", err)

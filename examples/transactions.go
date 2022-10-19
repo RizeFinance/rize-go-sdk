@@ -1,38 +1,16 @@
-package main
+package examples
 
 import (
 	"context"
 	"encoding/json"
 	"log"
 
-	"github.com/joho/godotenv"
 	"github.com/rizefinance/rize-go-sdk"
-	"github.com/rizefinance/rize-go-sdk/internal"
 )
 
-func init() {
-	// Load local env file
-	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file:", err)
-	}
-}
-
-func main() {
-	config := rize.Config{
-		ProgramUID:  internal.CheckEnvVariable("program_uid"),
-		HMACKey:     internal.CheckEnvVariable("hmac_key"),
-		Environment: internal.CheckEnvVariable("environment"),
-		Debug:       true,
-	}
-
-	// Create new Rize client
-	rc, err := rize.NewClient(&config)
-	if err != nil {
-		log.Fatal("Error building RizeClient\n", err)
-	}
-
-	// List Transactions
-	tlp := rize.TransactionListParams{
+// List Transactions
+func ExampleTransactionService_List(rc *rize.Client) {
+	params := &rize.TransactionListParams{
 		CustomerUID:                    "uKxmLxUEiSj5h4M3",
 		PoolUID:                        "wTSMX1GubP21ev2h",
 		DebitCardUID:                   "MYNGv45UK6HWBHHf",
@@ -40,84 +18,96 @@ func main() {
 		DestinationSyntheticAccountUID: "exMDShw6yM3NHLYV",
 		SyntheticAccountUID:            "4XkJnsfHsuqrxmeX",
 		Type:                           "card_refund",
-		ShowDeniedAuths:                false,
+		ShowDeniedAuths:                true,
 		ShowExpired:                    true,
 		Status:                         "failed",
 		SearchDescription:              "Transfer%2A",
 		IncludeZero:                    true,
 		Limit:                          100,
-		Offset:                         0,
+		Offset:                         10,
 		Sort:                           "id_asc",
 	}
-	tl, err := rc.Transactions.List(context.Background(), &tlp)
+	resp, err := rc.Transactions.List(context.Background(), params)
 	if err != nil {
-		log.Fatal("Error fetching transactions\n", err)
+		log.Fatal("Error fetching Transactions\n", err)
 	}
-	output, _ := json.MarshalIndent(tl, "", "\t")
+	output, _ := json.MarshalIndent(resp, "", "\t")
 	log.Println("List Transactions:", string(output))
+}
 
-	// Get Transaction
-	tg, err := rc.Transactions.Get(context.Background(), "SMwKC1osz77DTEiu")
+// Get Transaction
+func ExampleTransactionService_Get(rc *rize.Client) {
+	resp, err := rc.Transactions.Get(context.Background(), "SMwKC1osz77DTEiu")
 	if err != nil {
-		log.Fatal("Error fetching transaction\n", err)
+		log.Fatal("Error fetching Transaction\n", err)
 	}
-	output, _ = json.MarshalIndent(tg, "", "\t")
+	output, _ := json.MarshalIndent(resp, "", "\t")
 	log.Println("Get Transaction:", string(output))
+}
 
-	// List Transaction Events
-	tep := rize.TransactionEventListParams{
+// List Transaction Events
+func ExampleTransactionService_ListTransactionEvents(rc *rize.Client) {
+	params := &rize.TransactionEventListParams{
 		SourceCustodialAccountUID:      "dmRtw1xkS9ghrntB",
 		DestinationCustodialAccountUID: "W55zKgvAk3zkpGM3",
 		CustodialAccountUID:            "dmRtw1xkS9ghrntB",
 		Type:                           "odfi_ach_withdrawal",
 		TransactionUID:                 "SMwKC1osz77DTEiu",
 		Limit:                          100,
-		Offset:                         0,
+		Offset:                         10,
 		Sort:                           "created_at_asc",
 	}
-	te, err := rc.Transactions.ListTransactionEvents(context.Background(), &tep)
+	resp, err := rc.Transactions.ListTransactionEvents(context.Background(), params)
 	if err != nil {
 		log.Fatal("Error fetching Transaction Events\n", err)
 	}
-	output, _ = json.MarshalIndent(te, "", "\t")
+	output, _ := json.MarshalIndent(resp, "", "\t")
 	log.Println("List Transaction Events:", string(output))
+}
 
-	// Get Transaction Event
-	teg, err := rc.Transactions.GetTransactionEvent(context.Background(), "MB2yqBrm3c4bUbou")
+// Get Transaction Event
+func ExampleTransactionService_GetTransactionEvent(rc *rize.Client) {
+	resp, err := rc.Transactions.GetTransactionEvent(context.Background(), "MB2yqBrm3c4bUbou")
 	if err != nil {
 		log.Fatal("Error fetching Transaction Event\n", err)
 	}
-	output, _ = json.MarshalIndent(teg, "", "\t")
+	output, _ := json.MarshalIndent(resp, "", "\t")
 	log.Println("Get Transaction Event:", string(output))
+}
 
-	// List Synthetic Line Items
-	slp := rize.SyntheticLineItemListParams{
+// List Synthetic Line Items
+func ExampleTransactionService_ListSyntheticLineItems(rc *rize.Client) {
+	params := &rize.SyntheticLineItemListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		PoolUID:             "wTSMX1GubP21ev2h",
 		SyntheticAccountUID: "4XkJnsfHsuqrxmeX",
 		Limit:               100,
-		Offset:              0,
+		Offset:              10,
 		TransactionUID:      "SMwKC1osz77DTEiu",
 		Status:              "in_progress",
 		Sort:                "created_at_asc",
 	}
-	sl, err := rc.Transactions.ListSyntheticLineItems(context.Background(), &slp)
+	resp, err := rc.Transactions.ListSyntheticLineItems(context.Background(), params)
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Line Items\n", err)
 	}
-	output, _ = json.MarshalIndent(sl, "", "\t")
+	output, _ := json.MarshalIndent(resp, "", "\t")
 	log.Println("List Synthetic Line Items:", string(output))
+}
 
-	// Get Synthetic Line Item
-	sg, err := rc.Transactions.GetSyntheticLineItem(context.Background(), "j56aHgLBqkNu1KwK")
+// Get Synthetic Line Item
+func ExampleTransactionService_GetSyntheticLineItem(rc *rize.Client) {
+	resp, err := rc.Transactions.GetSyntheticLineItem(context.Background(), "j56aHgLBqkNu1KwK")
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Line Item\n", err)
 	}
-	output, _ = json.MarshalIndent(sg, "", "\t")
+	output, _ := json.MarshalIndent(resp, "", "\t")
 	log.Println("Get Synthetic Line Item:", string(output))
+}
 
-	// List Custodial Line Items
-	clp := rize.CustodialLineItemListParams{
+// List Custodial Line Items
+func ExampleTransactionService_ListCustodialLineItems(rc *rize.Client) {
+	params := &rize.CustodialLineItemListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		CustodialAccountUID: "wTSMX1GubP21ev2h",
 		Status:              "voided",
@@ -126,21 +116,23 @@ func main() {
 		TransactionEventUID: "MB2yqBrm3c4bUbou",
 		TransactionUID:      "SMwKC1osz77DTEiu",
 		Limit:               100,
-		Offset:              0,
+		Offset:              10,
 		Sort:                "created_at_asc",
 	}
-	cl, err := rc.Transactions.ListCustodialLineItems(context.Background(), &clp)
+	resp, err := rc.Transactions.ListCustodialLineItems(context.Background(), params)
 	if err != nil {
 		log.Fatal("Error fetching Custodial Line Items\n", err)
 	}
-	output, _ = json.MarshalIndent(cl, "", "\t")
+	output, _ := json.MarshalIndent(resp, "", "\t")
 	log.Println("List Custodial Line Items:", string(output))
+}
 
-	// Get Custodial Line Item
-	cg, err := rc.Transactions.GetCustodialLineItem(context.Background(), "j56aHgLBqkNu1KwK")
+// Get Custodial Line Item
+func ExampleTransactionService_GetCustodialLineItem(rc *rize.Client) {
+	resp, err := rc.Transactions.GetCustodialLineItem(context.Background(), "j56aHgLBqkNu1KwK")
 	if err != nil {
 		log.Fatal("Error fetching Custodial Line Item\n", err)
 	}
-	output, _ = json.MarshalIndent(cg, "", "\t")
+	output, _ := json.MarshalIndent(resp, "", "\t")
 	log.Println("Get Custodial Line Item:", string(output))
 }

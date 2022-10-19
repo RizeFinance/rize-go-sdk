@@ -97,7 +97,7 @@ var custodialLineItem = &rize.CustodialLineItem{
 	SettledAt:              time.Now(),
 }
 
-func TestListTransactions(t *testing.T) {
+func TestTransactionService_List(t *testing.T) {
 	params := &rize.TransactionListParams{
 		CustomerUID:                    "uKxmLxUEiSj5h4M3",
 		PoolUID:                        "wTSMX1GubP21ev2h",
@@ -125,7 +125,7 @@ func TestListTransactions(t *testing.T) {
 	}
 }
 
-func TestGetTransaction(t *testing.T) {
+func TestTransactionService_Get(t *testing.T) {
 	resp, err := rc.Transactions.Get(context.Background(), "SMwKC1osz77DTEiu")
 	if err != nil {
 		t.Fatal("Error fetching Transaction\n", err)
@@ -136,7 +136,7 @@ func TestGetTransaction(t *testing.T) {
 	}
 }
 
-func TestListTransactionEvents(t *testing.T) {
+func TestTransactionService_ListTransactionEvents(t *testing.T) {
 	params := &rize.TransactionEventListParams{
 		SourceCustodialAccountUID:      "dmRtw1xkS9ghrntB",
 		DestinationCustodialAccountUID: "W55zKgvAk3zkpGM3",
@@ -157,7 +157,7 @@ func TestListTransactionEvents(t *testing.T) {
 	}
 }
 
-func TestGetTransactionEvent(t *testing.T) {
+func TestTransactionService_GetTransactionEvent(t *testing.T) {
 	resp, err := rc.Transactions.GetTransactionEvent(context.Background(), "MB2yqBrm3c4bUbou")
 	if err != nil {
 		t.Fatal("Error fetching Transaction Event\n", err)
@@ -168,7 +168,7 @@ func TestGetTransactionEvent(t *testing.T) {
 	}
 }
 
-func TestListSyntheticLineItems(t *testing.T) {
+func TestTransactionService_ListSyntheticLineItems(t *testing.T) {
 	params := &rize.SyntheticLineItemListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		PoolUID:             "wTSMX1GubP21ev2h",
@@ -189,7 +189,7 @@ func TestListSyntheticLineItems(t *testing.T) {
 	}
 }
 
-func TestGetSyntheticLineItem(t *testing.T) {
+func TestTransactionService_GetSyntheticLineItem(t *testing.T) {
 	resp, err := rc.Transactions.GetSyntheticLineItem(context.Background(), "j56aHgLBqkNu1KwK")
 	if err != nil {
 		t.Fatal("Error fetching Synthetic Line Item\n", err)
@@ -200,7 +200,7 @@ func TestGetSyntheticLineItem(t *testing.T) {
 	}
 }
 
-func TestListCustodialLineItems(t *testing.T) {
+func TestTransactionService_ListCustodialLineItems(t *testing.T) {
 	params := &rize.CustodialLineItemListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		CustodialAccountUID: "wTSMX1GubP21ev2h",
@@ -223,7 +223,7 @@ func TestListCustodialLineItems(t *testing.T) {
 	}
 }
 
-func TestGetCustodialLineItem(t *testing.T) {
+func TestTransactionService_GetCustodialLineItem(t *testing.T) {
 	resp, err := rc.Transactions.GetCustodialLineItem(context.Background(), "j56aHgLBqkNu1KwK")
 	if err != nil {
 		t.Fatal("Error fetching Custodial Line Item\n", err)

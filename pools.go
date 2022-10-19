@@ -36,9 +36,9 @@ type PoolResponse struct {
 }
 
 // List retrieves a list of Pools filtered by the given parameters
-func (p *poolService) List(ctx context.Context, plp *PoolListParams) (*PoolResponse, error) {
+func (p *poolService) List(ctx context.Context, params *PoolListParams) (*PoolResponse, error) {
 	// Build PoolListParams into query string params
-	v, err := query.Values(plp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}

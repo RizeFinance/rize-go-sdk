@@ -57,9 +57,9 @@ type PinwheelJobResponse struct {
 }
 
 // List retrieves a list of Pinwheel Jobs filtered by the given parameters
-func (p *pinwheelJobService) List(ctx context.Context, plp *PinwheelJobListParams) (*PinwheelJobResponse, error) {
+func (p *pinwheelJobService) List(ctx context.Context, params *PinwheelJobListParams) (*PinwheelJobResponse, error) {
 	// Build PinwheelJobListParams into query string params
-	v, err := query.Values(plp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -84,12 +84,12 @@ func (p *pinwheelJobService) List(ctx context.Context, plp *PinwheelJobListParam
 }
 
 // Create is used to initialize a new Pinwheel Job and return a pinwheel_link_token to be used with the Pinwheel Link SDK
-func (p *pinwheelJobService) Create(ctx context.Context, pcp *PinwheelJobCreateParams) (*PinwheelJob, error) {
-	if len(pcp.JobNames) == 0 || pcp.SyntheticAccountUID == "" {
+func (p *pinwheelJobService) Create(ctx context.Context, params *PinwheelJobCreateParams) (*PinwheelJob, error) {
+	if len(params.JobNames) == 0 || params.SyntheticAccountUID == "" {
 		return nil, fmt.Errorf("JobNames and SyntheticAccountUID are required")
 	}
 
-	bytesMessage, err := json.Marshal(pcp)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}

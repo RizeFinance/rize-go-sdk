@@ -13,7 +13,7 @@ var tokenResponse = &rize.AuthTokenResponse{
 	Token: "auth-header.payload.signature",
 }
 
-func TestGetToken(t *testing.T) {
+func TestAuthService_GetToken(t *testing.T) {
 	resp, err := rc.Auth.GetToken(context.Background())
 	if err != nil {
 		t.Fatal("Error fetching Auth token\n", err)

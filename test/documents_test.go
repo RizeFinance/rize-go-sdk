@@ -23,7 +23,7 @@ var document = &rize.Document{
 	SyntheticAccountUIDs: []string{"Qtjp9FdPPpTiFeeo, NYeFXLPzNXbJQ2WR"},
 }
 
-func TestListDocuments(t *testing.T) {
+func TestDocumentService_List(t *testing.T) {
 	params := &rize.DocumentListParams{
 		DocumentType:        "monthly_statement",
 		Month:               1,
@@ -44,7 +44,7 @@ func TestListDocuments(t *testing.T) {
 	}
 }
 
-func TestGetDocument(t *testing.T) {
+func TestDocumentService_Get(t *testing.T) {
 	resp, err := rc.Documents.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Document\n", err)
@@ -55,7 +55,7 @@ func TestGetDocument(t *testing.T) {
 	}
 }
 
-func TestViewDocument(t *testing.T) {
+func TestDocumentService_View(t *testing.T) {
 	_, err := rc.Documents.View(context.Background(), "u8EHFJnWvJxRJZxa")
 	if err != nil {
 		t.Fatal("Error viewing document\n", err)

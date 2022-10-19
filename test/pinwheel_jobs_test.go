@@ -26,7 +26,7 @@ var pinwheelJob = &rize.PinwheelJob{
 	SkipWelcomeScreen:    false,
 }
 
-func TestListPinwheelJobs(t *testing.T) {
+func TestPinwheelJobService_List(t *testing.T) {
 	params := &rize.PinwheelJobListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		SyntheticAccountUID: "4XkJnsfHsuqrxmeX",
@@ -43,7 +43,7 @@ func TestListPinwheelJobs(t *testing.T) {
 	}
 }
 
-func TestCreatePinwheelJob(t *testing.T) {
+func TestPinwheelJobService_Create(t *testing.T) {
 	params := &rize.PinwheelJobCreateParams{
 		JobNames:             []string{"direct_deposit_switch"},
 		SyntheticAccountUID:  "4XkJnsfHsuqrxmeX",
@@ -62,7 +62,7 @@ func TestCreatePinwheelJob(t *testing.T) {
 	}
 }
 
-func TestGetPinwheelJob(t *testing.T) {
+func TestPinwheelJobService_Get(t *testing.T) {
 	resp, err := rc.PinwheelJobs.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Pinwheel Job\n", err)

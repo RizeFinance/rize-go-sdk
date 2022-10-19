@@ -1,12 +1,11 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
 	"log"
 
 	"github.com/joho/godotenv"
 	"github.com/rizefinance/rize-go-sdk"
+	"github.com/rizefinance/rize-go-sdk/examples"
 	"github.com/rizefinance/rize-go-sdk/internal"
 )
 
@@ -15,38 +14,24 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading .env file:", err)
 	}
+
+	v := rize.Version()
+	log.Printf("Loading Rize SDK version: %s\n", v)
 }
 
 func main() {
+	// Create new Rize client for examples
 	config := rize.Config{
 		ProgramUID:  internal.CheckEnvVariable("program_uid"),
 		HMACKey:     internal.CheckEnvVariable("hmac_key"),
 		Environment: internal.CheckEnvVariable("environment"),
 		Debug:       true,
 	}
-
-	// Create new Rize client
 	rc, err := rize.NewClient(&config)
 	if err != nil {
 		log.Fatal("Error building RizeClient\n", err)
 	}
 
-	// List Products
-	plp := rize.ProductListParams{
-		ProgramUID: "pQtTCSXz57fuefzp",
-	}
-	pl, err := rc.Products.List(context.Background(), &plp)
-	if err != nil {
-		log.Fatal("Error fetching products\n", err)
-	}
-	output, _ := json.MarshalIndent(pl, "", "\t")
-	log.Println("List Products:", string(output))
+	examples.ExampleAuthService_GetToken(rc)
 
-	// Get Product
-	pg, err := rc.Products.Get(context.Background(), "f9VncZny4ejhcPF4")
-	if err != nil {
-		log.Fatal("Error fetching product\n", err)
-	}
-	output, _ = json.MarshalIndent(pg, "", "\t")
-	log.Println("Get Product:", string(output))
 }

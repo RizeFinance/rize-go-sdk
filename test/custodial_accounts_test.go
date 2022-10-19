@@ -41,7 +41,7 @@ var custodialAccount = &rize.CustodialAccount{
 	ClosedAt:            time.Now(),
 }
 
-func TestListCustodialAccounts(t *testing.T) {
+func TestCustodialAccountService_List(t *testing.T) {
 	params := &rize.CustodialAccountListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		ExternalUID: "client-generated-id",
@@ -60,7 +60,7 @@ func TestListCustodialAccounts(t *testing.T) {
 	}
 }
 
-func TestGetCustodialAccounts(t *testing.T) {
+func TestCustodialAccountService_Get(t *testing.T) {
 	resp, err := rc.CustodialAccounts.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Custodial Account\n", err)

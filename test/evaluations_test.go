@@ -30,7 +30,7 @@ var evaluation = &rize.Evaluation{
 	},
 }
 
-func TestListEvaluations(t *testing.T) {
+func TestEvaluationService_List(t *testing.T) {
 	params := &rize.EvaluationListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		Latest:      true,
@@ -45,7 +45,7 @@ func TestListEvaluations(t *testing.T) {
 	}
 }
 
-func TestGetEvaluation(t *testing.T) {
+func TestEvaluationService_Get(t *testing.T) {
 	resp, err := rc.Evaluations.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Evaluation\n", err)

@@ -420,8 +420,14 @@ func validateSchema(method string, path string, status int, queryParams interfac
 		var bytesParams []byte
 		if queryParams != nil {
 			bytesParams, err = json.Marshal(&queryParams)
+			if err != nil {
+				return err
+			}
 		} else {
 			bytesParams, err = json.Marshal(&bodyParams)
+			if err != nil {
+				return err
+			}
 		}
 		p := make(map[string]interface{})
 		if err := json.Unmarshal(bytesParams, &p); err != nil {

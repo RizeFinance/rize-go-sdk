@@ -19,7 +19,7 @@ var customerProduct = &rize.CustomerProduct{
 	ProgramUID:    "F1oFMKafpB2Zm6ng",
 }
 
-func TestListCustomerProducts(t *testing.T) {
+func TestCustomerProductService_List(t *testing.T) {
 	params := &rize.CustomerProductListParams{
 		ProgramUID:  "pQtTCSXz57fuefzp",
 		ProductUID:  "zbJbEa72eKMgbbBv",
@@ -35,7 +35,7 @@ func TestListCustomerProducts(t *testing.T) {
 	}
 }
 
-func TestCreateCustomerProduct(t *testing.T) {
+func TestCustomerProductService_Create(t *testing.T) {
 	params := &rize.CustomerProductCreateParams{
 		CustomerUID: "S62MaHx6WwsqG9vQ",
 		ProductUID:  "pQtTCSXz57fuefzp",
@@ -50,7 +50,7 @@ func TestCreateCustomerProduct(t *testing.T) {
 	}
 }
 
-func TestGetCustomerProduct(t *testing.T) {
+func TestCustomerProductService_Get(t *testing.T) {
 	resp, err := rc.CustomerProducts.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Customer Product\n", err)

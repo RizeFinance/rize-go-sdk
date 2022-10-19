@@ -1,14 +1,15 @@
-package rize_test
+package examples
 
 import (
 	"context"
-	"net/http"
-	"testing"
+	"encoding/json"
+	"log"
 
 	"github.com/rizefinance/rize-go-sdk"
 )
 
-func TestSandboxService_Create(t *testing.T) {
+// Create Sandbox Transaction
+func ExampleSandboxService_Create(rc *rize.Client) {
 	params := &rize.SandboxCreateParams{
 		TransactionType:  "atm_withdrawal",
 		CustomerUID:      "uKxmLxUEiSj5h4M3",
@@ -23,10 +24,8 @@ func TestSandboxService_Create(t *testing.T) {
 	}
 	resp, err := rc.Sandbox.Create(context.Background(), params)
 	if err != nil {
-		t.Fatal("Error creating Sandbox transactions\n", err)
+		log.Fatal("Error creating Sandbox transactions\n", err)
 	}
-
-	if err := validateSchema(http.MethodPost, "/sandbox/mock_transactions", http.StatusCreated, nil, params, resp); err != nil {
-		t.Fatalf(err.Error())
-	}
+	output, _ := json.MarshalIndent(resp, "", "\t")
+	log.Println("Create Sandbox Transactions:", string(output))
 }

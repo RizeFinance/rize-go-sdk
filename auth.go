@@ -51,7 +51,7 @@ func (a *authService) GetToken(ctx context.Context) (*AuthTokenResponse, error) 
 			return nil, err
 		}
 
-		log.Println(fmt.Sprintf("Token response %+v", response))
+		log.Printf("Token response %+v\n", response)
 
 		// Validate token exists
 		if response.Token == "" {
@@ -83,7 +83,7 @@ func (a *authService) buildRefreshToken() (string, error) {
 		return "", err
 	}
 
-	log.Println(fmt.Sprintf("Signed token %s", signedToken))
+	log.Printf("Signed token %s\n", signedToken)
 
 	return signedToken, nil
 }

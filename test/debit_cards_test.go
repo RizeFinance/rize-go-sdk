@@ -44,7 +44,7 @@ var accessToken = &rize.DebitCardAccessToken{
 	ConfigID: "1",
 }
 
-func TestListDebitCards(t *testing.T) {
+func TestDebitCardService_List(t *testing.T) {
 	params := &rize.DebitCardListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		ExternalUID: "client-generated-id",
@@ -65,7 +65,7 @@ func TestListDebitCards(t *testing.T) {
 	}
 }
 
-func TestCreateDebitCard(t *testing.T) {
+func TestDebitCardService_Create(t *testing.T) {
 	params := &rize.DebitCardCreateParams{
 		ExternalUID:    "partner-generated-id",
 		CardArtworkUID: "EhrQZJNjCd79LLYq",
@@ -89,7 +89,7 @@ func TestCreateDebitCard(t *testing.T) {
 	}
 }
 
-func TestGetDebitCard(t *testing.T) {
+func TestDebitCardService_Get(t *testing.T) {
 	resp, err := rc.DebitCards.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		t.Fatal("Error fetching Debit Card\n", err)
@@ -100,7 +100,7 @@ func TestGetDebitCard(t *testing.T) {
 	}
 }
 
-func TestActivateDebitCard(t *testing.T) {
+func TestDebitCardService_Activate(t *testing.T) {
 	params := &rize.DebitCardActivateParams{
 		CardLastFourDigits: "1234",
 		CVV:                "012",
@@ -116,7 +116,7 @@ func TestActivateDebitCard(t *testing.T) {
 	}
 }
 
-func TestLockDebitCard(t *testing.T) {
+func TestDebitCardService_Lock(t *testing.T) {
 	params := &rize.DebitCardLockParams{
 		LockReason: "Fraud detected",
 	}
@@ -130,7 +130,7 @@ func TestLockDebitCard(t *testing.T) {
 	}
 }
 
-func TestUnlockDebitCard(t *testing.T) {
+func TestDebitCardService_Unlock(t *testing.T) {
 	resp, err := rc.DebitCards.Unlock(context.Background(), "Lt6qjTNnYLjFfEWL")
 	if err != nil {
 		t.Fatal("Error unlocking Debit Card\n", err)
@@ -141,7 +141,7 @@ func TestUnlockDebitCard(t *testing.T) {
 	}
 }
 
-func TestReissueDebitCard(t *testing.T) {
+func TestDebitCardService_Reissue(t *testing.T) {
 	params := &rize.DebitCardReissueParams{
 		CardArtworkUID: "EhrQZJNjCd79LLYq",
 		ReissueReason:  "damaged",
@@ -163,7 +163,7 @@ func TestReissueDebitCard(t *testing.T) {
 	}
 }
 
-func TestGetPINToken(t *testing.T) {
+func TestDebitCardService_GetPINToken(t *testing.T) {
 	params := &rize.DebitCardGetPINTokenParams{
 		ForceReset: true,
 	}
@@ -177,7 +177,7 @@ func TestGetPINToken(t *testing.T) {
 	}
 }
 
-func TestGetAccessToken(t *testing.T) {
+func TestDebitCardService_GetAccessToken(t *testing.T) {
 	resp, err := rc.DebitCards.GetAccessToken(context.Background(), "Lt6qjTNnYLjFfEWL")
 	if err != nil {
 		t.Fatal("Error fetching Debit Card Access Token\n", err)
@@ -188,7 +188,7 @@ func TestGetAccessToken(t *testing.T) {
 	}
 }
 
-func TestMigrateVirtualDebitCard(t *testing.T) {
+func TestDebitCardService_MigrateVirtualDebitCard(t *testing.T) {
 	params := &rize.VirtualDebitCardMigrateParams{
 		ExternalUID:    "partner-generated-id",
 		CardArtworkUID: "EhrQZJNjCd79LLYq",
@@ -209,7 +209,7 @@ func TestMigrateVirtualDebitCard(t *testing.T) {
 	}
 }
 
-func TestGetVirtualDebitCardImage(t *testing.T) {
+func TestDebitCardService_GetVirtualDebitCardImage(t *testing.T) {
 	params := &rize.DebitCardAccessToken{
 		Token:    "VmU27goFku4DyxfsdyoH5G1mlztvwskBywKrskVN9jQOh50Yy7",
 		ConfigID: "1",

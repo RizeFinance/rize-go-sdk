@@ -74,9 +74,9 @@ type AdjustmentTypeResponse struct {
 }
 
 // List retrieves a list of Adjustments filtered by the given parameters
-func (a *adjustmentService) List(ctx context.Context, alp *AdjustmentListParams) (*AdjustmentResponse, error) {
+func (a *adjustmentService) List(ctx context.Context, params *AdjustmentListParams) (*AdjustmentResponse, error) {
 	// Build AdjustmentListParams into query string params
-	v, err := query.Values(alp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -101,14 +101,14 @@ func (a *adjustmentService) List(ctx context.Context, alp *AdjustmentListParams)
 }
 
 // Create a new Adjustment with the provided specification
-func (a *adjustmentService) Create(ctx context.Context, acp *AdjustmentCreateParams) (*Adjustment, error) {
-	if acp.CustomerUID == "" ||
-		acp.USDAdjustmentAmount == "" ||
-		acp.AdjustmentTypeUID == "" {
+func (a *adjustmentService) Create(ctx context.Context, params *AdjustmentCreateParams) (*Adjustment, error) {
+	if params.CustomerUID == "" ||
+		params.USDAdjustmentAmount == "" ||
+		params.AdjustmentTypeUID == "" {
 		return nil, fmt.Errorf("CustomerUID, USDAdjustmentAmount and AdjustmentTypeUID are required")
 	}
 
-	bytesMessage, err := json.Marshal(acp)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -158,8 +158,8 @@ func (a *adjustmentService) Get(ctx context.Context, uid string) (*Adjustment, e
 }
 
 // ListAdjustmentTypes retrieves a list of Adjustment Types filtered by the given parameters
-func (a *adjustmentService) ListAdjustmentTypes(ctx context.Context, alp *AdjustmentTypeListParams) (*AdjustmentTypeResponse, error) {
-	v, err := query.Values(alp)
+func (a *adjustmentService) ListAdjustmentTypes(ctx context.Context, params *AdjustmentTypeListParams) (*AdjustmentTypeResponse, error) {
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}

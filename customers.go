@@ -136,9 +136,9 @@ type CustomerResponse struct {
 }
 
 // List retrieves a list of Customers filtered by the given parameters
-func (c *customerService) List(ctx context.Context, clp *CustomerListParams) (*CustomerResponse, error) {
+func (c *customerService) List(ctx context.Context, params *CustomerListParams) (*CustomerResponse, error) {
 	// Build CustomerListParams into query string params
-	v, err := query.Values(clp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -163,12 +163,12 @@ func (c *customerService) List(ctx context.Context, clp *CustomerListParams) (*C
 }
 
 // Create is used to initialize a new Customer with an email and external_uid
-func (c *customerService) Create(ctx context.Context, ccp *CustomerCreateParams) (*Customer, error) {
-	if ccp.Email == "" {
-		return nil, fmt.Errorf("Email is required")
+func (c *customerService) Create(ctx context.Context, params *CustomerCreateParams) (*Customer, error) {
+	if params.Email == "" {
+		return nil, fmt.Errorf("email is required")
 	}
 
-	bytesMessage, err := json.Marshal(ccp)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -218,12 +218,12 @@ func (c *customerService) Get(ctx context.Context, uid string) (*Customer, error
 }
 
 // Update will submit or update a Customer's personally identifiable information (PII) after they are created
-func (c *customerService) Update(ctx context.Context, uid string, cu *CustomerUpdateParams) (*Customer, error) {
+func (c *customerService) Update(ctx context.Context, uid string, params *CustomerUpdateParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	bytesMessage, err := json.Marshal(cu)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -248,12 +248,12 @@ func (c *customerService) Update(ctx context.Context, uid string, cu *CustomerUp
 }
 
 // Delete will archive a Customer
-func (c *customerService) Delete(ctx context.Context, uid string, cd *CustomerDeleteParams) (*http.Response, error) {
+func (c *customerService) Delete(ctx context.Context, uid string, params *CustomerDeleteParams) (*http.Response, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	bytesMessage, err := json.Marshal(cd)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -293,12 +293,12 @@ func (c *customerService) ConfirmPIIData(ctx context.Context, uid string) (*Cust
 }
 
 // Lock will freeze all activities relating to the Customer
-func (c *customerService) Lock(ctx context.Context, uid string, cl *CustomerLockParams) (*Customer, error) {
-	if uid == "" || cl.LockReason == "" {
+func (c *customerService) Lock(ctx context.Context, uid string, params *CustomerLockParams) (*Customer, error) {
+	if uid == "" || params.LockReason == "" {
 		return nil, fmt.Errorf("UID and LockReason are required")
 	}
 
-	bytesMessage, err := json.Marshal(cl)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -323,12 +323,12 @@ func (c *customerService) Lock(ctx context.Context, uid string, cl *CustomerLock
 }
 
 // Unlock will remove the Customer lock, returning their state to normal
-func (c *customerService) Unlock(ctx context.Context, uid string, cl *CustomerLockParams) (*Customer, error) {
+func (c *customerService) Unlock(ctx context.Context, uid string, params *CustomerLockParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	bytesMessage, err := json.Marshal(cl)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -355,12 +355,12 @@ func (c *customerService) Unlock(ctx context.Context, uid string, cl *CustomerLo
 // UpdateProfileResponses is used to submit a Customer's Profile Responses to Profile Requirements.
 // For most cases, use CustomerProfileResponseItem.Response to submit a string response.
 // For ordered list type responses, use CustomerProfileResponseItem.Num0/1/2
-func (c *customerService) UpdateProfileResponses(ctx context.Context, uid string, cpp []*CustomerProfileResponseParams) (*Customer, error) {
+func (c *customerService) UpdateProfileResponses(ctx context.Context, uid string, params []*CustomerProfileResponseParams) (*Customer, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	for _, v := range cpp {
+	for _, v := range params {
 		if v.ProfileRequirementUID == "" || (v.ProfileResponse.Response == "" && v.ProfileResponse.Num0 == "") {
 			return nil, fmt.Errorf("ProfileRequirementUID and ProfileResponse are required")
 		}
@@ -370,7 +370,7 @@ func (c *customerService) UpdateProfileResponses(ctx context.Context, uid string
 	var details = struct {
 		Details []*CustomerProfileResponseParams `json:"details"`
 	}{
-		Details: cpp,
+		Details: params,
 	}
 	bytesMessage, err := json.Marshal(&details)
 	if err != nil {
@@ -397,12 +397,12 @@ func (c *customerService) UpdateProfileResponses(ctx context.Context, uid string
 }
 
 // CreateSecondaryCustomer (DEPRECATED) is used to create a new Secondary Customer
-func (c *customerService) CreateSecondaryCustomer(ctx context.Context, scp *SecondaryCustomerParams) (*Customer, error) {
-	if scp.PrimaryCustomerUID == "" {
+func (c *customerService) CreateSecondaryCustomer(ctx context.Context, params *SecondaryCustomerParams) (*Customer, error) {
+	if params.PrimaryCustomerUID == "" {
 		return nil, fmt.Errorf("PrimaryCustomerUID is required")
 	}
 
-	bytesMessage, err := json.Marshal(&scp)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}

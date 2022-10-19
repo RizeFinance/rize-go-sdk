@@ -119,9 +119,9 @@ type WorkflowResponse struct {
 }
 
 // Retrieves a list of Compliance Workflows filtered by the given parameters
-func (c *complianceWorkflowService) List(ctx context.Context, wlp *WorkflowListParams) (*WorkflowResponse, error) {
+func (c *complianceWorkflowService) List(ctx context.Context, params *WorkflowListParams) (*WorkflowResponse, error) {
 	// Build WorkflowListParams into query string params
-	v, err := query.Values(wlp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -146,12 +146,12 @@ func (c *complianceWorkflowService) List(ctx context.Context, wlp *WorkflowListP
 }
 
 // Associates a new Compliance Workflow and set of Compliance Documents (for acknowledgment) with a Customer
-func (c *complianceWorkflowService) Create(ctx context.Context, wcp *WorkflowCreateParams) (*Workflow, error) {
-	if wcp.CustomerUID == "" || wcp.ProductCompliancePlanUID == "" {
+func (c *complianceWorkflowService) Create(ctx context.Context, params *WorkflowCreateParams) (*Workflow, error) {
+	if params.CustomerUID == "" || params.ProductCompliancePlanUID == "" {
 		return nil, fmt.Errorf("CustomerUID and ProductCompliancePlanUID values are required")
 	}
 
-	bytesMessage, err := json.Marshal(wcp)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -177,13 +177,13 @@ func (c *complianceWorkflowService) Create(ctx context.Context, wcp *WorkflowCre
 
 // ViewLatest is a helper endpoint for retrieving the most recent Compliance Workflow for a Customer.
 // A Customer UID must be supplied as the path parameter.
-func (c *complianceWorkflowService) ViewLatest(ctx context.Context, customerUID string, wlp *WorkflowLatestParams) (*Workflow, error) {
+func (c *complianceWorkflowService) ViewLatest(ctx context.Context, customerUID string, params *WorkflowLatestParams) (*Workflow, error) {
 	if customerUID == "" {
 		return nil, fmt.Errorf("customerUID is required")
 	}
 
 	// Build query params
-	v, err := query.Values(wlp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
@@ -207,12 +207,12 @@ func (c *complianceWorkflowService) ViewLatest(ctx context.Context, customerUID 
 }
 
 // AcknowledgeDocument is used to indicate acceptance or rejection of a Compliance Document within a given Compliance Workflow
-func (c *complianceWorkflowService) AcknowledgeDocument(ctx context.Context, uid string, wd *WorkflowDocumentParams) (*Workflow, error) {
-	if uid == "" || wd.Accept == "" || wd.DocumentUID == "" || wd.CustomerUID == "" {
+func (c *complianceWorkflowService) AcknowledgeDocument(ctx context.Context, uid string, params *WorkflowDocumentParams) (*Workflow, error) {
+	if uid == "" || params.Accept == "" || params.DocumentUID == "" || params.CustomerUID == "" {
 		return nil, fmt.Errorf("UID, Accept, DocumentUID and CustomerUID values are required")
 	}
 
-	bytesMessage, err := json.Marshal(wd)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}
@@ -237,18 +237,18 @@ func (c *complianceWorkflowService) AcknowledgeDocument(ctx context.Context, uid
 }
 
 // BatchAcknowledgeDocuments is used to indicate acceptance or rejection of multiple Compliance Documents within a given Compliance Workflow
-func (c *complianceWorkflowService) BatchAcknowledgeDocuments(ctx context.Context, uid string, wdp *WorkflowBatchDocumentsParams) (*Workflow, error) {
+func (c *complianceWorkflowService) BatchAcknowledgeDocuments(ctx context.Context, uid string, params *WorkflowBatchDocumentsParams) (*Workflow, error) {
 	if uid == "" {
 		return nil, fmt.Errorf("UID is required")
 	}
 
-	for _, d := range wdp.Documents {
+	for _, d := range params.Documents {
 		if d.Accept == "" || d.DocumentUID == "" {
-			return nil, fmt.Errorf("Accept and DocumentUID values are required")
+			return nil, fmt.Errorf("both Accept and DocumentUID values are required")
 		}
 	}
 
-	bytesMessage, err := json.Marshal(wdp)
+	bytesMessage, err := json.Marshal(params)
 	if err != nil {
 		return nil, err
 	}

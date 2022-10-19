@@ -54,9 +54,9 @@ type TransferResponse struct {
 }
 
 // List retrieves a list of Transfers filtered by the given parameters
-func (t *transferService) List(ctx context.Context, tlp *TransferListParams) (*TransferResponse, error) {
+func (t *transferService) List(ctx context.Context, params *TransferListParams) (*TransferResponse, error) {
 	// Build TransferListParams into query string params
-	v, err := query.Values(tlp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}

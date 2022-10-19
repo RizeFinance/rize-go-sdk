@@ -69,9 +69,9 @@ type CustodialAccountResponse struct {
 }
 
 // List retrieves a list of Custodial Accounts filtered by the given parameters
-func (c *custodialAccountService) List(ctx context.Context, plp *CustodialAccountListParams) (*CustodialAccountResponse, error) {
+func (c *custodialAccountService) List(ctx context.Context, params *CustodialAccountListParams) (*CustodialAccountResponse, error) {
 	// Build CustodialAccountListParams into query string params
-	v, err := query.Values(plp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}

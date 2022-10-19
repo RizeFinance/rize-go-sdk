@@ -37,9 +37,9 @@ type CardArtworkResponse struct {
 }
 
 // List retrieves a list of Card Artworks, optionally filtering by program
-func (c *cardArtworkService) List(ctx context.Context, clp *CardArtworkListParams) (*CardArtworkResponse, error) {
+func (c *cardArtworkService) List(ctx context.Context, params *CardArtworkListParams) (*CardArtworkResponse, error) {
 	// Build CardArtworkListParams into query string params
-	v, err := query.Values(clp)
+	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
 	}
