@@ -13,6 +13,8 @@ When you're ready to build, [open a sandbox environment](https://rizefs.com/get-
 
 For more information, check out our [Platform API Documentation](https://developer.rizefs.com/).
 
+See the [Examples ReadMe](examples/README.md) for a full walk-through of Customer Onboarding.
+
 ### Supported Go Versions
 
 The Rize Go SDK is compatible with the two most recent, major Go releases. 
@@ -117,7 +119,7 @@ config := rize.Config{
 }
 ```
 
-### Rize Message Queue
+## Rize Message Queue
 
 The SDK provides a package to connect to the [Rize Message Queue](https://developer.rizefs.com/docs/rize-message-queue) using the STOMP protocol. The `mq` package wraps [go-stomp](https://pkg.go.dev/github.com/go-stomp/stomp/v3) with configuration settings necessary for connecting and subscribing to events from the RMQ.
 
@@ -182,6 +184,8 @@ $ go run cmd/platform/main.go -h
 # Connect to the Rize Message Queue and subscribe to the Customer topic
 $ go run cmd/mq/main.go
 ```
+
+**See the [Examples ReadMe](examples/README.md) for a full walk-through of Customer Onboarding.**
 
 ## Unit Tests
 

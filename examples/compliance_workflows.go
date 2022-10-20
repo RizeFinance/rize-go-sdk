@@ -78,11 +78,9 @@ func (e Example) ExampleComplianceWorkflowService_BatchAcknowledgeDocuments(rc *
 			DocumentUID: "Yqyjk5b2xgQ9FrxS",
 			IPAddress:   "107.56.230.156",
 			UserName:    "gilbert chesterton",
-			CustomerUID: "h9MzupcjtA3LPW2e",
 		}, {
 			Accept:      "yes",
 			DocumentUID: "BgT64WeR0IxkgH6D",
-			CustomerUID: "h9MzupcjtA3LPW2e",
 		}},
 	}
 	resp, err := rc.ComplianceWorkflows.BatchAcknowledgeDocuments(context.Background(), "h9MzupcjtA3LPW2e", params)
