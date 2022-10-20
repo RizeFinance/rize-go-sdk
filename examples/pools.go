@@ -9,7 +9,7 @@ import (
 )
 
 // List Pools
-func ExamplePoolService_List(rc *rize.Client) {
+func (e Example) ExamplePoolService_List(rc *rize.Client) {
 	params := &rize.PoolListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		ExternalUID: "client-generated-id",
@@ -25,7 +25,7 @@ func ExamplePoolService_List(rc *rize.Client) {
 }
 
 // Get Pool
-func ExamplePoolService_Get(rc *rize.Client) {
+func (e Example) ExamplePoolService_Get(rc *rize.Client) {
 	resp, err := rc.Pools.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching pool\n", err)

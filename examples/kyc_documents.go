@@ -11,7 +11,7 @@ import (
 )
 
 // List documents
-func ExampleKYCDocumentService_List(rc *rize.Client) {
+func (e Example) ExampleKYCDocumentService_List(rc *rize.Client) {
 	params := &rize.KYCDocumentListParams{
 		EvaluationUID: "QSskNJkryskRXeYt",
 	}
@@ -24,7 +24,7 @@ func ExampleKYCDocumentService_List(rc *rize.Client) {
 }
 
 // Upload Document
-func ExampleKYCDocumentService_Upload(rc *rize.Client) {
+func (e Example) ExampleKYCDocumentService_Upload(rc *rize.Client) {
 	bytes, err := os.ReadFile("./file.png")
 	if err != nil {
 		log.Fatal("Error reading file\n", err)
@@ -47,7 +47,7 @@ func ExampleKYCDocumentService_Upload(rc *rize.Client) {
 }
 
 // Get Document
-func ExampleKYCDocumentService_Get(rc *rize.Client) {
+func (e Example) ExampleKYCDocumentService_Get(rc *rize.Client) {
 	resp, err := rc.KYCDocuments.Get(context.Background(), "u8EHFJnWvJxRJZxa")
 	if err != nil {
 		log.Fatal("Error fetching document\n", err)
@@ -57,7 +57,7 @@ func ExampleKYCDocumentService_Get(rc *rize.Client) {
 }
 
 // View Document
-func ExampleKYCDocumentService_View(rc *rize.Client) {
+func (e Example) ExampleKYCDocumentService_View(rc *rize.Client) {
 	resp, err := rc.KYCDocuments.View(context.Background(), "u8EHFJnWvJxRJZxa")
 	if err != nil {
 		log.Fatal("Error viewing document\n", err)

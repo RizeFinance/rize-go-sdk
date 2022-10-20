@@ -9,7 +9,7 @@ import (
 )
 
 // List Products
-func ExampleProductService_List(rc *rize.Client) {
+func (e Example) ExampleProductService_List(rc *rize.Client) {
 	params := &rize.ProductListParams{
 		ProgramUID: "pQtTCSXz57fuefzp",
 	}
@@ -22,7 +22,7 @@ func ExampleProductService_List(rc *rize.Client) {
 }
 
 // Get Product
-func ExampleProductService_Get(rc *rize.Client) {
+func (e Example) ExampleProductService_Get(rc *rize.Client) {
 	resp, err := rc.Products.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Product\n", err)

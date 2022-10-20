@@ -9,7 +9,7 @@ import (
 )
 
 // List Transfers
-func ExampleTransferService_List(rc *rize.Client) {
+func (e Example) ExampleTransferService_List(rc *rize.Client) {
 	params := &rize.TransferListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		ExternalUID:         "client-generated-id",
@@ -27,7 +27,7 @@ func ExampleTransferService_List(rc *rize.Client) {
 }
 
 // Create Transfer
-func ExampleTransferService_Create(rc *rize.Client) {
+func (e Example) ExampleTransferService_Create(rc *rize.Client) {
 	params := &rize.TransferCreateParams{
 		ExternalUID:                    "partner-generated-id",
 		SourceSyntheticAccountUID:      "4XkJnsfHsuqrxmeX",
@@ -44,7 +44,7 @@ func ExampleTransferService_Create(rc *rize.Client) {
 }
 
 // Get Transfer
-func ExampleTransferService_Get(rc *rize.Client) {
+func (e Example) ExampleTransferService_Get(rc *rize.Client) {
 	resp, err := rc.Transfers.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Transfer\n", err)

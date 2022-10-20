@@ -8,7 +8,10 @@ import (
 	"github.com/rizefinance/rize-go-sdk"
 )
 
-func ExampleAuthService_GetToken(rc *rize.Client) {
+// Example is a reflection type used for dynamically calling example function from the console
+type Example int
+
+func (e Example) ExampleAuthService_GetToken(rc *rize.Client) {
 	resp, err := rc.Auth.GetToken(context.Background())
 	if err != nil {
 		log.Fatal("Error fetching Auth token\n", err)

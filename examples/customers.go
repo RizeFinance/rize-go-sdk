@@ -11,7 +11,7 @@ import (
 )
 
 // List customers
-func ExampleCustomerService_List(rc *rize.Client) {
+func (e Example) ExampleCustomerService_List(rc *rize.Client) {
 	params := &rize.CustomerListParams{
 		UID:              "uKxmLxUEiSj5h4M3",
 		Status:           "identity_verified",
@@ -40,7 +40,7 @@ func ExampleCustomerService_List(rc *rize.Client) {
 }
 
 // Create new customer
-func ExampleCustomerService_Create(rc *rize.Client) {
+func (e Example) ExampleCustomerService_Create(rc *rize.Client) {
 	params := &rize.CustomerCreateParams{
 		ExternalUID:  "client-generated-id",
 		CustomerType: "primary",
@@ -57,7 +57,7 @@ func ExampleCustomerService_Create(rc *rize.Client) {
 }
 
 // Get customer
-func ExampleCustomerService_Get(rc *rize.Client) {
+func (e Example) ExampleCustomerService_Get(rc *rize.Client) {
 	resp, err := rc.Customers.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching customer\n", err)
@@ -68,7 +68,7 @@ func ExampleCustomerService_Get(rc *rize.Client) {
 }
 
 // Update customer
-func ExampleCustomerService_Update(rc *rize.Client) {
+func (e Example) ExampleCustomerService_Update(rc *rize.Client) {
 	params := &rize.CustomerUpdateParams{
 		Email: "olive.oyl@rizemoney.com",
 		Details: &rize.CustomerDetails{
@@ -99,7 +99,7 @@ func ExampleCustomerService_Update(rc *rize.Client) {
 }
 
 // Delete customer
-func ExampleCustomerService_Delete(rc *rize.Client) {
+func (e Example) ExampleCustomerService_Delete(rc *rize.Client) {
 	params := &rize.CustomerDeleteParams{
 		ArchiveNote: "Archiving customer note",
 	}
@@ -110,7 +110,7 @@ func ExampleCustomerService_Delete(rc *rize.Client) {
 }
 
 // Confirm Identity
-func ExampleCustomerService_ConfirmPIIData(rc *rize.Client) {
+func (e Example) ExampleCustomerService_ConfirmPIIData(rc *rize.Client) {
 	resp, err := rc.Customers.ConfirmPIIData(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error confirming identity\n", err)
@@ -120,7 +120,7 @@ func ExampleCustomerService_ConfirmPIIData(rc *rize.Client) {
 }
 
 // Lock customer
-func ExampleCustomerService_Lock(rc *rize.Client) {
+func (e Example) ExampleCustomerService_Lock(rc *rize.Client) {
 	params := &rize.CustomerLockParams{
 		LockNote:   "Fraud detected",
 		LockReason: "Customer Reported Fraud",
@@ -134,7 +134,7 @@ func ExampleCustomerService_Lock(rc *rize.Client) {
 }
 
 // Unlock Customer
-func ExampleCustomerService_Unlock(rc *rize.Client) {
+func (e Example) ExampleCustomerService_Unlock(rc *rize.Client) {
 	params := &rize.CustomerLockParams{
 		LockNote:           "Fraud detected",
 		UnlockReason:       "Customer Reported Fraud",
@@ -150,7 +150,7 @@ func ExampleCustomerService_Unlock(rc *rize.Client) {
 }
 
 // Update Profile Response
-func ExampleCustomerService_UpdateProfileResponses(rc *rize.Client) {
+func (e Example) ExampleCustomerService_UpdateProfileResponses(rc *rize.Client) {
 	// Update Profile Response with string response
 	params := &rize.CustomerProfileResponseParams{
 		ProfileRequirementUID: "ptRLF7nQvy8VoqM1",
@@ -183,7 +183,7 @@ func ExampleCustomerService_UpdateProfileResponses(rc *rize.Client) {
 }
 
 // Secondary Customers
-func ExampleCustomerService_CreateSecondaryCustomer(rc *rize.Client) {
+func (e Example) ExampleCustomerService_CreateSecondaryCustomer(rc *rize.Client) {
 	params := &rize.SecondaryCustomerParams{
 		ExternalUID:        "7002440b-9b98-4a8b-82b9-4503fe8c6bf0",
 		PrimaryCustomerUID: "kbF5TGrmwGizQuzZ",

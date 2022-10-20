@@ -9,7 +9,7 @@ import (
 )
 
 // List Customer Products
-func ExampleCustomerProductService_List(rc *rize.Client) {
+func (e Example) ExampleCustomerProductService_List(rc *rize.Client) {
 	params := &rize.CustomerProductListParams{
 		ProgramUID:  "pQtTCSXz57fuefzp",
 		ProductUID:  "zbJbEa72eKMgbbBv",
@@ -25,7 +25,7 @@ func ExampleCustomerProductService_List(rc *rize.Client) {
 }
 
 // Create Customer Product
-func ExampleCustomerProductService_Create(rc *rize.Client) {
+func (e Example) ExampleCustomerProductService_Create(rc *rize.Client) {
 	params := &rize.CustomerProductCreateParams{
 		CustomerUID: "S62MaHx6WwsqG9vQ",
 		ProductUID:  "pQtTCSXz57fuefzp",
@@ -39,7 +39,7 @@ func ExampleCustomerProductService_Create(rc *rize.Client) {
 }
 
 // Get Customer Product
-func ExampleCustomerProductService_Get(rc *rize.Client) {
+func (e Example) ExampleCustomerProductService_Get(rc *rize.Client) {
 	resp, err := rc.CustomerProducts.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Customer Product\n", err)

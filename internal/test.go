@@ -135,19 +135,19 @@ func RecurseRequestKeys(method string, path string, status int) ([]string, error
 	isRequest = true
 	p := doc.Paths.Find(path)
 	if p == nil {
-		return nil, fmt.Errorf("Path %s not found in request", path)
+		return nil, fmt.Errorf("path %s not found in request", path)
 	}
 	op := p.GetOperation(method)
 	if op == nil {
-		return nil, fmt.Errorf("Method %s not found in request", method)
+		return nil, fmt.Errorf("method %s not found in request", method)
 	}
 	rb := op.RequestBody
 	if rb == nil {
-		return nil, fmt.Errorf("RequestBody %d not found in request", status)
+		return nil, fmt.Errorf("requestBody %d not found in request", status)
 	}
 	mime := rb.Value.Content.Get("application/json")
 	if mime == nil {
-		return nil, fmt.Errorf("Mime application/json not found in request")
+		return nil, fmt.Errorf("mime application/json not found in request")
 	}
 	traverseSchema(mime.Schema.Value)
 
@@ -163,19 +163,19 @@ func RecurseRequestKeys(method string, path string, status int) ([]string, error
 func RecurseResponseKeys(method string, path string, status int) ([]string, error) {
 	p := doc.Paths.Find(path)
 	if p == nil {
-		return nil, fmt.Errorf("Path %s not found in response", path)
+		return nil, fmt.Errorf("path %s not found in response", path)
 	}
 	op := p.GetOperation(method)
 	if op == nil {
-		return nil, fmt.Errorf("Method %s not found in response", method)
+		return nil, fmt.Errorf("method %s not found in response", method)
 	}
 	st := op.Responses.Get(status)
 	if st == nil {
-		return nil, fmt.Errorf("Status %d not found in response", status)
+		return nil, fmt.Errorf("status %d not found in response", status)
 	}
 	mime := st.Value.Content.Get("application/json")
 	if mime == nil {
-		return nil, fmt.Errorf("Mime application/json not found in response")
+		return nil, fmt.Errorf("mime application/json not found in response")
 	}
 	traverseSchema(mime.Schema.Value)
 

@@ -9,7 +9,7 @@ import (
 )
 
 // List Pinwheel Jobs
-func ExamplePinwheelJobService_List(rc *rize.Client) {
+func (e Example) ExamplePinwheelJobService_List(rc *rize.Client) {
 	params := &rize.PinwheelJobListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		SyntheticAccountUID: "4XkJnsfHsuqrxmeX",
@@ -25,7 +25,7 @@ func ExamplePinwheelJobService_List(rc *rize.Client) {
 }
 
 // Create Pinwheel Job
-func ExamplePinwheelJobService_Create(rc *rize.Client) {
+func (e Example) ExamplePinwheelJobService_Create(rc *rize.Client) {
 	params := &rize.PinwheelJobCreateParams{
 		JobNames:             []string{"direct_deposit_switch"},
 		SyntheticAccountUID:  "4XkJnsfHsuqrxmeX",
@@ -43,7 +43,7 @@ func ExamplePinwheelJobService_Create(rc *rize.Client) {
 }
 
 // Get PinwheelJob
-func ExamplePinwheelJobService_Get(rc *rize.Client) {
+func (e Example) ExamplePinwheelJobService_Get(rc *rize.Client) {
 	resp, err := rc.PinwheelJobs.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Pinwheel Job\n", err)

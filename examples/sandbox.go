@@ -9,7 +9,7 @@ import (
 )
 
 // Create Sandbox Transaction
-func ExampleSandboxService_Create(rc *rize.Client) {
+func (e Example) ExampleSandboxService_Create(rc *rize.Client) {
 	params := &rize.SandboxCreateParams{
 		TransactionType:  "atm_withdrawal",
 		CustomerUID:      "uKxmLxUEiSj5h4M3",

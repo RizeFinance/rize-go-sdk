@@ -9,7 +9,7 @@ import (
 )
 
 // List Card Artwork
-func ExampleCardArtworkService_List(rc *rize.Client) {
+func (e Example) ExampleCardArtworkService_List(rc *rize.Client) {
 	params := &rize.CardArtworkListParams{
 		ProgramUID: "DbxJUHVuqt3C7hGK",
 		Limit:      100,
@@ -26,7 +26,7 @@ func ExampleCardArtworkService_List(rc *rize.Client) {
 }
 
 // Get Card Artwork
-func ExampleCardArtworkService_Get(rc *rize.Client) {
+func (e Example) ExampleCardArtworkService_Get(rc *rize.Client) {
 	resp, err := rc.CardArtworks.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Card Artwork\n", err)

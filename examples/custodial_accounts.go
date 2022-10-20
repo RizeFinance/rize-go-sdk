@@ -9,7 +9,7 @@ import (
 )
 
 // List Custodial Accounts
-func ExampleCustodialAccountService_List(rc *rize.Client) {
+func (e Example) ExampleCustodialAccountService_List(rc *rize.Client) {
 	params := &rize.CustodialAccountListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		ExternalUID: "client-generated-id",
@@ -27,7 +27,7 @@ func ExampleCustodialAccountService_List(rc *rize.Client) {
 }
 
 // Get Custodial Account
-func ExampleCustodialAccountService_Get(rc *rize.Client) {
+func (e Example) ExampleCustodialAccountService_Get(rc *rize.Client) {
 	resp, err := rc.CustodialAccounts.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Custodial Account\n", err)

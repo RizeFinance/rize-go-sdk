@@ -9,7 +9,7 @@ import (
 )
 
 // List Synthetic Accounts
-func ExampleSyntheticAccountService_List(rc *rize.Client) {
+func (e Example) ExampleSyntheticAccountService_List(rc *rize.Client) {
 	params := &rize.SyntheticAccountListParams{
 		CustomerUID:              "uKxmLxUEiSj5h4M3",
 		ExternalUID:              "client-generated-id",
@@ -31,7 +31,7 @@ func ExampleSyntheticAccountService_List(rc *rize.Client) {
 }
 
 // Create Synthetic Account
-func ExampleSyntheticAccountService_Create(rc *rize.Client) {
+func (e Example) ExampleSyntheticAccountService_Create(rc *rize.Client) {
 	params := &rize.SyntheticAccountCreateParams{
 		ExternalUID:             "partner-generated-id",
 		Name:                    "New Resource Name",
@@ -51,7 +51,7 @@ func ExampleSyntheticAccountService_Create(rc *rize.Client) {
 }
 
 // Get Synthetic Account
-func ExampleSyntheticAccountService_Get(rc *rize.Client) {
+func (e Example) ExampleSyntheticAccountService_Get(rc *rize.Client) {
 	resp, err := rc.SyntheticAccounts.Get(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Account\n", err)
@@ -61,7 +61,7 @@ func ExampleSyntheticAccountService_Get(rc *rize.Client) {
 }
 
 // Update Synthetic Account
-func ExampleSyntheticAccountService_Update(rc *rize.Client) {
+func (e Example) ExampleSyntheticAccountService_Update(rc *rize.Client) {
 	params := &rize.SyntheticAccountUpdateParams{
 		Name: "New Resource Name",
 		Note: "note",
@@ -75,7 +75,7 @@ func ExampleSyntheticAccountService_Update(rc *rize.Client) {
 }
 
 // Delete Synthetic Account
-func ExampleSyntheticAccountService_Delete(rc *rize.Client) {
+func (e Example) ExampleSyntheticAccountService_Delete(rc *rize.Client) {
 	resp, err := rc.SyntheticAccounts.Delete(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		log.Fatal("Error deleting Synthetic Account\n", err)
@@ -84,7 +84,7 @@ func ExampleSyntheticAccountService_Delete(rc *rize.Client) {
 }
 
 // List Synthetic Account Types
-func ExampleSyntheticAccountService_ListAccountTypes(rc *rize.Client) {
+func (e Example) ExampleSyntheticAccountService_ListAccountTypes(rc *rize.Client) {
 	params := &rize.SyntheticAccountTypeListParams{
 		ProgramUID: "EhrQZJNjCd79LLYq",
 		Limit:      100,
@@ -99,7 +99,7 @@ func ExampleSyntheticAccountService_ListAccountTypes(rc *rize.Client) {
 }
 
 // Get Synthetic Account Type
-func ExampleSyntheticAccountService_GetAccountType(rc *rize.Client) {
+func (e Example) ExampleSyntheticAccountService_GetAccountType(rc *rize.Client) {
 	resp, err := rc.SyntheticAccounts.GetAccountType(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Account Type\n", err)

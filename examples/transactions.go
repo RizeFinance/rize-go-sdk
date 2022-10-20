@@ -9,7 +9,7 @@ import (
 )
 
 // List Transactions
-func ExampleTransactionService_List(rc *rize.Client) {
+func (e Example) ExampleTransactionService_List(rc *rize.Client) {
 	params := &rize.TransactionListParams{
 		CustomerUID:                    "uKxmLxUEiSj5h4M3",
 		PoolUID:                        "wTSMX1GubP21ev2h",
@@ -36,7 +36,7 @@ func ExampleTransactionService_List(rc *rize.Client) {
 }
 
 // Get Transaction
-func ExampleTransactionService_Get(rc *rize.Client) {
+func (e Example) ExampleTransactionService_Get(rc *rize.Client) {
 	resp, err := rc.Transactions.Get(context.Background(), "SMwKC1osz77DTEiu")
 	if err != nil {
 		log.Fatal("Error fetching Transaction\n", err)
@@ -46,7 +46,7 @@ func ExampleTransactionService_Get(rc *rize.Client) {
 }
 
 // List Transaction Events
-func ExampleTransactionService_ListTransactionEvents(rc *rize.Client) {
+func (e Example) ExampleTransactionService_ListTransactionEvents(rc *rize.Client) {
 	params := &rize.TransactionEventListParams{
 		SourceCustodialAccountUID:      "dmRtw1xkS9ghrntB",
 		DestinationCustodialAccountUID: "W55zKgvAk3zkpGM3",
@@ -66,7 +66,7 @@ func ExampleTransactionService_ListTransactionEvents(rc *rize.Client) {
 }
 
 // Get Transaction Event
-func ExampleTransactionService_GetTransactionEvent(rc *rize.Client) {
+func (e Example) ExampleTransactionService_GetTransactionEvent(rc *rize.Client) {
 	resp, err := rc.Transactions.GetTransactionEvent(context.Background(), "MB2yqBrm3c4bUbou")
 	if err != nil {
 		log.Fatal("Error fetching Transaction Event\n", err)
@@ -76,7 +76,7 @@ func ExampleTransactionService_GetTransactionEvent(rc *rize.Client) {
 }
 
 // List Synthetic Line Items
-func ExampleTransactionService_ListSyntheticLineItems(rc *rize.Client) {
+func (e Example) ExampleTransactionService_ListSyntheticLineItems(rc *rize.Client) {
 	params := &rize.SyntheticLineItemListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		PoolUID:             "wTSMX1GubP21ev2h",
@@ -96,7 +96,7 @@ func ExampleTransactionService_ListSyntheticLineItems(rc *rize.Client) {
 }
 
 // Get Synthetic Line Item
-func ExampleTransactionService_GetSyntheticLineItem(rc *rize.Client) {
+func (e Example) ExampleTransactionService_GetSyntheticLineItem(rc *rize.Client) {
 	resp, err := rc.Transactions.GetSyntheticLineItem(context.Background(), "j56aHgLBqkNu1KwK")
 	if err != nil {
 		log.Fatal("Error fetching Synthetic Line Item\n", err)
@@ -106,7 +106,7 @@ func ExampleTransactionService_GetSyntheticLineItem(rc *rize.Client) {
 }
 
 // List Custodial Line Items
-func ExampleTransactionService_ListCustodialLineItems(rc *rize.Client) {
+func (e Example) ExampleTransactionService_ListCustodialLineItems(rc *rize.Client) {
 	params := &rize.CustodialLineItemListParams{
 		CustomerUID:         "uKxmLxUEiSj5h4M3",
 		CustodialAccountUID: "wTSMX1GubP21ev2h",
@@ -128,7 +128,7 @@ func ExampleTransactionService_ListCustodialLineItems(rc *rize.Client) {
 }
 
 // Get Custodial Line Item
-func ExampleTransactionService_GetCustodialLineItem(rc *rize.Client) {
+func (e Example) ExampleTransactionService_GetCustodialLineItem(rc *rize.Client) {
 	resp, err := rc.Transactions.GetCustodialLineItem(context.Background(), "j56aHgLBqkNu1KwK")
 	if err != nil {
 		log.Fatal("Error fetching Custodial Line Item\n", err)

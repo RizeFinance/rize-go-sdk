@@ -71,7 +71,7 @@ func main() {
 		log.Fatal("Error building RizeClient\n", err)
 	}
 	
-	// Create a new Compliance Worflow
+	// Create a new Compliance Workflow
 	wcp := rize.WorkflowCreateParams{
 		CustomerUID:              "h9MzupcjtA3LPW2e",
 		ProductCompliancePlanUID: "25NQX3GGXpAtpUmP",
@@ -172,7 +172,10 @@ $ cp .env-example .env
 
 ```sh
 # Run an example Platform API method <SERVICE_NAME> <METHOD_NAME>
-$ go run cmd/platform/main.go CustomerService List
+$ go run cmd/platform/main.go -s CustomerService -m List
+
+# Open help menu
+$ go run cmd/platform/main.go -h
 ```
 
 ```sh

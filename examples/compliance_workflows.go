@@ -9,7 +9,7 @@ import (
 )
 
 // List workflows
-func ExampleComplianceWorkflowService_List(rc *rize.Client) {
+func (e Example) ExampleComplianceWorkflowService_List(rc *rize.Client) {
 	params := &rize.WorkflowListParams{
 		CustomerUID: "S62MaHx6WwsqG9vQ",
 		ProductUID:  "pQtTCSXz57fuefzp",
@@ -26,7 +26,7 @@ func ExampleComplianceWorkflowService_List(rc *rize.Client) {
 }
 
 // Create workflow
-func ExampleComplianceWorkflowService_Create(rc *rize.Client) {
+func (e Example) ExampleComplianceWorkflowService_Create(rc *rize.Client) {
 	params := &rize.WorkflowCreateParams{
 		CustomerUID:              "h9MzupcjtA3LPW2e",
 		ProductCompliancePlanUID: "25NQX3GGXpAtpUmP",
@@ -40,7 +40,7 @@ func ExampleComplianceWorkflowService_Create(rc *rize.Client) {
 }
 
 // View latest workflow for a customer
-func ExampleComplianceWorkflowService_ViewLatest(rc *rize.Client) {
+func (e Example) ExampleComplianceWorkflowService_ViewLatest(rc *rize.Client) {
 	params := &rize.WorkflowLatestParams{
 		ProductCompliancePlanUID: "pQtTCSXz57fuefzp",
 	}
@@ -53,7 +53,7 @@ func ExampleComplianceWorkflowService_ViewLatest(rc *rize.Client) {
 }
 
 // Acknowledge document
-func ExampleComplianceWorkflowService_AcknowledgeDocument(rc *rize.Client) {
+func (e Example) ExampleComplianceWorkflowService_AcknowledgeDocument(rc *rize.Client) {
 	params := &rize.WorkflowDocumentParams{
 		Accept:      "yes",
 		CustomerUID: "h9MzupcjtA3LPW2e",
@@ -70,7 +70,7 @@ func ExampleComplianceWorkflowService_AcknowledgeDocument(rc *rize.Client) {
 }
 
 // Acknowledge multiple documents
-func ExampleComplianceWorkflowService_BatchAcknowledgeDocuments(rc *rize.Client) {
+func (e Example) ExampleComplianceWorkflowService_BatchAcknowledgeDocuments(rc *rize.Client) {
 	params := &rize.WorkflowBatchDocumentsParams{
 		CustomerUID: "h9MzupcjtA3LPW2e",
 		Documents: []*rize.WorkflowDocumentParams{{

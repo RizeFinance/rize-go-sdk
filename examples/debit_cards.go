@@ -9,7 +9,7 @@ import (
 )
 
 // List Debit Cards
-func ExampleDebitCardService_List(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_List(rc *rize.Client) {
 	params := &rize.DebitCardListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		ExternalUID: "client-generated-id",
@@ -28,7 +28,7 @@ func ExampleDebitCardService_List(rc *rize.Client) {
 }
 
 // Create Debit Card
-func ExampleDebitCardService_Create(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_Create(rc *rize.Client) {
 	params := &rize.DebitCardCreateParams{
 		ExternalUID:    "partner-generated-id",
 		CardArtworkUID: "EhrQZJNjCd79LLYq",
@@ -51,7 +51,7 @@ func ExampleDebitCardService_Create(rc *rize.Client) {
 }
 
 // Get Debit Card
-func ExampleDebitCardService_Get(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_Get(rc *rize.Client) {
 	resp, err := rc.DebitCards.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Debit Card\n", err)
@@ -61,7 +61,7 @@ func ExampleDebitCardService_Get(rc *rize.Client) {
 }
 
 // Activate Debit Card
-func ExampleDebitCardService_Activate(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_Activate(rc *rize.Client) {
 	params := &rize.DebitCardActivateParams{
 		CardLastFourDigits: "1234",
 		CVV:                "012",
@@ -76,7 +76,7 @@ func ExampleDebitCardService_Activate(rc *rize.Client) {
 }
 
 // Lock Debit Card
-func ExampleDebitCardService_Lock(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_Lock(rc *rize.Client) {
 	params := &rize.DebitCardLockParams{
 		LockReason: "Fraud detected",
 	}
@@ -89,7 +89,7 @@ func ExampleDebitCardService_Lock(rc *rize.Client) {
 }
 
 // Unlock Debit Card
-func ExampleDebitCardService_Unlock(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_Unlock(rc *rize.Client) {
 	resp, err := rc.DebitCards.Unlock(context.Background(), "Lt6qjTNnYLjFfEWL")
 	if err != nil {
 		log.Fatal("Error unlocking Debit Card\n", err)
@@ -99,7 +99,7 @@ func ExampleDebitCardService_Unlock(rc *rize.Client) {
 }
 
 // Reissue Debit Card
-func ExampleDebitCardService_Reissue(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_Reissue(rc *rize.Client) {
 	params := &rize.DebitCardReissueParams{
 		CardArtworkUID: "EhrQZJNjCd79LLYq",
 		ReissueReason:  "damaged",
@@ -120,7 +120,7 @@ func ExampleDebitCardService_Reissue(rc *rize.Client) {
 }
 
 // Get Debit Card PIN Token
-func ExampleDebitCardService_GetPINToken(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_GetPINToken(rc *rize.Client) {
 	params := &rize.DebitCardGetPINTokenParams{
 		ForceReset: true,
 	}
@@ -133,7 +133,7 @@ func ExampleDebitCardService_GetPINToken(rc *rize.Client) {
 }
 
 // Get Debit Card Access Token
-func ExampleDebitCardService_GetAccessToken(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_GetAccessToken(rc *rize.Client) {
 	resp, err := rc.DebitCards.GetAccessToken(context.Background(), "Lt6qjTNnYLjFfEWL")
 	if err != nil {
 		log.Fatal("Error fetching Debit Card Access Token\n", err)
@@ -143,7 +143,7 @@ func ExampleDebitCardService_GetAccessToken(rc *rize.Client) {
 }
 
 // Migrate a Virtual Debit Card to a Physical Debit Card
-func ExampleDebitCardService_MigrateVirtualDebitCard(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_MigrateVirtualDebitCard(rc *rize.Client) {
 	params := &rize.VirtualDebitCardMigrateParams{
 		ExternalUID:    "partner-generated-id",
 		CardArtworkUID: "EhrQZJNjCd79LLYq",
@@ -164,7 +164,7 @@ func ExampleDebitCardService_MigrateVirtualDebitCard(rc *rize.Client) {
 }
 
 // Get Virtual Debit Card Image
-func ExampleDebitCardService_GetVirtualDebitCardImage(rc *rize.Client) {
+func (e Example) ExampleDebitCardService_GetVirtualDebitCardImage(rc *rize.Client) {
 	params := &rize.DebitCardAccessToken{
 		Token:    "VmU27goFku4DyxfsdyoH5G1mlztvwskBywKrskVN9jQOh50Yy7",
 		ConfigID: "1",

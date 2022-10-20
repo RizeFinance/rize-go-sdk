@@ -9,7 +9,7 @@ import (
 )
 
 // List Evaluations
-func ExampleEvaluationService_List(rc *rize.Client) {
+func (e Example) ExampleEvaluationService_List(rc *rize.Client) {
 	params := &rize.EvaluationListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		Latest:      true,
@@ -23,7 +23,7 @@ func ExampleEvaluationService_List(rc *rize.Client) {
 }
 
 // Get Evaluation
-func ExampleEvaluationService_Get(rc *rize.Client) {
+func (e Example) ExampleEvaluationService_Get(rc *rize.Client) {
 	resp, err := rc.Evaluations.Get(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Evaluation\n", err)

@@ -221,7 +221,7 @@ func (cfg *Config) validateConfig() error {
 
 	if cfg.HTTPClient == nil {
 		cfg.HTTPClient = &http.Client{
-			Timeout: internal.TimeoutSeconds,
+			Timeout: internal.APITimeout,
 		}
 	}
 

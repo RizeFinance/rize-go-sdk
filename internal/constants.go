@@ -7,14 +7,14 @@ import (
 // Shared SDK Constants
 const (
 	// Platform SDK
-	BasePath       = "api/v1"
-	TimeoutSeconds = time.Second * 30
-	TokenMaxAge    = int64((time.Hour * 23) / time.Millisecond)
+	BasePath    = "api/v1"
+	APITimeout  = time.Second * 30
+	TokenMaxAge = int64((time.Hour * 23) / time.Millisecond)
 	// Message Queue
 	MQSendTimeout    = time.Millisecond * 5000
 	MQReceiveTimeout = time.Millisecond * 5000
 
-	SDKVersion = "0.0.1"
+	SDKVersion = "1.0.0"
 )
 
 // Environments are Rize infrastructure tiers

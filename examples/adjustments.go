@@ -9,7 +9,7 @@ import (
 )
 
 // List Adjustments
-func ExampleAdjustmentService_List(rc *rize.Client) {
+func (e Example) ExampleAdjustmentService_List(rc *rize.Client) {
 	params := &rize.AdjustmentListParams{
 		CustomerUID:            "uKxmLxUEiSj5h4M3",
 		AdjustmentTypeUID:      "2Ej2tsFbQT3S1HYd",
@@ -27,7 +27,7 @@ func ExampleAdjustmentService_List(rc *rize.Client) {
 }
 
 // Create Adjustment
-func ExampleAdjustmentService_Create(rc *rize.Client) {
+func (e Example) ExampleAdjustmentService_Create(rc *rize.Client) {
 	params := &rize.AdjustmentCreateParams{
 		ExternalUID:         "partner-generated-id",
 		CustomerUID:         "kaxHFJnWvJxRJZxq",
@@ -43,7 +43,7 @@ func ExampleAdjustmentService_Create(rc *rize.Client) {
 }
 
 // Get Adjustment
-func ExampleAdjustmentService_Get(rc *rize.Client) {
+func (e Example) ExampleAdjustmentService_Get(rc *rize.Client) {
 	resp, err := rc.Adjustments.Get(context.Background(), "exMDShw6yM3NHLYV")
 	if err != nil {
 		log.Fatal("Error fetching Adjustment\n", err)
@@ -53,7 +53,7 @@ func ExampleAdjustmentService_Get(rc *rize.Client) {
 }
 
 // List Adjustment Types
-func ExampleAdjustmentService_ListAdjustmentTypes(rc *rize.Client) {
+func (e Example) ExampleAdjustmentService_ListAdjustmentTypes(rc *rize.Client) {
 	params := &rize.AdjustmentTypeListParams{
 		CustomerUID: "uKxmLxUEiSj5h4M3",
 		ProgramUID:  "DbxJUHVuqt3C7hGK",
@@ -67,7 +67,7 @@ func ExampleAdjustmentService_ListAdjustmentTypes(rc *rize.Client) {
 }
 
 // Get Adjustment Type
-func ExampleAdjustmentService_GetAdjustmentType(rc *rize.Client) {
+func (e Example) ExampleAdjustmentService_GetAdjustmentType(rc *rize.Client) {
 	resp, err := rc.Adjustments.GetAdjustmentType(context.Background(), "EhrQZJNjCd79LLYq")
 	if err != nil {
 		log.Fatal("Error fetching Adjustment Type\n", err)
