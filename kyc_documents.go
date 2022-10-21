@@ -39,14 +39,8 @@ type KYCDocumentUploadParams struct {
 	Type          string `json:"type"`
 }
 
-// KYCDocumentResponse is an API response containing a list of KYC Documents
-type KYCDocumentResponse struct {
-	BaseResponse
-	Data []*KYCDocument `json:"data"`
-}
-
 // List retrieves a list of KYC Documents for a given evaluation
-func (k *kycDocumentService) List(ctx context.Context, params *KYCDocumentListParams) (*KYCDocumentResponse, error) {
+func (k *kycDocumentService) List(ctx context.Context, params *KYCDocumentListParams) (*ListResponse, error) {
 	if params.EvaluationUID == "" {
 		return nil, fmt.Errorf("EvaluationUID is required")
 	}
@@ -67,7 +61,7 @@ func (k *kycDocumentService) List(ctx context.Context, params *KYCDocumentListPa
 		return nil, err
 	}
 
-	response := &KYCDocumentResponse{}
+	response := &ListResponse{Data: []*KYCDocument{}}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

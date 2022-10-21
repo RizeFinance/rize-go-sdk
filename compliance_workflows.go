@@ -112,14 +112,8 @@ type WorkflowBatchDocumentsParams struct {
 	Documents   []*WorkflowDocumentParams `json:"documents"`
 }
 
-// WorkflowResponse is an API response containing a list of Compliance Workflows
-type WorkflowResponse struct {
-	BaseResponse
-	Data []*Workflow `json:"data"`
-}
-
 // Retrieves a list of Compliance Workflows filtered by the given parameters
-func (c *complianceWorkflowService) List(ctx context.Context, params *WorkflowListParams) (*WorkflowResponse, error) {
+func (c *complianceWorkflowService) List(ctx context.Context, params *WorkflowListParams) (*ListResponse, error) {
 	// Build WorkflowListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -137,7 +131,7 @@ func (c *complianceWorkflowService) List(ctx context.Context, params *WorkflowLi
 		return nil, err
 	}
 
-	response := &WorkflowResponse{}
+	response := &ListResponse{Data: []*Workflow{}}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

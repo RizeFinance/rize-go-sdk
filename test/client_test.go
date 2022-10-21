@@ -66,7 +66,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/adjustments" {
 				adj := append([]*rize.Adjustment{}, adjustment)
-				resp, _ := json.Marshal(&rize.AdjustmentResponse{Data: adj})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: adj})
 				w.Write(resp)
 				return
 			}
@@ -78,7 +78,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "adjustment_types":
 		if r.URL.Path == "/"+internal.BasePath+"/adjustment_types" {
 			adjTypes := append([]*rize.AdjustmentType{}, adjustmentType)
-			resp, _ := json.Marshal(&rize.AdjustmentTypeResponse{Data: adjTypes})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: adjTypes})
 			w.Write(resp)
 			return
 		}
@@ -94,7 +94,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "card_artworks":
 		if r.URL.Path == "/"+internal.BasePath+"/card_artworks" {
 			art := append([]*rize.CardArtwork{}, artwork)
-			resp, _ := json.Marshal(&rize.CardArtworkResponse{Data: art})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: art})
 			w.Write(resp)
 			return
 		}
@@ -105,7 +105,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/compliance_workflows" {
 				work := append([]*rize.Workflow{}, workflow)
-				resp, _ := json.Marshal(&rize.WorkflowResponse{Data: work})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: work})
 				w.Write(resp)
 				return
 			}
@@ -121,7 +121,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/customers" {
 				customers := append([]*rize.Customer{}, customer)
-				resp, _ := json.Marshal(&rize.CustomerResponse{Data: customers})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: customers})
 				w.Write(resp)
 				return
 			}
@@ -133,7 +133,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "custodial_accounts":
 		if r.URL.Path == "/"+internal.BasePath+"/custodial_accounts" {
 			acct := append([]*rize.CustodialAccount{}, custodialAccount)
-			resp, _ := json.Marshal(&rize.CustodialAccountResponse{Data: acct})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: acct})
 			w.Write(resp)
 			return
 		}
@@ -142,7 +142,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "custodial_line_items":
 		if r.URL.Path == "/"+internal.BasePath+"/custodial_line_items" {
 			item := append([]*rize.CustodialLineItem{}, custodialLineItem)
-			resp, _ := json.Marshal(&rize.CustodialLineItemResponse{Data: item})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: item})
 			w.Write(resp)
 			return
 		}
@@ -151,7 +151,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "custodial_partners":
 		if r.URL.Path == "/"+internal.BasePath+"/custodial_partners" {
 			acct := append([]*rize.CustodialPartner{}, custodialPartner)
-			resp, _ := json.Marshal(&rize.CustodialPartnerResponse{Data: acct})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: acct})
 			w.Write(resp)
 			return
 		}
@@ -162,7 +162,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/customer_products" {
 				prod := append([]*rize.CustomerProduct{}, customerProduct)
-				resp, _ := json.Marshal(&rize.CustomerProductResponse{Data: prod})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: prod})
 				w.Write(resp)
 				return
 			}
@@ -176,7 +176,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/debit_cards" {
 				cards := append([]*rize.DebitCard{}, debitCard)
-				resp, _ := json.Marshal(&rize.DebitCardResponse{Data: cards})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: cards})
 				w.Write(resp)
 				return
 			} else if r.URL.Path == "/"+internal.BasePath+"/debit_cards/{uid}/pin_change_token" {
@@ -198,7 +198,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/documents" {
 				doc := append([]*rize.Document{}, document)
-				resp, _ := json.Marshal(&rize.DocumentResponse{Data: doc})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: doc})
 				w.Write(resp)
 				return
 			} else if r.URL.Path == "/"+internal.BasePath+"/documents/{uid/view}" {
@@ -215,7 +215,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "evaluations":
 		if r.URL.Path == "/"+internal.BasePath+"/evaluations" {
 			eval := append([]*rize.Evaluation{}, evaluation)
-			resp, _ := json.Marshal(&rize.EvaluationResponse{Data: eval})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: eval})
 			w.Write(resp)
 			return
 		}
@@ -226,7 +226,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/kyc_documents" {
 				doc := append([]*rize.KYCDocument{}, kycDocument)
-				resp, _ := json.Marshal(&rize.KYCDocumentResponse{Data: doc})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: doc})
 				w.Write(resp)
 				return
 			} else if r.URL.Path == "/"+internal.BasePath+"/kyc_documents/{uid/view}" {
@@ -245,7 +245,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/pinwheel_jobs" {
 				job := append([]*rize.PinwheelJob{}, pinwheelJob)
-				resp, _ := json.Marshal(&rize.PinwheelJobResponse{Data: job})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: job})
 				w.Write(resp)
 				return
 			}
@@ -257,7 +257,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "pools":
 		if r.URL.Path == "/"+internal.BasePath+"/pools" {
 			p := append([]*rize.Pool{}, pool)
-			resp, _ := json.Marshal(&rize.PoolResponse{Data: p})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: p})
 			w.Write(resp)
 			return
 		}
@@ -266,7 +266,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "products":
 		if r.URL.Path == "/"+internal.BasePath+"/products" {
 			p := append([]*rize.Product{}, product)
-			resp, _ := json.Marshal(&rize.ProductResponse{Data: p})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: p})
 			w.Write(resp)
 			return
 		}
@@ -282,7 +282,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/synthetic_accounts" {
 				synth := append([]*rize.SyntheticAccount{}, syntheticAccount)
-				resp, _ := json.Marshal(&rize.SyntheticAccountResponse{Data: synth})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: synth})
 				w.Write(resp)
 				return
 			}
@@ -296,7 +296,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/synthetic_account_types" {
 				synth := append([]*rize.SyntheticAccountType{}, syntheticAccountType)
-				resp, _ := json.Marshal(&rize.SyntheticAccountTypeResponse{Data: synth})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: synth})
 				w.Write(resp)
 				return
 			}
@@ -308,7 +308,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "synthetic_line_items":
 		if r.URL.Path == "/"+internal.BasePath+"/synthetic_line_items" {
 			synth := append([]*rize.SyntheticLineItem{}, syntheticLineItem)
-			resp, _ := json.Marshal(&rize.SyntheticLineItemResponse{Data: synth})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: synth})
 			w.Write(resp)
 			return
 		}
@@ -317,7 +317,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "transactions":
 		if r.URL.Path == "/"+internal.BasePath+"/transactions" {
 			t := append([]*rize.Transaction{}, transaction)
-			resp, _ := json.Marshal(&rize.TransactionResponse{Data: t})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: t})
 			w.Write(resp)
 			return
 		}
@@ -326,7 +326,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	case "transaction_events":
 		if r.URL.Path == "/"+internal.BasePath+"/transaction_events" {
 			t := append([]*rize.TransactionEvent{}, transactionEvent)
-			resp, _ := json.Marshal(&rize.TransactionEventResponse{Data: t})
+			resp, _ := json.Marshal(&rize.ListResponse{Data: t})
 			w.Write(resp)
 			return
 		}
@@ -337,7 +337,7 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 		case http.MethodGet:
 			if r.URL.Path == "/"+internal.BasePath+"/transfers" {
 				t := append([]*rize.Transfer{}, transfer)
-				resp, _ := json.Marshal(&rize.TransferResponse{Data: t})
+				resp, _ := json.Marshal(&rize.ListResponse{Data: t})
 				w.Write(resp)
 				return
 			}

@@ -30,14 +30,8 @@ type CardArtworkListParams struct {
 	Offset     int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
-// CardArtworkResponse is an API response containing a list of Card Artwork
-type CardArtworkResponse struct {
-	BaseResponse
-	Data []*CardArtwork `json:"data"`
-}
-
 // List retrieves a list of Card Artworks, optionally filtering by program
-func (c *cardArtworkService) List(ctx context.Context, params *CardArtworkListParams) (*CardArtworkResponse, error) {
+func (c *cardArtworkService) List(ctx context.Context, params *CardArtworkListParams) (*ListResponse, error) {
 	// Build CardArtworkListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -55,7 +49,7 @@ func (c *cardArtworkService) List(ctx context.Context, params *CardArtworkListPa
 		return nil, err
 	}
 
-	response := &CardArtworkResponse{}
+	response := &ListResponse{Data: []*CardArtwork{}}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}
