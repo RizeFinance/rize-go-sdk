@@ -23,6 +23,7 @@ var (
 	rc  *rize.Client
 	ts  *httptest.Server
 	err error
+	rl  []*http.Request
 
 	errDetails = &rize.ErrorDetails{
 		Code:       http.StatusNotFound,
@@ -36,6 +37,8 @@ var (
 func TestMain(m *testing.M) {
 	// Create mock test server
 	ts = httptest.NewServer(http.HandlerFunc(mockHandler))
+	// Create a request list to log all mock requests fed into the handler
+	rl = []*http.Request{}
 
 	// Create new Rize client for tests
 	config := rize.Config{
@@ -50,7 +53,15 @@ func TestMain(m *testing.M) {
 		log.Fatal(err.Error())
 	}
 
-	os.Exit(m.Run())
+	// Run all package tests
+	code := m.Run()
+
+	// Check for any schema paths not covered by the SDK
+	if err := validatePaths(); err != nil {
+		log.Fatal(err.Error())
+	}
+
+	os.Exit(code)
 
 	defer ts.Close()
 }
@@ -60,6 +71,11 @@ func mockHandler(w http.ResponseWriter, r *http.Request) {
 	// Consolidate requests by schema path
 	path := strings.TrimPrefix(r.URL.Path+"/", "/"+internal.BasePath+"/")
 	path = path[:strings.Index(path, "/")]
+
+	// Log requests for OpenAPI schema comparison
+	rl = append(rl, r)
+
+	// Handle requests by path
 	switch path {
 	case "adjustments":
 		switch r.Method {
@@ -455,6 +471,29 @@ func validateSchema(method string, path string, status int, queryParams interfac
 	respDiff := internal.Difference(schemaResp, sdkResp)
 	if len(respDiff) > 0 {
 		return fmt.Errorf("Response is missing the following keys that are present in the OpenAPI schema:\n%s", respDiff)
+	}
+
+	return nil
+}
+
+// Check SDK path/method combinations against the OpenAPI schema to find anything that's missing
+func validatePaths() error {
+	// Convert test requests to OpenAPI path format
+	paths := []string{}
+	for _, r := range rl {
+		r.URL.Scheme = "https"
+		r.URL.Host = "sandbox.rizefs.com"
+		route, err := internal.FindRoute(r)
+		if err != nil {
+			return err
+		}
+		paths = append(paths, route)
+	}
+
+	schemaPaths := internal.BuildSchemaPathsList()
+	diff := internal.Difference(schemaPaths, paths)
+	if len(diff) > 0 {
+		return fmt.Errorf("SDK is missing the following path + method combinations that are present in the OpenAPI schema:\n%s", diff)
 	}
 
 	return nil

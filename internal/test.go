@@ -110,6 +110,26 @@ func ValidateResponse(status int, body []byte, requestValidationInput *openapi3f
 	return nil
 }
 
+// BuildSchemaPathsList generates a list of all path and method combinations in the OpenAPI schema
+func BuildSchemaPathsList() []string {
+	s := []string{}
+	for p, op := range doc.Paths {
+		for m := range op.Operations() {
+			s = append(s, p+"_"+m)
+		}
+	}
+	return s
+}
+
+// FindRoute matches an HTTP request with the path/operation in the OpenAPI schema
+func FindRoute(req *http.Request) (string, error) {
+	route, _, err := router.FindRoute(req)
+	if err != nil {
+		return "", err
+	}
+	return route.Path + "_" + route.Method, nil
+}
+
 // GetRequestKeys returns any request keys (query string or body params) from the OpenAPI schema
 func GetRequestKeys(method string, path string, status int) ([]string, error) {
 	var output []string
