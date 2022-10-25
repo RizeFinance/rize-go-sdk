@@ -14,6 +14,10 @@ Implementation examples for each SDk service.
 $ go run cmd/platform/main.go -s CustomerService -m List
 ```
 
+# Expand Pagination on `List` Endpoints
+
+For a lightweight example on how to consume paginated results, see [ExampleClientService_WithPagination](client.go)
+
 # Example Customer Onboarding Flow
 
 The steps below will walk through the process of onboarding a new customer. Be sure to check out the [Onboarding Documentation](https://developer.rizefs.com/docs/onboarding-customers-into-a-product) in our [Resource Center](https://developer.rizefs.com/docs) before getting started. 
