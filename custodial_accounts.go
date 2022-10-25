@@ -62,14 +62,14 @@ type CustodialAccountListParams struct {
 	Type        string `url:"type,omitempty" json:"type,omitempty"`
 }
 
-// CustodialAccountResponse is an API response containing a list of Custodial Accounts
-type CustodialAccountResponse struct {
-	BaseResponse
+// CustodialAccountListResponse is an API response containing a list of Custodial Accounts
+type CustodialAccountListResponse struct {
+	ListResponse
 	Data []*CustodialAccount `json:"data"`
 }
 
 // List retrieves a list of Custodial Accounts filtered by the given parameters
-func (c *custodialAccountService) List(ctx context.Context, params *CustodialAccountListParams) (*CustodialAccountResponse, error) {
+func (c *custodialAccountService) List(ctx context.Context, params *CustodialAccountListParams) (*CustodialAccountListResponse, error) {
 	// Build CustodialAccountListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -87,7 +87,7 @@ func (c *custodialAccountService) List(ctx context.Context, params *CustodialAcc
 		return nil, err
 	}
 
-	response := &CustodialAccountResponse{}
+	response := &CustodialAccountListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

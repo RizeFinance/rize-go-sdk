@@ -103,9 +103,9 @@ type VirtualDebitCardMigrateParams struct {
 	ShippingAddress *DebitCardShippingAddress `json:"shipping_address,omitempty"`
 }
 
-// DebitCardResponse is an API response containing a list of Debit Cards
-type DebitCardResponse struct {
-	BaseResponse
+// DebitCardListResponse is an API response containing a list of Debit Cards
+type DebitCardListResponse struct {
+	ListResponse
 	Data []*DebitCard `json:"data"`
 }
 
@@ -115,7 +115,7 @@ type DebitCardPINTokenResponse struct {
 }
 
 // List retrieves a list of Debit Cards filtered by the given parameters
-func (d *debitCardService) List(ctx context.Context, params *DebitCardListParams) (*DebitCardResponse, error) {
+func (d *debitCardService) List(ctx context.Context, params *DebitCardListParams) (*DebitCardListResponse, error) {
 	// Build DebitCardListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -133,7 +133,7 @@ func (d *debitCardService) List(ctx context.Context, params *DebitCardListParams
 		return nil, err
 	}
 
-	response := &DebitCardResponse{}
+	response := &DebitCardListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

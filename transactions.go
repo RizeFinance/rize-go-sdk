@@ -159,32 +159,32 @@ type CustodialLineItemListParams struct {
 	Sort                string `url:"sort,omitempty" json:"sort,omitempty"`
 }
 
-// TransactionResponse is an API response containing a list of Transactions
-type TransactionResponse struct {
-	BaseResponse
+// TransactionListResponse is an API response containing a list of Transactions
+type TransactionListResponse struct {
+	ListResponse
 	Data []*Transaction `json:"data"`
 }
 
-// TransactionEventResponse is an API response containing a list of TransactionEvents
-type TransactionEventResponse struct {
-	BaseResponse
+// TransactionEventListResponse is an API response containing a list of TransactionEvents
+type TransactionEventListResponse struct {
+	ListResponse
 	Data []*TransactionEvent `json:"data"`
 }
 
-// SyntheticLineItemResponse is an API response containing a list of SyntheticLineItems
-type SyntheticLineItemResponse struct {
-	BaseResponse
+// SyntheticLineItemListResponse is an API response containing a list of SyntheticLineItems
+type SyntheticLineItemListResponse struct {
+	ListResponse
 	Data []*SyntheticLineItem `json:"data"`
 }
 
-// CustodialLineItemResponse is an API response containing a list of CustodialLineItems
-type CustodialLineItemResponse struct {
-	BaseResponse
+// CustodialLineItemListResponse is an API response containing a list of CustodialLineItems
+type CustodialLineItemListResponse struct {
+	ListResponse
 	Data []*CustodialLineItem `json:"data"`
 }
 
 // List retrieves a list of Transactions filtered by the given parameters
-func (t *transactionService) List(ctx context.Context, params *TransactionListParams) (*TransactionResponse, error) {
+func (t *transactionService) List(ctx context.Context, params *TransactionListParams) (*TransactionListResponse, error) {
 	// Build TransactionListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -202,7 +202,7 @@ func (t *transactionService) List(ctx context.Context, params *TransactionListPa
 		return nil, err
 	}
 
-	response := &TransactionResponse{}
+	response := &TransactionListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}
@@ -236,7 +236,7 @@ func (t *transactionService) Get(ctx context.Context, uid string) (*Transaction,
 }
 
 // ListTransactionEvents retrieves a list of Transaction Events filtered by the given parameters
-func (t *transactionService) ListTransactionEvents(ctx context.Context, params *TransactionEventListParams) (*TransactionEventResponse, error) {
+func (t *transactionService) ListTransactionEvents(ctx context.Context, params *TransactionEventListParams) (*TransactionEventListResponse, error) {
 	// Build TransactionEventListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -254,7 +254,7 @@ func (t *transactionService) ListTransactionEvents(ctx context.Context, params *
 		return nil, err
 	}
 
-	response := &TransactionEventResponse{}
+	response := &TransactionEventListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}
@@ -288,7 +288,7 @@ func (t *transactionService) GetTransactionEvent(ctx context.Context, uid string
 }
 
 // ListSyntheticLineItems retrieves a list of Synthetic Line Items filtered by the given parameters
-func (t *transactionService) ListSyntheticLineItems(ctx context.Context, params *SyntheticLineItemListParams) (*SyntheticLineItemResponse, error) {
+func (t *transactionService) ListSyntheticLineItems(ctx context.Context, params *SyntheticLineItemListParams) (*SyntheticLineItemListResponse, error) {
 	// Build SyntheticLineItemListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -306,7 +306,7 @@ func (t *transactionService) ListSyntheticLineItems(ctx context.Context, params 
 		return nil, err
 	}
 
-	response := &SyntheticLineItemResponse{}
+	response := &SyntheticLineItemListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}
@@ -340,7 +340,7 @@ func (t *transactionService) GetSyntheticLineItem(ctx context.Context, uid strin
 }
 
 // ListCustodialLineItems retrieves a list of Custodial Line Items filtered by the given parameters
-func (t *transactionService) ListCustodialLineItems(ctx context.Context, params *CustodialLineItemListParams) (*CustodialLineItemResponse, error) {
+func (t *transactionService) ListCustodialLineItems(ctx context.Context, params *CustodialLineItemListParams) (*CustodialLineItemListResponse, error) {
 	// Build CustodialLineItemListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -358,7 +358,7 @@ func (t *transactionService) ListCustodialLineItems(ctx context.Context, params 
 		return nil, err
 	}
 
-	response := &CustodialLineItemResponse{}
+	response := &CustodialLineItemListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

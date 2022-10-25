@@ -40,14 +40,14 @@ type DocumentListParams struct {
 	Offset              int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
-// DocumentResponse is an API response containing a list of Documents
-type DocumentResponse struct {
-	BaseResponse
+// DocumentListResponse is an API response containing a list of Documents
+type DocumentListResponse struct {
+	ListResponse
 	Data []*Document `json:"data"`
 }
 
 // List retrieves a list of Documents filtered by the given parameters
-func (d *documentService) List(ctx context.Context, params *DocumentListParams) (*DocumentResponse, error) {
+func (d *documentService) List(ctx context.Context, params *DocumentListParams) (*DocumentListResponse, error) {
 	// Build DocumentListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -65,7 +65,7 @@ func (d *documentService) List(ctx context.Context, params *DocumentListParams) 
 		return nil, err
 	}
 
-	response := &DocumentResponse{}
+	response := &DocumentListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

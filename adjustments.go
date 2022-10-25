@@ -61,20 +61,20 @@ type AdjustmentTypeListParams struct {
 	ShowDeprecated bool   `url:"show_deprecated,omitempty" json:"show_deprecated,omitempty"`
 }
 
-// AdjustmentResponse is an API response containing a list of Adjustments
-type AdjustmentResponse struct {
-	BaseResponse
+// AdjustmentListResponse is an API response containing a list of Adjustments
+type AdjustmentListResponse struct {
+	ListResponse
 	Data []*Adjustment `json:"data"`
 }
 
-// AdjustmentTypeResponse is an API response containing a list of Adjustments Types
-type AdjustmentTypeResponse struct {
-	BaseResponse
+// AdjustmentTypeListResponse is an API response containing a list of Adjustments Types
+type AdjustmentTypeListResponse struct {
+	ListResponse
 	Data []*AdjustmentType `json:"data"`
 }
 
 // List retrieves a list of Adjustments filtered by the given parameters
-func (a *adjustmentService) List(ctx context.Context, params *AdjustmentListParams) (*AdjustmentResponse, error) {
+func (a *adjustmentService) List(ctx context.Context, params *AdjustmentListParams) (*AdjustmentListResponse, error) {
 	// Build AdjustmentListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -92,7 +92,7 @@ func (a *adjustmentService) List(ctx context.Context, params *AdjustmentListPara
 		return nil, err
 	}
 
-	response := &AdjustmentResponse{}
+	response := &AdjustmentListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}
@@ -158,7 +158,7 @@ func (a *adjustmentService) Get(ctx context.Context, uid string) (*Adjustment, e
 }
 
 // ListAdjustmentTypes retrieves a list of Adjustment Types filtered by the given parameters
-func (a *adjustmentService) ListAdjustmentTypes(ctx context.Context, params *AdjustmentTypeListParams) (*AdjustmentTypeResponse, error) {
+func (a *adjustmentService) ListAdjustmentTypes(ctx context.Context, params *AdjustmentTypeListParams) (*AdjustmentTypeListResponse, error) {
 	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
@@ -175,7 +175,7 @@ func (a *adjustmentService) ListAdjustmentTypes(ctx context.Context, params *Adj
 		return nil, err
 	}
 
-	response := &AdjustmentTypeResponse{}
+	response := &AdjustmentTypeListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

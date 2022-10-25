@@ -47,14 +47,14 @@ type TransferCreateParams struct {
 	USDTransferAmount              string `json:"usd_transfer_amount"`
 }
 
-// TransferResponse is an API response containing a list of Transfers
-type TransferResponse struct {
-	BaseResponse
+// TransferListResponse is an API response containing a list of Transfers
+type TransferListResponse struct {
+	ListResponse
 	Data []*Transfer `json:"data"`
 }
 
 // List retrieves a list of Transfers filtered by the given parameters
-func (t *transferService) List(ctx context.Context, params *TransferListParams) (*TransferResponse, error) {
+func (t *transferService) List(ctx context.Context, params *TransferListParams) (*TransferListResponse, error) {
 	// Build TransferListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -72,7 +72,7 @@ func (t *transferService) List(ctx context.Context, params *TransferListParams) 
 		return nil, err
 	}
 
-	response := &TransferResponse{}
+	response := &TransferListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

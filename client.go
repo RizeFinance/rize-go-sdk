@@ -21,10 +21,10 @@ type service struct {
 	client *Client
 }
 
-// BaseResponse is the default 'List' endpoint response.
+// ListResponse is the default 'List' endpoint response.
 // It is intended to be included in a response type specific to a service, which
 // includes a Data array specific to that service type
-type BaseResponse struct {
+type ListResponse struct {
 	TotalCount int `json:"total_count"`
 	Count      int `json:"count"`
 	Limit      int `json:"limit"`
@@ -69,8 +69,8 @@ type Client struct {
 	DebitCards          *debitCardService
 	Documents           *documentService
 	Evaluations         *evaluationService
-	PinwheelJobs        *pinwheelJobService
 	KYCDocuments        *kycDocumentService
+	PinwheelJobs        *pinwheelJobService
 	Pools               *poolService
 	Products            *productService
 	Sandbox             *sandboxService

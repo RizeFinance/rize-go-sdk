@@ -98,20 +98,20 @@ type SyntheticAccountTypeListParams struct {
 	Offset     int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
-// SyntheticAccountResponse is an API response containing a list of Synthetic Accounts
-type SyntheticAccountResponse struct {
-	BaseResponse
+// SyntheticAccountListResponse is an API response containing a list of Synthetic Accounts
+type SyntheticAccountListResponse struct {
+	ListResponse
 	Data []*SyntheticAccount `json:"data"`
 }
 
-// SyntheticAccountTypeResponse is an API response containing a list of Synthetic Account Types
-type SyntheticAccountTypeResponse struct {
-	BaseResponse
+// SyntheticAccountTypeListResponse is an API response containing a list of Synthetic Account Types
+type SyntheticAccountTypeListResponse struct {
+	ListResponse
 	Data []*SyntheticAccountType `json:"data"`
 }
 
 // List retrieves a list of Synthetic Account filtered by the given parameters
-func (sa *syntheticAccountService) List(ctx context.Context, params *SyntheticAccountListParams) (*SyntheticAccountResponse, error) {
+func (sa *syntheticAccountService) List(ctx context.Context, params *SyntheticAccountListParams) (*SyntheticAccountListResponse, error) {
 	// Build SyntheticAccountListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -129,7 +129,7 @@ func (sa *syntheticAccountService) List(ctx context.Context, params *SyntheticAc
 		return nil, err
 	}
 
-	response := &SyntheticAccountResponse{}
+	response := &SyntheticAccountListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}
@@ -238,7 +238,7 @@ func (sa *syntheticAccountService) Delete(ctx context.Context, uid string) (*htt
 }
 
 // ListAccountTypes retrieves a list of Synthetic Account Types filtered by the given parameters
-func (sa *syntheticAccountService) ListAccountTypes(ctx context.Context, params *SyntheticAccountTypeListParams) (*SyntheticAccountTypeResponse, error) {
+func (sa *syntheticAccountService) ListAccountTypes(ctx context.Context, params *SyntheticAccountTypeListParams) (*SyntheticAccountTypeListResponse, error) {
 	// Build SyntheticAccountTypeListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -256,7 +256,7 @@ func (sa *syntheticAccountService) ListAccountTypes(ctx context.Context, params 
 		return nil, err
 	}
 
-	response := &SyntheticAccountTypeResponse{}
+	response := &SyntheticAccountTypeListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

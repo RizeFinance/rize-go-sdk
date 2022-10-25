@@ -129,14 +129,14 @@ type SecondaryCustomerParams struct {
 	Details            *CustomerDetails `json:"details"`
 }
 
-// CustomerResponse is an API response containing a list of Customers
-type CustomerResponse struct {
-	BaseResponse
+// CustomerListResponse is an API response containing a list of Customers
+type CustomerListResponse struct {
+	ListResponse
 	Data []*Customer `json:"data"`
 }
 
 // List retrieves a list of Customers filtered by the given parameters
-func (c *customerService) List(ctx context.Context, params *CustomerListParams) (*CustomerResponse, error) {
+func (c *customerService) List(ctx context.Context, params *CustomerListParams) (*CustomerListResponse, error) {
 	// Build CustomerListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -154,7 +154,7 @@ func (c *customerService) List(ctx context.Context, params *CustomerListParams) 
 		return nil, err
 	}
 
-	response := &CustomerResponse{}
+	response := &CustomerListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

@@ -29,14 +29,14 @@ type PoolListParams struct {
 	Offset      int    `url:"offset,omitempty" json:"offset,omitempty"`
 }
 
-// PoolResponse is an API response containing a list of Pools
-type PoolResponse struct {
-	BaseResponse
+// PoolListResponse is an API response containing a list of Pools
+type PoolListResponse struct {
+	ListResponse
 	Data []*Pool `json:"data"`
 }
 
 // List retrieves a list of Pools filtered by the given parameters
-func (p *poolService) List(ctx context.Context, params *PoolListParams) (*PoolResponse, error) {
+func (p *poolService) List(ctx context.Context, params *PoolListParams) (*PoolListResponse, error) {
 	// Build PoolListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -54,7 +54,7 @@ func (p *poolService) List(ctx context.Context, params *PoolListParams) (*PoolRe
 		return nil, err
 	}
 
-	response := &PoolResponse{}
+	response := &PoolListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

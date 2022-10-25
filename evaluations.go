@@ -47,14 +47,14 @@ type EvaluationListParams struct {
 	Latest      bool   `url:"latest,omitempty" json:"latest,omitempty"`
 }
 
-// EvaluationResponse is an API response containing a list of Evaluations
-type EvaluationResponse struct {
-	BaseResponse
+// EvaluationListResponse is an API response containing a list of Evaluations
+type EvaluationListResponse struct {
+	ListResponse
 	Data []*Evaluation `json:"data"`
 }
 
 // List retrieves a list of Evaluations filtered by the given parameters
-func (p *evaluationService) List(ctx context.Context, params *EvaluationListParams) (*EvaluationResponse, error) {
+func (p *evaluationService) List(ctx context.Context, params *EvaluationListParams) (*EvaluationListResponse, error) {
 	// Build EvaluationListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -72,7 +72,7 @@ func (p *evaluationService) List(ctx context.Context, params *EvaluationListPara
 		return nil, err
 	}
 
-	response := &EvaluationResponse{}
+	response := &EvaluationListResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}
