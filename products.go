@@ -41,8 +41,14 @@ type ProductListParams struct {
 	ProgramUID string `url:"program_uid,omitempty" json:"program_uid,omitempty"`
 }
 
+// ProductResponse is an API response containing a list of Products
+type ProductResponse struct {
+	BaseResponse
+	Data []*Product `json:"data"`
+}
+
 // List retrieves a list of Products filtered by the given parameters
-func (p *productService) List(ctx context.Context, params *ProductListParams) (*ListResponse, error) {
+func (p *productService) List(ctx context.Context, params *ProductListParams) (*ProductResponse, error) {
 	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
@@ -59,7 +65,7 @@ func (p *productService) List(ctx context.Context, params *ProductListParams) (*
 		return nil, err
 	}
 
-	response := &ListResponse{Data: []*Product{}}
+	response := &ProductResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

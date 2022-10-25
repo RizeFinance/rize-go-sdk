@@ -18,8 +18,14 @@ type CustodialPartner struct {
 	Type string `json:"type,omitempty"`
 }
 
+// CustodialPartnerResponse is an API response containing a list of Custodial Partners
+type CustodialPartnerResponse struct {
+	BaseResponse
+	Data []*CustodialPartner `json:"data"`
+}
+
 // List retrieves a list of CustodialPartners filtered by the given parameters
-func (c *custodialPartnerService) List(ctx context.Context) (*ListResponse, error) {
+func (c *custodialPartnerService) List(ctx context.Context) (*CustodialPartnerResponse, error) {
 	res, err := c.client.doRequest(ctx, http.MethodGet, "custodial_partners", nil, nil)
 	if err != nil {
 		return nil, err
@@ -31,7 +37,7 @@ func (c *custodialPartnerService) List(ctx context.Context) (*ListResponse, erro
 		return nil, err
 	}
 
-	response := &ListResponse{Data: []*CustodialPartner{}}
+	response := &CustodialPartnerResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

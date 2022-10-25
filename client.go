@@ -21,15 +21,14 @@ type service struct {
 	client *Client
 }
 
-// ListResponse is the default 'List' endpoint response.
+// BaseResponse is the default 'List' endpoint response.
 // It is intended to be included in a response type specific to a service, which
 // includes a Data array specific to that service type
-type ListResponse struct {
-	TotalCount int         `json:"total_count"`
-	Count      int         `json:"count"`
-	Limit      int         `json:"limit"`
-	Offset     int         `json:"offset"`
-	Data       interface{} `json:"data"`
+type BaseResponse struct {
+	TotalCount int `json:"total_count"`
+	Count      int `json:"count"`
+	Limit      int `json:"limit"`
+	Offset     int `json:"offset"`
 }
 
 // Config stores Rize configuration values
@@ -70,8 +69,8 @@ type Client struct {
 	DebitCards          *debitCardService
 	Documents           *documentService
 	Evaluations         *evaluationService
-	KYCDocuments        *kycDocumentService
 	PinwheelJobs        *pinwheelJobService
+	KYCDocuments        *kycDocumentService
 	Pools               *poolService
 	Products            *productService
 	Sandbox             *sandboxService

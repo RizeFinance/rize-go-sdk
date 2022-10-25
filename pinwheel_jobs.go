@@ -50,8 +50,14 @@ type PinwheelJobCreateParams struct {
 	SkipWelcomeScreen    bool     `json:"skip_welcome_screen,omitempty"`
 }
 
+// PinwheelJobResponse is an API response containing a list of Pinwheel Jobs
+type PinwheelJobResponse struct {
+	BaseResponse
+	Data []*PinwheelJob `json:"data"`
+}
+
 // List retrieves a list of Pinwheel Jobs filtered by the given parameters
-func (p *pinwheelJobService) List(ctx context.Context, params *PinwheelJobListParams) (*ListResponse, error) {
+func (p *pinwheelJobService) List(ctx context.Context, params *PinwheelJobListParams) (*PinwheelJobResponse, error) {
 	// Build PinwheelJobListParams into query string params
 	v, err := query.Values(params)
 	if err != nil {
@@ -69,7 +75,7 @@ func (p *pinwheelJobService) List(ctx context.Context, params *PinwheelJobListPa
 		return nil, err
 	}
 
-	response := &ListResponse{Data: []*PinwheelJob{}}
+	response := &PinwheelJobResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}

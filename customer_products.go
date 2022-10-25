@@ -38,8 +38,14 @@ type CustomerProductCreateParams struct {
 	ProductUID  string `json:"product_uid"`
 }
 
+// CustomerProductResponse is an API response containing a list of Customer Products
+type CustomerProductResponse struct {
+	BaseResponse
+	Data []*CustomerProduct `json:"data"`
+}
+
 // List Customers and the Products they have onboarded onto, filtered by the given parameters
-func (cp *customerProductService) List(ctx context.Context, params *CustomerProductListParams) (*ListResponse, error) {
+func (cp *customerProductService) List(ctx context.Context, params *CustomerProductListParams) (*CustomerProductResponse, error) {
 	v, err := query.Values(params)
 	if err != nil {
 		return nil, err
@@ -56,7 +62,7 @@ func (cp *customerProductService) List(ctx context.Context, params *CustomerProd
 		return nil, err
 	}
 
-	response := &ListResponse{Data: []*CustomerProduct{}}
+	response := &CustomerProductResponse{}
 	if err = json.Unmarshal(body, response); err != nil {
 		return nil, err
 	}
