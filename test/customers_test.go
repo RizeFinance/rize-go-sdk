@@ -89,9 +89,27 @@ func TestCustomerService_List(t *testing.T) {
 
 func TestCustomerService_Create(t *testing.T) {
 	params := &rize.CustomerCreateParams{
-		ExternalUID:  "client-generated-id",
-		CustomerType: "primary",
-		Email:        "olive.oyl@popeyes.com",
+		CustomerType:       "primary",
+		PrimaryCustomerUID: "kbF5TGrmwGizQuzZ",
+		ExternalUID:        "client-generated-id",
+		Email:              "olive.oyl@popeyes.com",
+		Details: &rize.CustomerDetails{
+			FirstName:    "Olive",
+			MiddleName:   "Olivia",
+			LastName:     "Oyl",
+			Suffix:       "Jr.",
+			Phone:        "5555551212",
+			BusinessName: "Oliver's Olive Emporium",
+			SSN:          "111-22-3333",
+			DOB:          internal.DOB(time.Now()),
+			Address: &rize.CustomerAddress{
+				Street1:    "123 Abc St.",
+				Street2:    "Apt 2",
+				City:       "Chicago",
+				State:      "IL",
+				PostalCode: "12345",
+			},
+		},
 	}
 
 	resp, err := rc.Customers.Create(context.Background(), params)
@@ -240,36 +258,6 @@ func TestCustomerService_UpdateProfileResponses(t *testing.T) {
 	}
 
 	if err := validateSchema(http.MethodPut, "/customers/{uid}/update_profile_responses", http.StatusOK, nil, paramList, res); err != nil {
-		t.Fatalf(err.Error())
-	}
-}
-
-func TestCustomerService_CreateSecondaryCustomer(t *testing.T) {
-	params := &rize.SecondaryCustomerParams{
-		ExternalUID:        "7002440b-9b98-4a8b-82b9-4503fe8c6bf0",
-		PrimaryCustomerUID: "kbF5TGrmwGizQuzZ",
-		Email:              "tomas@example.com",
-		Details: &rize.CustomerDetails{
-			FirstName:  "Olive",
-			MiddleName: "Olivia",
-			LastName:   "Oyl",
-			Suffix:     "Jr.",
-			DOB:        internal.DOB(time.Now()),
-			Address: &rize.CustomerAddress{
-				Street1:    "123 Abc St.",
-				Street2:    "Apt 2",
-				City:       "Chicago",
-				State:      "IL",
-				PostalCode: "12345",
-			},
-		},
-	}
-	resp, err := rc.Customers.CreateSecondaryCustomer(context.Background(), params)
-	if err != nil {
-		t.Fatal("Error creating secondary customer\n", err)
-	}
-
-	if err := validateSchema(http.MethodPost, "/customers/create_secondary", http.StatusCreated, nil, params, resp); err != nil {
 		t.Fatalf(err.Error())
 	}
 }

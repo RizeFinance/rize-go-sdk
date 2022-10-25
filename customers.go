@@ -91,9 +91,11 @@ type CustomerListParams struct {
 
 // CustomerCreateParams are the body params used when creating a new Customer
 type CustomerCreateParams struct {
-	ExternalUID  string `json:"external_uid,omitempty"`
-	CustomerType string `json:"customer_type,omitempty"`
-	Email        string `json:"email"`
+	CustomerType       string           `json:"customer_type,omitempty"`
+	PrimaryCustomerUID string           `json:"primary_customer_uid"`
+	ExternalUID        string           `json:"external_uid,omitempty"`
+	Email              string           `json:"email"`
+	Details            *CustomerDetails `json:"details"`
 }
 
 // CustomerUpdateParams are the body params used when updating a Customer
@@ -119,14 +121,6 @@ type CustomerLockParams struct {
 type CustomerProfileResponseParams struct {
 	ProfileRequirementUID string                                `json:"profile_requirement_uid"`
 	ProfileResponse       *internal.CustomerProfileResponseItem `json:"profile_response"`
-}
-
-// SecondaryCustomerParams are the body params used when creating a new Secondary Customer
-type SecondaryCustomerParams struct {
-	ExternalUID        string           `json:"external_uid,omitempty"`
-	PrimaryCustomerUID string           `json:"primary_customer_uid"`
-	Email              string           `json:"email,omitempty"`
-	Details            *CustomerDetails `json:"details"`
 }
 
 // CustomerListResponse is an API response containing a list of Customers
@@ -378,36 +372,6 @@ func (c *customerService) UpdateProfileResponses(ctx context.Context, uid string
 	}
 
 	res, err := c.client.doRequest(ctx, http.MethodPut, fmt.Sprintf("customers/%s/update_profile_responses", uid), nil, bytes.NewBuffer(bytesMessage))
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	response := &Customer{}
-	if err = json.Unmarshal(body, response); err != nil {
-		return nil, err
-	}
-
-	return response, nil
-}
-
-// CreateSecondaryCustomer (DEPRECATED) is used to create a new Secondary Customer
-func (c *customerService) CreateSecondaryCustomer(ctx context.Context, params *SecondaryCustomerParams) (*Customer, error) {
-	if params.PrimaryCustomerUID == "" {
-		return nil, fmt.Errorf("PrimaryCustomerUID is required")
-	}
-
-	bytesMessage, err := json.Marshal(params)
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := c.client.doRequest(ctx, http.MethodPost, "customers/create_secondary", nil, bytes.NewBuffer(bytesMessage))
 	if err != nil {
 		return nil, err
 	}
