@@ -14,7 +14,7 @@ const (
 	MQSendTimeout    = time.Millisecond * 5000
 	MQReceiveTimeout = time.Millisecond * 5000
 
-	SDKVersion = "1.0.0"
+	SDKVersion = "1.1.0"
 )
 
 // Environments are Rize infrastructure tiers
