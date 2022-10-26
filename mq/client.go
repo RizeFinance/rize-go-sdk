@@ -76,7 +76,7 @@ func (cfg *Config) validateConfig() error {
 	}
 
 	if ok := slices.Contains(internal.Environments, strings.ToLower(cfg.Environment)); !ok {
-		log.Println(fmt.Sprintf("Environment %s not recognized. Defaulting to sandbox...", cfg.Environment))
+		log.Printf("Environment %s not recognized. Defaulting to sandbox...\n", cfg.Environment)
 		cfg.Environment = "sandbox"
 	}
 

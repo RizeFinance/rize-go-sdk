@@ -45,7 +45,7 @@ func (m *messageQueueService) Connect() error {
 func (m *messageQueueService) Subscribe(topic string, subscriptionName string) (*stomp.Subscription, error) {
 	// Validate topic name
 	if ok := slices.Contains(internal.MQServices, strings.ToLower(topic)); !ok {
-		return nil, fmt.Errorf("Topic %s not recognized", topic)
+		return nil, fmt.Errorf("topic %s not recognized", topic)
 	}
 
 	sub, err := m.client.Connection.Subscribe(

@@ -34,18 +34,14 @@ func JSONKeys(data map[string]interface{}) []string {
 		// Check for json object
 		if val, ok := value.(map[string]interface{}); ok {
 			keys = append(keys, key)
-			for _, k := range JSONKeys(val) {
-				keys = append(keys, k)
-			}
+			keys = append(keys, JSONKeys(val)...)
 			// Check for json array
 		} else if val, ok := value.([]interface{}); ok {
 			keys = append(keys, key)
 			for _, v := range val {
 				// Check for json object
 				if subObject, ok := v.(map[string]interface{}); ok {
-					for _, subObjectKey := range JSONKeys(subObject) {
-						keys = append(keys, subObjectKey)
-					}
+					keys = append(keys, JSONKeys(subObject)...)
 				}
 			}
 		} else {
