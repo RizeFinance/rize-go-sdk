@@ -8,7 +8,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/google/go-querystring v1.1.0
 	github.com/joho/godotenv v1.4.0
-	golang.org/x/exp v0.0.0-20221026004748-78e5e7837ae6
+	golang.org/x/exp v0.0.0-20221026153819-32f3d567a233
 )
 
 require (
