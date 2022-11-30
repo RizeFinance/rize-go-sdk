@@ -92,16 +92,17 @@ type CustomerListParams struct {
 // CustomerCreateParams are the body params used when creating a new Customer
 type CustomerCreateParams struct {
 	CustomerType       string           `json:"customer_type,omitempty"`
-	PrimaryCustomerUID string           `json:"primary_customer_uid"`
+	PrimaryCustomerUID string           `json:"primary_customer_uid,omitempty"`
 	ExternalUID        string           `json:"external_uid,omitempty"`
-	Email              string           `json:"email"`
-	Details            *CustomerDetails `json:"details"`
+	Email              string           `json:"email,omitempty"`
+	Details            *CustomerDetails `json:"details,omitempty"`
 }
 
 // CustomerUpdateParams are the body params used when updating a Customer
 type CustomerUpdateParams struct {
-	Email   string           `json:"email,omitempty"`
-	Details *CustomerDetails `json:"details,omitempty"`
+	Email       string           `json:"email,omitempty"`
+	Details     *CustomerDetails `json:"details,omitempty"`
+	ExternalUID string           `json:"external_uid,omitempty"`
 }
 
 // CustomerDeleteParams are the body params used when deleting/archiving a Customer
@@ -158,8 +159,8 @@ func (c *customerService) List(ctx context.Context, params *CustomerListParams) 
 
 // Create is used to initialize a new Customer with an email and external_uid
 func (c *customerService) Create(ctx context.Context, params *CustomerCreateParams) (*Customer, error) {
-	if params.Email == "" {
-		return nil, fmt.Errorf("email is required")
+	if params.CustomerType == "secondary" && params.PrimaryCustomerUID == "" {
+		return nil, fmt.Errorf("primary_customer_uid is required for secondary customers")
 	}
 
 	bytesMessage, err := json.Marshal(params)
