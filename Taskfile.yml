@@ -1,0 +1,14 @@
+version: '3'
+
+dotenv: ['.env']
+
+tasks:
+  run:platform:
+    - cmd: go run cmd/platform/main.go {{.CLI_ARGS}}
+  run:mq:
+    - cmd: go run cmd/mq/main.go
+  help:
+    - cmd: go run cmd/platform/main.go -h
+
+  test:
+    - cmd: go test ./test -v -coverpkg=./... -cover

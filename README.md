@@ -191,8 +191,14 @@ $ go run cmd/mq/main.go
 
 Test files for the platform SDK can be found in the [test](test/) directory.
 
-```go
-$  go test ./test -v -coverpkg=./... -cover
+```sh
+# Install Task
+$ brew install go-task/tap/go-task
+```
+
+```sh
+# Run all unit tests
+$ task test
 ```
 
 ## Documentation
