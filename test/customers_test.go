@@ -3,6 +3,7 @@ package rize_test
 import (
 	"context"
 	"net/http"
+	"strings"
 	"testing"
 	"time"
 
@@ -119,6 +120,20 @@ func TestCustomerService_Create(t *testing.T) {
 
 	if err := validateSchema(http.MethodPost, "/customers", http.StatusCreated, nil, params, resp); err != nil {
 		t.Fatalf(err.Error())
+	}
+}
+
+func TestCustomerService_Create_SecondaryMissingPrimaryCustomerUID(t *testing.T) {
+	params := &rize.CustomerCreateParams{
+		CustomerType: "secondary",
+	}
+	resp, err := rc.Customers.Create(context.Background(), params)
+
+	if err == nil || !strings.Contains(err.Error(), "primary_customer_uid is required") {
+		t.Fatal("Expected to see an error regarding missing primary_customer_uid for secondary customer type")
+	}
+	if resp != nil {
+		t.Fatal("Expected response to be nil due to error")
 	}
 }
 
