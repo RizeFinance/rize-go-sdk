@@ -150,7 +150,8 @@ func TestCustomerService_Get(t *testing.T) {
 
 func TestCustomerService_Update(t *testing.T) {
 	params := &rize.CustomerUpdateParams{
-		Email: "olive.oyl@rizemoney.com",
+		Email:       "olive.oyl@rizemoney.com",
+		ExternalUID: "client-generated-id",
 		Details: &rize.CustomerDetails{
 			FirstName:    "Olive",
 			MiddleName:   "Olivia",
@@ -225,9 +226,8 @@ func TestCustomerService_Lock(t *testing.T) {
 
 func TestCustomerService_Unlock(t *testing.T) {
 	params := &rize.CustomerLockParams{
-		LockNote:           "Fraud detected",
-		UnlockReason:       "Customer Reported Fraud",
-		UnlockAllSecondary: true,
+		LockNote:     "Fraud detected",
+		UnlockReason: "Customer Reported Fraud",
 	}
 	// Unlock Customer
 	resp, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", params)

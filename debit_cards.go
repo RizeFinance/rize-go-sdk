@@ -45,11 +45,9 @@ type DebitCardShippingAddress struct {
 }
 
 // DebitCardAccessToken contains the token necessary to retrieve a virtual Debit Card image.
-// Used as the response type for GetAccessToken.
-// Used as query params for GetVirtualDebitCardImage.
 type DebitCardAccessToken struct {
-	Token    string `url:"token" json:"token"`
-	ConfigID string `url:"config_id" json:"config_id"`
+	Token    string `json:"token"`
+	ConfigID string `json:"config_id"`
 }
 
 // DebitCardListParams builds the query parameters used in querying Debit Cards
@@ -101,6 +99,12 @@ type VirtualDebitCardMigrateParams struct {
 	ExternalUID     string                    `json:"external_uid,omitempty"`
 	CardArtworkUID  string                    `json:"card_artwork_uid,omitempty"`
 	ShippingAddress *DebitCardShippingAddress `json:"shipping_address,omitempty"`
+}
+
+// VirtualDebitCardQueryParams are the query params used to retrieve a virtual Debit Card image
+type VirtualDebitCardQueryParams struct {
+	Token  string `url:"token" json:"token"`
+	Config string `url:"config" json:"config"`
 }
 
 // DebitCardListResponse is an API response containing a list of Debit Cards
@@ -401,8 +405,8 @@ func (d *debitCardService) MigrateVirtualDebitCard(ctx context.Context, uid stri
 }
 
 // GetVirtualDebitCardImage is used to retrieve a virtual Debit Card image
-func (d *debitCardService) GetVirtualDebitCardImage(ctx context.Context, params *DebitCardAccessToken) (*http.Response, error) {
-	if params.ConfigID == "" || params.Token == "" {
+func (d *debitCardService) GetVirtualDebitCardImage(ctx context.Context, params *VirtualDebitCardQueryParams) (*http.Response, error) {
+	if params.Config == "" || params.Token == "" {
 		return nil, fmt.Errorf("Config and Token params are required")
 	}
 

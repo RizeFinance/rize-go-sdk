@@ -165,9 +165,9 @@ func (e Example) ExampleDebitCardService_MigrateVirtualDebitCard(rc *rize.Client
 
 // Get Virtual Debit Card Image
 func (e Example) ExampleDebitCardService_GetVirtualDebitCardImage(rc *rize.Client) {
-	params := &rize.DebitCardAccessToken{
-		Token:    "VmU27goFku4DyxfsdyoH5G1mlztvwskBywKrskVN9jQOh50Yy7",
-		ConfigID: "1",
+	params := &rize.VirtualDebitCardQueryParams{
+		Token:  "VmU27goFku4DyxfsdyoH5G1mlztvwskBywKrskVN9jQOh50Yy7",
+		Config: "1",
 	}
 	resp, err := rc.DebitCards.GetVirtualDebitCardImage(context.Background(), params)
 	if err != nil {

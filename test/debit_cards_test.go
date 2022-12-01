@@ -210,9 +210,9 @@ func TestDebitCardService_MigrateVirtualDebitCard(t *testing.T) {
 }
 
 func TestDebitCardService_GetVirtualDebitCardImage(t *testing.T) {
-	params := &rize.DebitCardAccessToken{
-		Token:    "VmU27goFku4DyxfsdyoH5G1mlztvwskBywKrskVN9jQOh50Yy7",
-		ConfigID: "1",
+	params := &rize.VirtualDebitCardQueryParams{
+		Token:  "VmU27goFku4DyxfsdyoH5G1mlztvwskBywKrskVN9jQOh50Yy7",
+		Config: "1",
 	}
 	_, err := rc.DebitCards.GetVirtualDebitCardImage(context.Background(), params)
 	if err != nil {

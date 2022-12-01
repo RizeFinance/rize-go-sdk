@@ -88,7 +88,8 @@ func (e Example) ExampleCustomerService_Get(rc *rize.Client) {
 // Update customer
 func (e Example) ExampleCustomerService_Update(rc *rize.Client) {
 	params := &rize.CustomerUpdateParams{
-		Email: "olive.oyl@rizemoney.com",
+		Email:       "olive.oyl@rizemoney.com",
+		ExternalUID: "client-generated-id",
 		Details: &rize.CustomerDetails{
 			FirstName:    "Olive",
 			MiddleName:   "Olivia",
@@ -154,9 +155,8 @@ func (e Example) ExampleCustomerService_Lock(rc *rize.Client) {
 // Unlock Customer
 func (e Example) ExampleCustomerService_Unlock(rc *rize.Client) {
 	params := &rize.CustomerLockParams{
-		LockNote:           "Fraud detected",
-		UnlockReason:       "Customer Reported Fraud",
-		UnlockAllSecondary: true,
+		LockNote:     "Fraud detected",
+		UnlockReason: "Customer Reported Fraud",
 	}
 	// Unlock Customer
 	resp, err := rc.Customers.Unlock(context.Background(), "EhrQZJNjCd79LLYq", params)

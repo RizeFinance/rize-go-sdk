@@ -112,10 +112,9 @@ type CustomerDeleteParams struct {
 
 // CustomerLockParams are the body params used when locking/unlocking a Customer
 type CustomerLockParams struct {
-	LockNote           string `json:"lock_note,omitempty"`
-	LockReason         string `json:"lock_reason,omitempty"`
-	UnlockReason       string `json:"unlock_reason,omitempty"`
-	UnlockAllSecondary bool   `json:"unlock_all_secondary,omitempty"`
+	LockNote     string `json:"lock_note,omitempty"`
+	LockReason   string `json:"lock_reason,omitempty"`
+	UnlockReason string `json:"unlock_reason,omitempty"`
 }
 
 // CustomerProfileResponseParams are the body params used when updating Customer Profile responses
