@@ -135,6 +135,10 @@ func GetRequestKeys(method string, path string, status int) ([]string, error) {
 	var output []string
 
 	params := doc.Paths.Find(path).GetOperation(method).Parameters
+	if len(params) == 0 {
+		// Sometimes params exist outside of the Operation block
+		params = doc.Paths.Find(path).Parameters
+	}
 	for _, s := range params {
 		// Only check query parameters
 		if s.Value.In == "path" || s.Value.In == "header" {
@@ -241,39 +245,39 @@ func traverseRef(ref *openapi3.SchemaRef) {
 
 // Traverse openapi3.Schema.Properties
 func traverseProps(props openapi3.Schemas) {
-	if data, ok := props["data"]; ok {
-		traverseRef(data)
-	} else if details, ok := props["details"]; ok {
-		traverseRef(details)
-	} else {
-		for k, v := range props {
-			// Ignore keys on the Request object marked as read-only
-			if isRequest && v.Value.ReadOnly {
-				continue
-			}
+	for k, v := range props {
+		if k == "details" || k == "data" {
+			traverseRef(v)
+		}
 
-			// Ignore keys on the Response object marked as write-only
-			if !isRequest && v.Value.WriteOnly {
-				continue
-			}
+		// Ignore keys on the Request object marked as read-only
+		if isRequest && v.Value.ReadOnly {
+			continue
+		}
 
-			// Note the key that was found
+		// Ignore keys on the Response object marked as write-only
+		if !isRequest && v.Value.WriteOnly {
+			continue
+		}
+
+		// Note the key that was found
+		if k != "details" && k != "data" {
 			keys = append(keys, k)
+		}
 
-			// Check for oneOf
-			if v.Value.OneOf != nil {
-				traverseRefs(v.Value.OneOf)
-			}
+		// Check for oneOf
+		if v.Value.OneOf != nil {
+			traverseRefs(v.Value.OneOf)
+		}
 
-			// Check for nested items
-			if v.Value.Items != nil {
-				traverseRef(v.Value.Items)
-			}
+		// Check for nested items
+		if v.Value.Items != nil {
+			traverseRef(v.Value.Items)
+		}
 
-			// Check for nested properties
-			if v.Value.Properties != nil {
-				traverseProps(v.Value.Properties)
-			}
+		// Check for nested properties
+		if v.Value.Properties != nil {
+			traverseProps(v.Value.Properties)
 		}
 	}
 }
