@@ -18,7 +18,7 @@ var (
 	router    routers.Router
 	err       error
 	keys      []string
-	server    = "https://sandbox.rizefs.com/api/v1/"
+	server    = "https://sandbox.newline53.com/api/v1/"
 	ctx       = context.Background()
 	isRequest = false
 )

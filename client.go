@@ -226,7 +226,7 @@ func (cfg *Config) validateConfig() error {
 	}
 
 	if cfg.BaseURL == "" {
-		cfg.BaseURL = fmt.Sprintf("https://%s.rizefs.com", cfg.Environment)
+		cfg.BaseURL = fmt.Sprintf("https://%s.newline53.com", cfg.Environment)
 	}
 
 	return nil

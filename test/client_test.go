@@ -482,7 +482,7 @@ func validatePaths() error {
 	paths := []string{}
 	for _, r := range rl {
 		r.URL.Scheme = "https"
-		r.URL.Host = "sandbox.rizefs.com"
+		r.URL.Host = "sandbox.newline53.com"
 		route, err := internal.FindRoute(r)
 		if err != nil {
 			return err

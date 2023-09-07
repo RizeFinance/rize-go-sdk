@@ -55,7 +55,7 @@ func NewClient(cfg *Config) (*Client, error) {
 
 	rc := &Client{}
 	rc.cfg = cfg
-	rc.Endpoint = fmt.Sprintf("mq-%s.rizefs.com:61614", cfg.Environment)
+	rc.Endpoint = fmt.Sprintf("mq-%s.newline53.com:61614", cfg.Environment)
 	rc.MessageQueue = &messageQueueService{client: rc}
 
 	return rc, nil

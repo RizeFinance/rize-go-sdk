@@ -32,11 +32,11 @@ func main() {
 
 	// Create MQ connection
 	if err := rc.MessageQueue.Connect(); err != nil {
-		log.Fatal("Error creation MQ connection:\n", err)
+		log.Fatal("Error creating MQ connection:\n", err)
 	}
 
 	// Subscribe to customer MQ topics
-	sub, err := rc.MessageQueue.Subscribe("customer", "customerSubscription")
+	sub, err := rc.MessageQueue.Subscribe("transfer", "transferSubscription")
 	if err != nil {
 		log.Printf("Subscribe failed: %s\n", err)
 	}

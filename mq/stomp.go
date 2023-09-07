@@ -41,7 +41,7 @@ func (m *messageQueueService) Connect() error {
 }
 
 // Subscribe will create a new STOMP topic subscription. Requires an active connection.
-// `subscriptionName“ can be any name you choose to identify the subscription
+// `subscriptionName` can be any name you choose to identify the subscription
 func (m *messageQueueService) Subscribe(topic string, subscriptionName string) (*stomp.Subscription, error) {
 	// Validate topic name
 	if ok := slices.Contains(internal.MQServices, strings.ToLower(topic)); !ok {
